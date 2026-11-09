@@ -67,3 +67,23 @@ módulos (`extras/` + `manifest.json`) y la web de documentación (MkDocs + GitH
   [analysis/k2-port-feasibility.md](analysis/k2-port-feasibility.md)).
 - Pendiente al crear los repos: nombre y ubicación local del fork, y si se enlaza aquí como submódulo para el
   desarrollo.
+
+## D4 — Ramas, commits e integración (2026-11-09)
+
+**Decisión.**
+
+| Repo | Ramas |
+| - | - |
+| `Creality-Hi-CFW` | `main` estable (releases) y `dev` de integración |
+| `Creality-Hi-Kalico` | `main` espejo de Jacob10383/kalico; `dev` de integración (rama por defecto); `main-hi` estable, la que usará el instalador |
+
+- Cada tarea en una rama que sale de `dev` (`feat/...`, `fix/...`, `docs/...`) y entra en `dev` por **pull
+  request**. `dev` pasa a la rama estable (`main` o `main-hi`) por pull request cuando funciona; en el fork, eso
+  significa probado en la impresora.
+- Commits con [Conventional Commits](https://www.conventionalcommits.org/) en inglés: `type(scope): descripción`
+  y cuerpo libre opcional. Sustituye al formato `CHANGES BY FILE`/`IMPROVEMENTS` de los primeros commits.
+- En el fork solo se ejecutan los checks de los pull request; los workflows de publicación heredados de Kalico
+  se desactivan.
+
+**Motivos.** Los pull request dejan historial revisable, lanzan el CI de Kalico y encajan con los hilos del
+proyecto de claude.ai. `main` espejo en el fork hace que actualizar desde Jacob sea un avance directo.
