@@ -7,6 +7,7 @@ chelper/__init__.py without importing it, so they follow upstream changes.
 
 Usage: chelper_build.py <chelper-src-dir> <out-dir> <source-rev>
 """
+
 import ast
 import hashlib
 import os
@@ -45,7 +46,11 @@ def read_build_recipe(srcdir):
     missing = [k for k, v in wanted.items() if v is None]
     if missing:
         sys.exit("chelper/__init__.py: cannot find %s" % ", ".join(missing))
-    return wanted["SOURCE_FILES"], wanted["OTHER_FILES"], wanted["COMPILE_ARGS"]
+    return (
+        wanted["SOURCE_FILES"],
+        wanted["OTHER_FILES"],
+        wanted["COMPILE_ARGS"],
+    )
 
 
 def run(cmd):
@@ -86,17 +91,30 @@ def main():
     for key, value in EXPECTED_ATTRS.items():
         m = re.search(r"%s: (.*)" % key, attrs)
         if not m or m.group(1).strip() != value:
-            errors.append("%s is %r, expected %r" % (key, m and m.group(1), value))
+            errors.append(
+                "%s is %r, expected %r" % (key, m and m.group(1), value)
+            )
     versions = sorted(
         set(
             tuple(int(x) for x in v.split("."))
-            for v in re.findall(r"GLIBC_(\d+(?:\.\d+)+)", run("%s -V %s" % (READELF, dest)))
+            for v in re.findall(
+                r"GLIBC_(\d+(?:\.\d+)+)", run("%s -V %s" % (READELF, dest))
+            )
         )
     )
     if not versions or versions[-1] > MAX_GLIBC:
-        errors.append("needs glibc %s, printer has %s" % (versions[-1:], MAX_GLIBC))
-    needed = re.findall(r"\(NEEDED\).*\[(.*)\]", run("%s -d %s" % (READELF, dest)))
-    allowed = {"libc.so.6", "libm.so.6", "libpthread.so.0", "ld-linux-armhf.so.3"}
+        errors.append(
+            "needs glibc %s, printer has %s" % (versions[-1:], MAX_GLIBC)
+        )
+    needed = re.findall(
+        r"\(NEEDED\).*\[(.*)\]", run("%s -d %s" % (READELF, dest))
+    )
+    allowed = {
+        "libc.so.6",
+        "libm.so.6",
+        "libpthread.so.0",
+        "ld-linux-armhf.so.3",
+    }
     if not set(needed) <= allowed:
         errors.append("unexpected NEEDED libraries: %s" % needed)
 

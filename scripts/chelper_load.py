@@ -8,6 +8,7 @@ library was linked against a newer glibc than the one present.
 
 Usage: chelper_load.py <path/to/c_helper.so>
 """
+
 import ctypes
 import os
 import platform
@@ -29,12 +30,24 @@ def main():
         sys.exit("FAIL: trapq_alloc returned NULL")
     lib.trapq_free.argtypes = [ctypes.c_void_p]
     lib.trapq_free(tq)
-    for name in ("serialqueue_alloc", "steppersyncmgr_alloc", "cartesian_stepper_alloc",
-                 "extruder_stepper_alloc", "input_shaper_alloc", "trdispatch_alloc"):
+    for name in (
+        "serialqueue_alloc",
+        "steppersyncmgr_alloc",
+        "cartesian_stepper_alloc",
+        "extruder_stepper_alloc",
+        "input_shaper_alloc",
+        "trdispatch_alloc",
+    ):
         getattr(lib, name)
-    print("OK: %s loads on %s, python %s, libc %s" % (
-        os.path.basename(path), platform.machine(),
-        platform.python_version(), "-".join(platform.libc_ver())))
+    print(
+        "OK: %s loads on %s, python %s, libc %s"
+        % (
+            os.path.basename(path),
+            platform.machine(),
+            platform.python_version(),
+            "-".join(platform.libc_ver()),
+        )
+    )
 
 
 if __name__ == "__main__":

@@ -6,6 +6,7 @@ fork: the command survives the end of the SSH session.
 
 Usage: hi_spawn.py <pidfile> <command> [args...]
 """
+
 import os
 import sys
 

@@ -23,11 +23,18 @@ Las MCU **no se reflashean**. Cada fase se prueba en la partición A/B libre: si
       [Creality-Hi-CFW](https://github.com/ale87jan/Creality-Hi-CFW) y
       [Creality-Hi-Kalico](https://github.com/ale87jan/Creality-Hi-Kalico) (fork de Jacob10383/kalico;
       `main` refleja el upstream, el trabajo va en `dev`). Sin submódulo por ahora.
-- [ ] Compilar `c_helper.so` de Kalico para ARMv7 hard-float, glibc 2.29 (la Hi no tiene gcc).
-- [ ] Revisar dependencias Python frente a las de la Hi (cffi 1.14.6, greenlet 1.0.0, numpy 1.20.1,
-      Jinja2 3.0.3); empaquetar ruedas si hace falta.
-- [ ] Instalación en la partición libre y forma de volver a stock (`fw_setenv root_partition` / `boot_partition`).
+- [x] Compilar `c_helper.so` de Kalico para ARMv7 hard-float, glibc 2.29 (la Hi no tiene gcc):
+      `scripts/build_chelper.sh`. Falta probar la carga en la impresora ([phase1-plan.md](phase1-plan.md) §4).
+- [x] Revisar dependencias Python frente a las de la Hi (cffi 1.14.6, greenlet 1.0.0, numpy 1.20.1,
+      Jinja2 3.0.3): Kalico funciona con ellas en PC; no hacen falta ruedas ([phase1-plan.md](phase1-plan.md) §2).
+- [ ] Instalación y forma de volver a stock. Scripts de sesión hechos y probados en simulación
+      (`scripts/hi_install.sh`, `hi_kalico.sh`, `hi_restore.sh`); sin probar en la impresora. El slot A/B libre se
+      aplaza: el overlay es común a los dos slots ([phase1-plan.md](phase1-plan.md) §5 y §9).
 - [ ] Config mínima: tres MCU, steppers Z/Z1/E, temperaturas, ventiladores. Sin motores X/Y, CFS ni sonda.
+      Escrita y validada en modo batch (`config/hi/printer.cfg` del fork); sin probar en la impresora.
+
+Plan, análisis y pruebas pendientes: [phase1-plan.md](phase1-plan.md). Estado: [ESTADO.md](ESTADO.md). Tareas:
+[backlog.md](backlog.md).
       Base: config actual de la impresora en `data/captures/2026-11-09_hi-v1.1.0.60/printer-config/`.
 
 ## Fase 2 — Motores X/Y de lazo cerrado

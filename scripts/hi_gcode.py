@@ -2,13 +2,14 @@
 """Minimal client for the Klipper/Kalico API socket (standard library only).
 
 Usage:
-  hi_gcode.py <socket> info              host state (startup/ready/error/shutdown)
+  hi_gcode.py <socket> info              host state (ready, error...)
   hi_gcode.py <socket> temps             heaters, thermistors and fans
   hi_gcode.py <socket> query OBJ [OBJ..] raw status of printer objects
   hi_gcode.py <socket> "G-CODE" [...]    run g-code and print its output
 
 Exit code: 0 ok, 1 the host answered with an error, 2 cannot connect.
 """
+
 import json
 import socket
 import sys
@@ -67,7 +68,10 @@ class Client:
 def show(msg):
     if "error" in msg:
         err = msg["error"]
-        print("ERROR: %s" % (err.get("message", err) if isinstance(err, dict) else err))
+        print(
+            "ERROR: %s"
+            % (err.get("message", err) if isinstance(err, dict) else err)
+        )
         return 1
     return 0
 
@@ -94,9 +98,17 @@ def main():
         if cmd == "temps":
             names = cli.call("objects/list")["result"]["objects"]
             wanted = [
-                n for n in names
-                if n.split()[0] in ("extruder", "heater_bed", "temperature_sensor",
-                                    "fan", "heater_fan", "fan_generic")
+                n
+                for n in names
+                if n.split()[0]
+                in (
+                    "extruder",
+                    "heater_bed",
+                    "temperature_sensor",
+                    "fan",
+                    "heater_fan",
+                    "fan_generic",
+                )
             ]
         else:
             wanted = args

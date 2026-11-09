@@ -33,6 +33,7 @@ rev=$(git -C "$kalico" rev-parse --short=12 HEAD)
 stamp=$(git -C "$kalico" log -1 --format=%ct HEAD)
 version=$(git -C "$kalico" describe --always --tags --long HEAD)
 tools_rev=$(git -C "$here" rev-parse --short=12 HEAD 2>/dev/null || echo unknown)
+if [ -n "$(git -C "$here" status --porcelain -- . 2>/dev/null)" ]; then tools_rev="$tools_rev-dirty"; fi
 
 if [ $skip -eq 0 ]; then
     "$here/build_chelper.sh" "${chelper_opts[@]}" "$kalico" "$out/chelper"
