@@ -28,6 +28,7 @@ Las MCU **no se reflashean**. Cada fase se prueba en la partición A/B libre: si
       Jinja2 3.0.3); empaquetar ruedas si hace falta.
 - [ ] Instalación en la partición libre y forma de volver a stock (`fw_setenv root_partition` / `boot_partition`).
 - [ ] Config mínima: tres MCU, steppers Z/Z1/E, temperaturas, ventiladores. Sin motores X/Y, CFS ni sonda.
+      Base: config actual de la impresora en `data/captures/2026-11-09_hi-v1.1.0.60/printer-config/`.
 
 ## Fase 2 — Motores X/Y de lazo cerrado
 

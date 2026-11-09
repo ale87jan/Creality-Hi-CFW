@@ -4,9 +4,14 @@
 
 | Carpeta | Contenido |
 | - | - |
-| `2026-11-09_hi-v1.1.0.60/` | `bed_mcu.json`: diccionario de la MCU de la cama (`ttyS4`). `motors.json`: dirección y 77 parámetros de los motores 0x81 (X) y 0x82 (Y), con el valor decodificado y los bytes crudos |
+| `2026-11-09_hi-v1.1.0.60/` | `bed_mcu.json`: diccionario de la MCU de la cama (`ttyS4`). `motors.json`: dirección y 77 parámetros de los motores 0x81 (X) y 0x82 (Y), con el valor decodificado y los bytes crudos. `printer-config/`: config de Klipper que corre en la impresora |
 
-Generados con `tools/hi_probe.py` (solo lectura) y Klipper de stock parado.
+- `bed_mcu.json` y `motors.json`: generados con `tools/hi_probe.py` (solo lectura) y Klipper de stock parado.
+- `printer-config/`: los 15 `.cfg` copiados de la impresora (`printer_data/config`). Son la config reorganizada
+  del usuario para el Klipper de stock (`v1.1.0.60-cfw.1`), idéntica a `ale87jan/Creality-Hi-Custom-Klipper`,
+  rama `dev`, commit `f2747f8` (2026-11-08), carpeta `config/F018_CR4NU200360C20`. Ese repo tiene además
+  `cfs_materials.cfg` y `original/` (config de stock). Usa comandos del Klipper parcheado de Creality: es la
+  base para escribir la config de Kalico, no se carga tal cual.
 
 ## `derived/` — extraídos de las imágenes OTA
 
