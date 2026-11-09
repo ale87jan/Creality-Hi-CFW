@@ -1,0 +1,938 @@
+{
+  "0x81": {
+    "params": {
+      "controller_cur_filter_param_en": {
+        "error": null,
+        "id": 128,
+        "raw": "0000",
+        "value": 0
+      },
+      "controller_cur_filter_param_fc": {
+        "error": null,
+        "id": 130,
+        "raw": "0080bb45",
+        "value": 6000.0
+      },
+      "controller_cur_loop_pid_fal_param_a": {
+        "error": null,
+        "id": 111,
+        "raw": "9a99993f",
+        "value": 1.2
+      },
+      "controller_cur_loop_pid_fal_param_en": {
+        "error": null,
+        "id": 110,
+        "raw": "0000",
+        "value": 0
+      },
+      "controller_cur_loop_pid_fal_param_zoom": {
+        "error": null,
+        "id": 113,
+        "raw": "0000803e",
+        "value": 0.25
+      },
+      "controller_cur_loop_pid_param_kc": {
+        "error": null,
+        "id": 105,
+        "raw": "0000003f",
+        "value": 0.5
+      },
+      "controller_cur_loop_pid_param_ki": {
+        "error": null,
+        "id": 103,
+        "raw": "00004843",
+        "value": 200.0
+      },
+      "controller_cur_loop_pid_param_kp": {
+        "error": null,
+        "id": 102,
+        "raw": "00000040",
+        "value": 2.0
+      },
+      "controller_fwc_param_I_max": {
+        "error": null,
+        "id": 123,
+        "raw": "0000b040",
+        "value": 5.5
+      },
+      "controller_fwc_param_en": {
+        "error": null,
+        "id": 122,
+        "raw": "0100",
+        "value": 1
+      },
+      "controller_fwc_param_phi_e": {
+        "error": null,
+        "id": 125,
+        "raw": "4382053b",
+        "value": 0.002037183
+      },
+      "controller_fwc_param_wm_base": {
+        "error": null,
+        "id": 127,
+        "raw": "0000c842",
+        "value": 100.0
+      },
+      "controller_leso_param_b0": {
+        "error": null,
+        "id": 117,
+        "raw": "00606a47",
+        "value": 60000.0
+      },
+      "controller_leso_param_b0k": {
+        "error": null,
+        "id": 116,
+        "raw": "00002041",
+        "value": 10.0
+      },
+      "controller_leso_param_wd": {
+        "error": null,
+        "id": 121,
+        "raw": "0000c843",
+        "value": 400.0
+      },
+      "controller_leso_param_wp": {
+        "error": null,
+        "id": 119,
+        "raw": "00007a45",
+        "value": 4000.0
+      },
+      "controller_leso_param_ws": {
+        "error": null,
+        "id": 120,
+        "raw": "00007a45",
+        "value": 4000.0
+      },
+      "controller_leso_param_z3k": {
+        "error": null,
+        "id": 118,
+        "raw": "00000000",
+        "value": 0.0
+      },
+      "controller_param_en_feedforward_idiq": {
+        "error": null,
+        "id": 66,
+        "raw": "0100",
+        "value": 1
+      },
+      "controller_param_en_feedforward_uduq": {
+        "error": null,
+        "id": 67,
+        "raw": "0100",
+        "value": 1
+      },
+      "controller_pos_loop_pid_param_kp": {
+        "error": null,
+        "id": 70,
+        "raw": "0000c842",
+        "value": 100.0
+      },
+      "controller_spd_loop_pid_fal_param_a": {
+        "error": null,
+        "id": 95,
+        "raw": "3333333f",
+        "value": 0.7
+      },
+      "controller_spd_loop_pid_fal_param_en": {
+        "error": null,
+        "id": 94,
+        "raw": "0000",
+        "value": 0
+      },
+      "controller_spd_loop_pid_fal_param_zoom": {
+        "error": null,
+        "id": 97,
+        "raw": "cdcccc3d",
+        "value": 0.1
+      },
+      "controller_spd_loop_pid_param_kc": {
+        "error": null,
+        "id": 89,
+        "raw": "0000003f",
+        "value": 0.5
+      },
+      "controller_spd_loop_pid_param_ki": {
+        "error": null,
+        "id": 87,
+        "raw": "00004842",
+        "value": 50.0
+      },
+      "controller_spd_loop_pid_param_kp": {
+        "error": null,
+        "id": 86,
+        "raw": "7b14ae3d",
+        "value": 0.085
+      },
+      "driver_board_param_R_of_current_sample_ohm": {
+        "error": null,
+        "id": 30,
+        "raw": "cdcc4c3d",
+        "value": 0.05
+      },
+      "driver_board_param_amp_gain": {
+        "error": null,
+        "id": 28,
+        "raw": "0000a041",
+        "value": 20.0
+      },
+      "driver_board_param_power_supply_V": {
+        "error": null,
+        "id": 26,
+        "raw": "0000c041",
+        "value": 24.0
+      },
+      "flash_manager_param_checksum_restore_en": {
+        "error": null,
+        "id": 168,
+        "raw": "0000",
+        "value": 0
+      },
+      "mcu_param_input_pulse_counter_filter_level": {
+        "error": null,
+        "id": 64,
+        "raw": "0400",
+        "value": 4
+      },
+      "mcu_param_input_pulse_counter_trigger_mode": {
+        "error": null,
+        "id": 63,
+        "raw": "0100",
+        "value": 1
+      },
+      "motor_param_Ke": {
+        "error": null,
+        "id": 43,
+        "raw": "899bd03d",
+        "value": 0.1018592
+      },
+      "motor_param_L": {
+        "error": null,
+        "id": 42,
+        "raw": "6f12833a",
+        "value": 0.001
+      },
+      "motor_param_R": {
+        "error": null,
+        "id": 41,
+        "raw": "9a99193f",
+        "value": 0.6
+      },
+      "param_boot_key": {
+        "error": null,
+        "id": 1,
+        "raw": "8642",
+        "value": 17030
+      },
+      "param_elec_angle_calibration_standar_deg": {
+        "error": null,
+        "id": 8,
+        "raw": "00007041",
+        "value": 15.0
+      },
+      "param_elec_offset": {
+        "error": null,
+        "id": 9,
+        "raw": "01299343",
+        "value": 294.3203
+      },
+      "param_elec_offset_err_deg": {
+        "error": null,
+        "id": 25,
+        "raw": "25939840",
+        "value": 4.767962
+      },
+      "param_emergency_pin_mode": {
+        "error": null,
+        "id": 11,
+        "raw": "0100",
+        "value": 1
+      },
+      "param_encoder_calibtate_official_ud_cal_set": {
+        "error": null,
+        "id": 23,
+        "raw": "9a99193e",
+        "value": 0.15
+      },
+      "param_flash_checksum": {
+        "error": null,
+        "id": 225,
+        "raw": "0000",
+        "value": 0
+      },
+      "param_flash_key": {
+        "error": null,
+        "id": 224,
+        "raw": "255b",
+        "value": 23333
+      },
+      "param_flash_key_write_retries_num": {
+        "error": null,
+        "id": 2,
+        "raw": "0500",
+        "value": 5
+      },
+      "param_flash_param_version": {
+        "error": null,
+        "id": 0,
+        "raw": "4702",
+        "value": 583
+      },
+      "param_motion_dir": {
+        "error": null,
+        "id": 21,
+        "raw": "0000803f",
+        "value": 1.0
+      },
+      "param_phase_order_invert": {
+        "error": null,
+        "id": 10,
+        "raw": "0000",
+        "value": 0
+      },
+      "param_pwm_period_s": {
+        "error": null,
+        "id": 4,
+        "raw": "f7cc1238",
+        "value": 3.5e-05
+      },
+      "param_singleturn_control_mode": {
+        "error": null,
+        "id": 7,
+        "raw": "0100",
+        "value": 1
+      },
+      "param_stall_cur_A": {
+        "error": null,
+        "id": 13,
+        "raw": "3333333f",
+        "value": 0.7
+      },
+      "param_stall_mode": {
+        "error": null,
+        "id": 12,
+        "raw": "0200",
+        "value": 2
+      },
+      "param_stall_pos_err_rad": {
+        "error": null,
+        "id": 14,
+        "raw": "8fc2753c",
+        "value": 0.015
+      },
+      "param_system_startup_delay_ms": {
+        "error": null,
+        "id": 3,
+        "raw": "6400",
+        "value": 100
+      },
+      "param_task_period_s": {
+        "error": null,
+        "id": 5,
+        "raw": "f7cc1239",
+        "value": 0.00014
+      },
+      "param_ud_cal_set": {
+        "error": null,
+        "id": 20,
+        "raw": "9a99193e",
+        "value": 0.15
+      },
+      "param_use_default_param": {
+        "error": null,
+        "id": 6,
+        "raw": "0000",
+        "value": 0
+      },
+      "protection_err_code_backup": {
+        "error": null,
+        "id": 191,
+        "raw": "00000000",
+        "value": 0
+      },
+      "protection_param_mcu_temp_max": {
+        "error": null,
+        "id": 190,
+        "raw": "0000e642",
+        "value": 115.0
+      },
+      "protection_param_power_voltage_min": {
+        "error": null,
+        "id": 189,
+        "raw": "0000a041",
+        "value": 20.0
+      },
+      "protection_param_protect_en": {
+        "error": null,
+        "id": 173,
+        "raw": "0100",
+        "value": 1
+      },
+      "protection_param_prt_continuous_clear_time_s": {
+        "error": null,
+        "id": 227,
+        "raw": "0000003f",
+        "value": 0.5
+      },
+      "protection_param_prt_continuous_cur_A": {
+        "error": null,
+        "id": 180,
+        "raw": "00008040",
+        "value": 4.0
+      },
+      "protection_param_prt_continuous_time_s": {
+        "error": null,
+        "id": 181,
+        "raw": "0000803f",
+        "value": 1.0
+      },
+      "protection_param_prt_over_speed_rad_s": {
+        "error": null,
+        "id": 182,
+        "raw": "63149d43",
+        "value": 314.1593
+      },
+      "protection_param_prt_over_speed_time_s": {
+        "error": null,
+        "id": 183,
+        "raw": "cdcccc3d",
+        "value": 0.1
+      },
+      "protection_param_prt_peak_cur_A": {
+        "error": null,
+        "id": 179,
+        "raw": "00c07944",
+        "value": 999.0
+      },
+      "protection_param_prt_track_err_time": {
+        "error": null,
+        "id": 188,
+        "raw": "cdcccc3d",
+        "value": 0.1
+      },
+      "protection_param_prt_track_max_err": {
+        "error": null,
+        "id": 187,
+        "raw": "cdcccc3d",
+        "value": 0.1
+      },
+      "protection_warning_code_backup": {
+        "error": null,
+        "id": 192,
+        "raw": "00000000",
+        "value": 0
+      },
+      "step_controller_param_subdivision": {
+        "error": null,
+        "id": 200,
+        "raw": "1000",
+        "value": 16
+      },
+      "zazen_param_zazen_en": {
+        "error": null,
+        "id": 217,
+        "raw": "0100",
+        "value": 1
+      },
+      "zazen_param_zazen_gain_cur_ki": {
+        "error": null,
+        "id": 223,
+        "raw": "0000803f",
+        "value": 1.0
+      },
+      "zazen_param_zazen_gain_cur_kp": {
+        "error": null,
+        "id": 222,
+        "raw": "0000803f",
+        "value": 1.0
+      },
+      "zazen_param_zazen_gain_spd_ki": {
+        "error": null,
+        "id": 221,
+        "raw": "0000003f",
+        "value": 0.5
+      },
+      "zazen_param_zazen_gain_spd_kp": {
+        "error": null,
+        "id": 220,
+        "raw": "0000003f",
+        "value": 0.5
+      },
+      "zazen_param_zazen_trigger_time_s": {
+        "error": null,
+        "id": 218,
+        "raw": "0000803f",
+        "value": 1.0
+      }
+    },
+    "reported_addr": 129,
+    "status": 0
+  },
+  "0x82": {
+    "params": {
+      "controller_cur_filter_param_en": {
+        "error": null,
+        "id": 128,
+        "raw": "0000",
+        "value": 0
+      },
+      "controller_cur_filter_param_fc": {
+        "error": null,
+        "id": 130,
+        "raw": "0080bb45",
+        "value": 6000.0
+      },
+      "controller_cur_loop_pid_fal_param_a": {
+        "error": null,
+        "id": 111,
+        "raw": "9a99993f",
+        "value": 1.2
+      },
+      "controller_cur_loop_pid_fal_param_en": {
+        "error": null,
+        "id": 110,
+        "raw": "0000",
+        "value": 0
+      },
+      "controller_cur_loop_pid_fal_param_zoom": {
+        "error": null,
+        "id": 113,
+        "raw": "0000803e",
+        "value": 0.25
+      },
+      "controller_cur_loop_pid_param_kc": {
+        "error": null,
+        "id": 105,
+        "raw": "0000003f",
+        "value": 0.5
+      },
+      "controller_cur_loop_pid_param_ki": {
+        "error": null,
+        "id": 103,
+        "raw": "00004843",
+        "value": 200.0
+      },
+      "controller_cur_loop_pid_param_kp": {
+        "error": null,
+        "id": 102,
+        "raw": "00000040",
+        "value": 2.0
+      },
+      "controller_fwc_param_I_max": {
+        "error": null,
+        "id": 123,
+        "raw": "0000b040",
+        "value": 5.5
+      },
+      "controller_fwc_param_en": {
+        "error": null,
+        "id": 122,
+        "raw": "0100",
+        "value": 1
+      },
+      "controller_fwc_param_phi_e": {
+        "error": null,
+        "id": 125,
+        "raw": "2c56013b",
+        "value": 0.00197352
+      },
+      "controller_fwc_param_wm_base": {
+        "error": null,
+        "id": 127,
+        "raw": "0000c842",
+        "value": 100.0
+      },
+      "controller_leso_param_b0": {
+        "error": null,
+        "id": 117,
+        "raw": "00606a47",
+        "value": 60000.0
+      },
+      "controller_leso_param_b0k": {
+        "error": null,
+        "id": 116,
+        "raw": "00002041",
+        "value": 10.0
+      },
+      "controller_leso_param_wd": {
+        "error": null,
+        "id": 121,
+        "raw": "0000c843",
+        "value": 400.0
+      },
+      "controller_leso_param_wp": {
+        "error": null,
+        "id": 119,
+        "raw": "00007a45",
+        "value": 4000.0
+      },
+      "controller_leso_param_ws": {
+        "error": null,
+        "id": 120,
+        "raw": "00007a45",
+        "value": 4000.0
+      },
+      "controller_leso_param_z3k": {
+        "error": null,
+        "id": 118,
+        "raw": "00000000",
+        "value": 0.0
+      },
+      "controller_param_en_feedforward_idiq": {
+        "error": null,
+        "id": 66,
+        "raw": "0100",
+        "value": 1
+      },
+      "controller_param_en_feedforward_uduq": {
+        "error": null,
+        "id": 67,
+        "raw": "0100",
+        "value": 1
+      },
+      "controller_pos_loop_pid_param_kp": {
+        "error": null,
+        "id": 70,
+        "raw": "0000c842",
+        "value": 100.0
+      },
+      "controller_spd_loop_pid_fal_param_a": {
+        "error": null,
+        "id": 95,
+        "raw": "3333333f",
+        "value": 0.7
+      },
+      "controller_spd_loop_pid_fal_param_en": {
+        "error": null,
+        "id": 94,
+        "raw": "0000",
+        "value": 0
+      },
+      "controller_spd_loop_pid_fal_param_zoom": {
+        "error": null,
+        "id": 97,
+        "raw": "cdcccc3d",
+        "value": 0.1
+      },
+      "controller_spd_loop_pid_param_kc": {
+        "error": null,
+        "id": 89,
+        "raw": "0000003f",
+        "value": 0.5
+      },
+      "controller_spd_loop_pid_param_ki": {
+        "error": null,
+        "id": 87,
+        "raw": "00004842",
+        "value": 50.0
+      },
+      "controller_spd_loop_pid_param_kp": {
+        "error": null,
+        "id": 86,
+        "raw": "321e853d",
+        "value": 0.064999
+      },
+      "driver_board_param_R_of_current_sample_ohm": {
+        "error": null,
+        "id": 30,
+        "raw": "cdcc4c3d",
+        "value": 0.05
+      },
+      "driver_board_param_amp_gain": {
+        "error": null,
+        "id": 28,
+        "raw": "0000a041",
+        "value": 20.0
+      },
+      "driver_board_param_power_supply_V": {
+        "error": null,
+        "id": 26,
+        "raw": "0000c041",
+        "value": 24.0
+      },
+      "flash_manager_param_checksum_restore_en": {
+        "error": null,
+        "id": 168,
+        "raw": "0000",
+        "value": 0
+      },
+      "mcu_param_input_pulse_counter_filter_level": {
+        "error": null,
+        "id": 64,
+        "raw": "0400",
+        "value": 4
+      },
+      "mcu_param_input_pulse_counter_trigger_mode": {
+        "error": null,
+        "id": 63,
+        "raw": "0100",
+        "value": 1
+      },
+      "motor_param_Ke": {
+        "error": null,
+        "id": 43,
+        "raw": "a516ca3d",
+        "value": 0.098676
+      },
+      "motor_param_L": {
+        "error": null,
+        "id": 42,
+        "raw": "3480b73a",
+        "value": 0.0014
+      },
+      "motor_param_R": {
+        "error": null,
+        "id": 41,
+        "raw": "14ae473f",
+        "value": 0.78
+      },
+      "param_boot_key": {
+        "error": null,
+        "id": 1,
+        "raw": "8642",
+        "value": 17030
+      },
+      "param_elec_angle_calibration_standar_deg": {
+        "error": null,
+        "id": 8,
+        "raw": "00007041",
+        "value": 15.0
+      },
+      "param_elec_offset": {
+        "error": null,
+        "id": 9,
+        "raw": "7c9d8143",
+        "value": 259.2303
+      },
+      "param_elec_offset_err_deg": {
+        "error": null,
+        "id": 25,
+        "raw": "6e79b040",
+        "value": 5.514823
+      },
+      "param_emergency_pin_mode": {
+        "error": null,
+        "id": 11,
+        "raw": "0100",
+        "value": 1
+      },
+      "param_encoder_calibtate_official_ud_cal_set": {
+        "error": null,
+        "id": 23,
+        "raw": "9a99193e",
+        "value": 0.15
+      },
+      "param_flash_checksum": {
+        "error": null,
+        "id": 225,
+        "raw": "0000",
+        "value": 0
+      },
+      "param_flash_key": {
+        "error": null,
+        "id": 224,
+        "raw": "255b",
+        "value": 23333
+      },
+      "param_flash_key_write_retries_num": {
+        "error": null,
+        "id": 2,
+        "raw": "0500",
+        "value": 5
+      },
+      "param_flash_param_version": {
+        "error": null,
+        "id": 0,
+        "raw": "4702",
+        "value": 583
+      },
+      "param_motion_dir": {
+        "error": null,
+        "id": 21,
+        "raw": "0000803f",
+        "value": 1.0
+      },
+      "param_phase_order_invert": {
+        "error": null,
+        "id": 10,
+        "raw": "0000",
+        "value": 0
+      },
+      "param_pwm_period_s": {
+        "error": null,
+        "id": 4,
+        "raw": "f7cc1238",
+        "value": 3.5e-05
+      },
+      "param_singleturn_control_mode": {
+        "error": null,
+        "id": 7,
+        "raw": "0100",
+        "value": 1
+      },
+      "param_stall_cur_A": {
+        "error": null,
+        "id": 13,
+        "raw": "3333333f",
+        "value": 0.7
+      },
+      "param_stall_mode": {
+        "error": null,
+        "id": 12,
+        "raw": "0200",
+        "value": 2
+      },
+      "param_stall_pos_err_rad": {
+        "error": null,
+        "id": 14,
+        "raw": "8fc2753c",
+        "value": 0.015
+      },
+      "param_system_startup_delay_ms": {
+        "error": null,
+        "id": 3,
+        "raw": "6400",
+        "value": 100
+      },
+      "param_task_period_s": {
+        "error": null,
+        "id": 5,
+        "raw": "f7cc1239",
+        "value": 0.00014
+      },
+      "param_ud_cal_set": {
+        "error": null,
+        "id": 20,
+        "raw": "9a99193e",
+        "value": 0.15
+      },
+      "param_use_default_param": {
+        "error": null,
+        "id": 6,
+        "raw": "0000",
+        "value": 0
+      },
+      "protection_err_code_backup": {
+        "error": null,
+        "id": 191,
+        "raw": "00000000",
+        "value": 0
+      },
+      "protection_param_mcu_temp_max": {
+        "error": null,
+        "id": 190,
+        "raw": "0000e642",
+        "value": 115.0
+      },
+      "protection_param_power_voltage_min": {
+        "error": null,
+        "id": 189,
+        "raw": "0000a041",
+        "value": 20.0
+      },
+      "protection_param_protect_en": {
+        "error": null,
+        "id": 173,
+        "raw": "0100",
+        "value": 1
+      },
+      "protection_param_prt_continuous_clear_time_s": {
+        "error": null,
+        "id": 227,
+        "raw": "0000003f",
+        "value": 0.5
+      },
+      "protection_param_prt_continuous_cur_A": {
+        "error": null,
+        "id": 180,
+        "raw": "00008040",
+        "value": 4.0
+      },
+      "protection_param_prt_continuous_time_s": {
+        "error": null,
+        "id": 181,
+        "raw": "0000803f",
+        "value": 1.0
+      },
+      "protection_param_prt_over_speed_rad_s": {
+        "error": null,
+        "id": 182,
+        "raw": "63149d43",
+        "value": 314.1593
+      },
+      "protection_param_prt_over_speed_time_s": {
+        "error": null,
+        "id": 183,
+        "raw": "cdcccc3d",
+        "value": 0.1
+      },
+      "protection_param_prt_peak_cur_A": {
+        "error": null,
+        "id": 179,
+        "raw": "00c07944",
+        "value": 999.0
+      },
+      "protection_param_prt_track_err_time": {
+        "error": null,
+        "id": 188,
+        "raw": "cdcccc3d",
+        "value": 0.1
+      },
+      "protection_param_prt_track_max_err": {
+        "error": null,
+        "id": 187,
+        "raw": "cdcccc3d",
+        "value": 0.1
+      },
+      "protection_warning_code_backup": {
+        "error": null,
+        "id": 192,
+        "raw": "00000000",
+        "value": 0
+      },
+      "step_controller_param_subdivision": {
+        "error": null,
+        "id": 200,
+        "raw": "1000",
+        "value": 16
+      },
+      "zazen_param_zazen_en": {
+        "error": null,
+        "id": 217,
+        "raw": "0100",
+        "value": 1
+      },
+      "zazen_param_zazen_gain_cur_ki": {
+        "error": null,
+        "id": 223,
+        "raw": "0000803f",
+        "value": 1.0
+      },
+      "zazen_param_zazen_gain_cur_kp": {
+        "error": null,
+        "id": 222,
+        "raw": "0000803f",
+        "value": 1.0
+      },
+      "zazen_param_zazen_gain_spd_ki": {
+        "error": null,
+        "id": 221,
+        "raw": "0000003f",
+        "value": 0.5
+      },
+      "zazen_param_zazen_gain_spd_kp": {
+        "error": null,
+        "id": 220,
+        "raw": "0000003f",
+        "value": 0.5
+      },
+      "zazen_param_zazen_trigger_time_s": {
+        "error": null,
+        "id": 218,
+        "raw": "0000803f",
+        "value": 1.0
+      }
+    },
+    "reported_addr": 130,
+    "status": 0
+  }
+}

@@ -1,0 +1,35 @@
+# Official firmware images and their extractions: large and proprietary.
+# Keep them locally; their checksums are listed in firmware/README.md.
+firmware/ota/*
+!firmware/ota/.gitkeep
+firmware/extracted/*
+!firmware/extracted/.gitkeep
+*.img
+*.swu
+
+# strings dumps of Creality's closed binaries: kept locally, not published
+data/derived/strings/
+
+# Large kernel artefacts produced by tools/fwextract.py bootimg
+vmlinux
+*.dtb
+
+# Personal Claude Code settings
+CLAUDE.local.md
+.claude/settings.local.json
+
+# Third-party repositories cloned for reference
+external/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+
+# Editors and OS
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db

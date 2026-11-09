@@ -1,0 +1,86 @@
+Files k2-v1.1.8.3/usr/share/klipper/klippy/chelper/Makefile and hi-v1.1.0.74/usr/share/klipper/klippy/chelper/Makefile differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/chelper/__init__.py and hi-v1.1.0.74/usr/share/klipper/klippy/chelper/__init__.py differ
+Only in hi-v1.1.0.74/usr/share/klipper/klippy/chelper: box_serial.c
+Only in hi-v1.1.0.74/usr/share/klipper/klippy/chelper: filament_change.c
+Files k2-v1.1.8.3/usr/share/klipper/klippy/chelper/filament_change.o and hi-v1.1.0.74/usr/share/klipper/klippy/chelper/filament_change.o differ
+Only in hi-v1.1.0.74/usr/share/klipper/klippy/chelper: make_T113arm.sh
+Only in hi-v1.1.0.74/usr/share/klipper/klippy/chelper: make_mips.sh
+Only in hi-v1.1.0.74/usr/share/klipper/klippy/chelper: make_rasp.sh
+Only in hi-v1.1.0.74/usr/share/klipper/klippy/chelper: make_x86.sh
+Only in hi-v1.1.0.74/usr/share/klipper/klippy/chelper: msgblock_485.c
+Files k2-v1.1.8.3/usr/share/klipper/klippy/chelper/msgblock_485.o and hi-v1.1.0.74/usr/share/klipper/klippy/chelper/msgblock_485.o differ
+Only in hi-v1.1.0.74/usr/share/klipper/klippy/chelper: serial_485_queue.c
+Files k2-v1.1.8.3/usr/share/klipper/klippy/chelper/serial_485_queue.o and hi-v1.1.0.74/usr/share/klipper/klippy/chelper/serial_485_queue.o differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/chelper/serialqueue.c and hi-v1.1.0.74/usr/share/klipper/klippy/chelper/serialqueue.c differ
+Only in hi-v1.1.0.74/usr/share/klipper/klippy/chelper: shaper_calibrate_c
+Files k2-v1.1.8.3/usr/share/klipper/klippy/chelper/trapq.c and hi-v1.1.0.74/usr/share/klipper/klippy/chelper/trapq.c differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/chelper/trapq.h and hi-v1.1.0.74/usr/share/klipper/klippy/chelper/trapq.h differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/clocksync.py and hi-v1.1.0.74/usr/share/klipper/klippy/clocksync.py differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/configfile.py and hi-v1.1.0.74/usr/share/klipper/klippy/configfile.py differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/extras/adc_temperature.py and hi-v1.1.0.74/usr/share/klipper/klippy/extras/adc_temperature.py differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/extras/adxl345.py and hi-v1.1.0.74/usr/share/klipper/klippy/extras/adxl345.py differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/extras/auto_addr.py and hi-v1.1.0.74/usr/share/klipper/klippy/extras/auto_addr.py differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/extras/auto_addr_wrapper.py and hi-v1.1.0.74/usr/share/klipper/klippy/extras/auto_addr_wrapper.py differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/extras/bed_mesh.py and hi-v1.1.0.74/usr/share/klipper/klippy/extras/bed_mesh.py differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/extras/belt_mdl.py and hi-v1.1.0.74/usr/share/klipper/klippy/extras/belt_mdl.py differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/extras/bus.py and hi-v1.1.0.74/usr/share/klipper/klippy/extras/bus.py differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/extras/custom_macro.py and hi-v1.1.0.74/usr/share/klipper/klippy/extras/custom_macro.py differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/extras/exclude_object.py and hi-v1.1.0.74/usr/share/klipper/klippy/extras/exclude_object.py differ
+Only in hi-v1.1.0.74/usr/share/klipper/klippy/extras: external_material.py
+Only in hi-v1.1.0.74/usr/share/klipper/klippy/extras: external_material_wrapper.py
+Files k2-v1.1.8.3/usr/share/klipper/klippy/extras/fan.py and hi-v1.1.0.74/usr/share/klipper/klippy/extras/fan.py differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/extras/fan_feedback.py and hi-v1.1.0.74/usr/share/klipper/klippy/extras/fan_feedback.py differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/extras/filament_switch_sensor.py and hi-v1.1.0.74/usr/share/klipper/klippy/extras/filament_switch_sensor.py differ
+Only in hi-v1.1.0.74/usr/share/klipper/klippy/extras: gap_auto_comp.py
+Files k2-v1.1.8.3/usr/share/klipper/klippy/extras/gcode_arcs.py and hi-v1.1.0.74/usr/share/klipper/klippy/extras/gcode_arcs.py differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/extras/gcode_macro.py and hi-v1.1.0.74/usr/share/klipper/klippy/extras/gcode_macro.py differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/extras/gcode_move.py and hi-v1.1.0.74/usr/share/klipper/klippy/extras/gcode_move.py differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/extras/heater_bed.py and hi-v1.1.0.74/usr/share/klipper/klippy/extras/heater_bed.py differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/extras/heater_fan.py and hi-v1.1.0.74/usr/share/klipper/klippy/extras/heater_fan.py differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/extras/heaters.py and hi-v1.1.0.74/usr/share/klipper/klippy/extras/heaters.py differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/extras/homing.py and hi-v1.1.0.74/usr/share/klipper/klippy/extras/homing.py differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/extras/io_remap.py and hi-v1.1.0.74/usr/share/klipper/klippy/extras/io_remap.py differ
+Only in k2-v1.1.8.3/usr/share/klipper/klippy/extras: load_ai.py
+Files k2-v1.1.8.3/usr/share/klipper/klippy/extras/metadata.py and hi-v1.1.0.74/usr/share/klipper/klippy/extras/metadata.py differ
+Only in k2-v1.1.8.3/usr/share/klipper/klippy/extras: ms3200x.py
+Only in hi-v1.1.0.74/usr/share/klipper/klippy/extras: nozzle_clear.py
+Files k2-v1.1.8.3/usr/share/klipper/klippy/extras/output_pin.py and hi-v1.1.0.74/usr/share/klipper/klippy/extras/output_pin.py differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/extras/pause_resume.py and hi-v1.1.0.74/usr/share/klipper/klippy/extras/pause_resume.py differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/extras/pid_calibrate.py and hi-v1.1.0.74/usr/share/klipper/klippy/extras/pid_calibrate.py differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/extras/print_stats.py and hi-v1.1.0.74/usr/share/klipper/klippy/extras/print_stats.py differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/extras/probe.py and hi-v1.1.0.74/usr/share/klipper/klippy/extras/probe.py differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/extras/resonance_tester.py and hi-v1.1.0.74/usr/share/klipper/klippy/extras/resonance_tester.py differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/extras/shaper_calibrate.py and hi-v1.1.0.74/usr/share/klipper/klippy/extras/shaper_calibrate.py differ
+Only in hi-v1.1.0.74/usr/share/klipper/klippy/extras: soft_homing.py
+Only in hi-v1.1.0.74/usr/share/klipper/klippy/extras: statistics.py
+Only in k2-v1.1.8.3/usr/share/klipper/klippy/extras: statistics_ext.py
+Only in hi-v1.1.0.74/usr/share/klipper/klippy/extras: steer.py
+Only in hi-v1.1.0.74/usr/share/klipper/klippy/extras: steer_wrapper.c
+Only in hi-v1.1.0.74/usr/share/klipper/klippy/extras: steer_wrapper.py
+Files k2-v1.1.8.3/usr/share/klipper/klippy/extras/stepper_enable.py and hi-v1.1.0.74/usr/share/klipper/klippy/extras/stepper_enable.py differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/extras/temperature_fan.py and hi-v1.1.0.74/usr/share/klipper/klippy/extras/temperature_fan.py differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/extras/temperature_mcu.py and hi-v1.1.0.74/usr/share/klipper/klippy/extras/temperature_mcu.py differ
+Only in hi-v1.1.0.74/usr/share/klipper/klippy/extras: test_tmc.py
+Only in hi-v1.1.0.74/usr/share/klipper/klippy/extras: timer_read.py
+Files k2-v1.1.8.3/usr/share/klipper/klippy/extras/tmc.py and hi-v1.1.0.74/usr/share/klipper/klippy/extras/tmc.py differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/extras/tmc2208.py and hi-v1.1.0.74/usr/share/klipper/klippy/extras/tmc2208.py differ
+Only in k2-v1.1.8.3/usr/share/klipper/klippy/extras: tmc2262.py
+Only in hi-v1.1.0.74/usr/share/klipper/klippy/extras: tmc_line_check.py
+Files k2-v1.1.8.3/usr/share/klipper/klippy/extras/tmc_uart.py and hi-v1.1.0.74/usr/share/klipper/klippy/extras/tmc_uart.py differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/extras/tool.py and hi-v1.1.0.74/usr/share/klipper/klippy/extras/tool.py differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/extras/verify_heater.py and hi-v1.1.0.74/usr/share/klipper/klippy/extras/verify_heater.py differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/extras/virtual_sdcard.py and hi-v1.1.0.74/usr/share/klipper/klippy/extras/virtual_sdcard.py differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/extras/z_align.py and hi-v1.1.0.74/usr/share/klipper/klippy/extras/z_align.py differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/extras/z_tilt.py and hi-v1.1.0.74/usr/share/klipper/klippy/extras/z_tilt.py differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/gcode.py and hi-v1.1.0.74/usr/share/klipper/klippy/gcode.py differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/kinematics/cartesian.py and hi-v1.1.0.74/usr/share/klipper/klippy/kinematics/cartesian.py differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/kinematics/corexy.py and hi-v1.1.0.74/usr/share/klipper/klippy/kinematics/corexy.py differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/kinematics/extruder.py and hi-v1.1.0.74/usr/share/klipper/klippy/kinematics/extruder.py differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/mcu.py and hi-v1.1.0.74/usr/share/klipper/klippy/mcu.py differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/msgproto.py and hi-v1.1.0.74/usr/share/klipper/klippy/msgproto.py differ
+Only in k2-v1.1.8.3/usr/share/klipper/klippy: mymodule
+Files k2-v1.1.8.3/usr/share/klipper/klippy/reactor.py and hi-v1.1.0.74/usr/share/klipper/klippy/reactor.py differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/serialhdl.py and hi-v1.1.0.74/usr/share/klipper/klippy/serialhdl.py differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/stepper.py and hi-v1.1.0.74/usr/share/klipper/klippy/stepper.py differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/toolhead.py and hi-v1.1.0.74/usr/share/klipper/klippy/toolhead.py differ
+Files k2-v1.1.8.3/usr/share/klipper/klippy/webhooks.py and hi-v1.1.0.74/usr/share/klipper/klippy/webhooks.py differ
