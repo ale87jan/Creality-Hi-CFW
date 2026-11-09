@@ -24,12 +24,15 @@ git-ignored; never copy them into tracked files. Both repos are **public**.
 
 ## Git
 
-- Branches: `main` is stable; all work goes to `dev` (or feature branches off `dev`), merged into `main` when
-  stable. Never commit directly on `main`.
-- Commit format `type(scope): description`, imperative, English, title <= 50 chars. Types: `feat`, `fix`,
-  `refactor`, `tune`, `docs`, `chore`.
-- Body: `CHANGES BY FILE:` (new files marked `[NEW]`) and `IMPROVEMENTS:`. No `Co-Authored-By` or
-  "Generated with" lines.
+Decision D4 in [docs/decisions.md](docs/decisions.md).
+
+- Branches: `main` is stable (releases); `dev` integrates work. Each task gets a branch off `dev`
+  (`feat/...`, `fix/...`, `docs/...`) merged into `dev` by pull request; `dev` goes to `main` by pull request
+  when stable. Never commit directly on `main` or `dev`.
+- [Conventional Commits](https://www.conventionalcommits.org/): `type(scope): description`, imperative,
+  English, title <= 72 chars (aim for 50), optional free-form body explaining why. Types: `feat`, `fix`,
+  `docs`, `refactor`, `test`, `perf`, `build`, `ci`, `chore`, `revert`.
+- No `Co-Authored-By` or "Generated with" lines in commits.
 - Atomic commits; never push or force-push unless asked.
 
 ## Layout
@@ -40,7 +43,7 @@ git-ignored; never copy them into tracked files. Both repos are **public**.
 | `docs/protocols/` | `rs485.md` (motor/CFS bus), `mcu.md` (Klipper MCU commands) |
 | `docs/analysis/` | Hi firmware version diffs; K2 port feasibility with on-printer results |
 | `docs/roadmap.md` | Phases and next steps |
-| `docs/decisions.md` | Design decisions (D1 Jacob10383's Kalico as base, D2 own fork, D3 two repos) |
+| `docs/decisions.md` | Design decisions (D1 Jacob10383's Kalico as base, D2 own fork, D3 two repos, D4 git flow) |
 | `RESEARCH.md` | Method, sources, confidence levels, licensing notes |
 | `tools/fwextract.py` | Unpack OTA images, MCU dictionaries, kernel/DTB/config |
 | `tools/hi_probe.py` | Read-only probe run **on the printer** (MCU identify, motor params) |
