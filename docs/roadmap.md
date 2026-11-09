@@ -19,7 +19,10 @@ Las MCU **no se reflashean**. Cada fase se prueba en la partición A/B libre: si
 - [x] El código vive en un fork propio del Kalico de Jacob10383 ([decisions.md](decisions.md), D2). Licencia:
       GPLv3.
 - [x] Dos repos: este para investigación, docs, herramientas e instalador; el fork para el código (D3).
-- [ ] Inicializar este repo y crear el fork (nombre, ubicación local, ¿submódulo aquí?).
+- [x] Repos creados (2026-11-09), públicos y GPLv3:
+      [Creality-Hi-CFW](https://github.com/ale87jan/Creality-Hi-CFW) y
+      [Creality-Hi-Kalico](https://github.com/ale87jan/Creality-Hi-Kalico) (fork de Jacob10383/kalico;
+      `main` refleja el upstream, el trabajo va en `dev`). Sin submódulo por ahora.
 - [ ] Compilar `c_helper.so` de Kalico para ARMv7 hard-float, glibc 2.29 (la Hi no tiene gcc).
 - [ ] Revisar dependencias Python frente a las de la Hi (cffi 1.14.6, greenlet 1.0.0, numpy 1.20.1,
       Jinja2 3.0.3); empaquetar ruedas si hace falta.
