@@ -55,11 +55,17 @@ def git(args, cwd):
         return ""
 
 
-def effective_cwd(cmd, cwd, dash_c):
-    m = re.match(r"\s*cd\s+(\S+)\s*(?:&&|;)", cmd)
-    base = os.path.join(cwd, os.path.expanduser(m.group(1))) if m else cwd
+CD = re.compile(r"(?:^|[;&|(\n])\s*cd\s+(\S+)")
+
+
+def effective_cwd(cmd, cwd, dash_c, upto):
+    """Directory a git call runs in: the start cwd moved by every `cd` that precedes it in the chain."""
+    base = cwd
+    for m in CD.finditer(cmd[:upto]):
+        target = os.path.expandvars(os.path.expanduser(m.group(1).strip("'\"")))
+        base = os.path.normpath(os.path.join(base, target))
     if dash_c:
-        base = os.path.join(base, os.path.expanduser(dash_c))
+        base = os.path.normpath(os.path.join(base, os.path.expanduser(dash_c)))
     return base
 
 
@@ -84,7 +90,7 @@ def check_bash(raw, cwd):
                     "(git add <file>..., git commit -m ... -- <file>...), never -A, -a, -u or '.'")
     for m in GIT_WRITE.finditer(cmd):
         verb = m.group(2)
-        where = effective_cwd(cmd, cwd, m.group(1))
+        where = effective_cwd(cmd, cwd, m.group(1), m.start())
         top = git(["rev-parse", "--show-toplevel"], where)
         if top and os.path.basename(top) in READ_ONLY_REPOS:
             out("deny", "%s is a read-only reference repository" % os.path.basename(top))

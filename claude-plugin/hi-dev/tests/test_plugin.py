@@ -53,6 +53,13 @@ class GuardBash(unittest.TestCase):
                   "FOO=1 git reset --hard", "git -C . commit -m 'a b'", "ls | git am x.patch"):
             self.assertEqual(guard("Bash", {"command": c}, r), "deny", c)
 
+    def test_cd_in_the_chain_sets_the_repo(self):
+        dev, task = make_repo("dev"), make_repo("feat/x")
+        self.assertIsNone(guard("Bash", {"command": "git status && cd %s && git commit -m 'feat: x'" % task}, dev))
+        self.assertIsNone(guard("Bash", {"command": "cd /tmp && cd %s && git commit -m 'feat: x'" % task}, dev))
+        self.assertEqual(guard("Bash", {"command": "cd %s && git commit -m 'feat: x'" % dev}, task), "deny")
+        self.assertEqual(guard("Bash", {"command": "cd %s && git add f && git commit -m 'feat: x'" % task + " && cd %s && git merge y" % dev}, task), "deny")
+
     def test_attribution_denied(self):
         self.assertEqual(guard("Bash", {"command": "git commit -m 'x' -m 'Co-Authored-By: a'"},
                                make_repo("feat/x")), "deny")
