@@ -25,9 +25,8 @@ config mínima en modo batch ([phase1-plan.md §3.2](phase1-plan.md)).
 ## Siguiente acción
 
 1. **Usuario:** revisar los pull request hacia `dev` (B01).
-2. **Usuario:** responder a la decisión pendiente (abajo).
-3. **Usuario:** compilar `c_helper.so` en su PC y ejecutar el paso 0 en la impresora (B03, B02).
-4. **Modelo:** analizar `step0.txt` y registrar decisiones (B02, B04).
+2. **Usuario:** compilar `c_helper.so` en su PC y ejecutar el paso 0 en la impresora (B03, B02).
+3. **Modelo:** analizar `step0.txt` (B02).
 
 Nada se ha ejecutado todavía en la impresora.
 
@@ -38,11 +37,8 @@ Nada se ha ejecutado todavía en la impresora.
 - Fork: commit `feat(hi): add phase 1 bring-up config with batch tests` (`config/hi/printer.cfg`, `test/hi/`,
   `test/test_hi_config.py`).
 
-## Decisiones pendientes del usuario
+## Decisiones
 
-Enviadas el 2026-11-09 (se trabaja con la opción recomendada mientras tanto). Detalle en
-[phase1-plan.md §10](phase1-plan.md):
-
-1. ~~Cómo se instala Kalico en fase 1~~: aprobada la escalonada sin flash el 2026-11-10 (D5).
-2. ~~De dónde sale `c_helper.so`~~: aprobado como artefacto del paquete el 2026-11-10 (D6).
-3. Interfaz en fase 1 (recomendada: consola SSH y después Fluidd).
+Las tres enviadas el 2026-11-09 se aprobaron el 2026-11-10 con la opción recomendada: D5, D6 y D7 en
+[decisions.md](decisions.md). Quedan sin confirmar expresamente las cuatro tomadas por defecto
+([phase1-plan.md §10](phase1-plan.md)).

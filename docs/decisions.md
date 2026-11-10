@@ -129,3 +129,21 @@ el `.tar.gz` con su SHA-256. El fork conserva el binario de Jacob sin tocar.
 
 - Un clon del fork no funciona en la Hi por sí solo: hay que instalar el paquete.
 - `make_bundle.sh` rechaza un `.so` compilado de otro commit.
+
+## D7 — Interfaz en fase 1: consola SSH y después Fluidd (2026-11-10)
+
+**Contexto.** `master-server`, `display-server` y `app-server` de Creality hablan con Klipper directamente por
+`/tmp/klippy_uds` ([phase1-plan.md](phase1-plan.md) §5.3). Opciones: consola SSH y después Fluidd, solo consola,
+o dejar todos los servicios de stock encendidos contra Kalico.
+
+**Decisión.** Primer arranque con socket propio (`/tmp/kalico_uds`) y consola por SSH (`hi_kalico.sh gcode`);
+cuando el arranque básico esté comprobado, el Moonraker de stock apuntando a Kalico (`hi_kalico.sh start --ui`).
+Los servicios de Creality (pantalla, nube) se paran durante la sesión.
+
+**Motivos.** Con socket propio los servicios de Creality no envían a Kalico peticiones propietarias, y Fluidd se
+añade cuando ya se sabe que el núcleo funciona.
+
+**Consecuencias.**
+
+- La pantalla queda sin servicio mientras dura una sesión de Kalico.
+- Falta comprobar que el Moonraker de stock funciona contra Kalico (backlog B10).

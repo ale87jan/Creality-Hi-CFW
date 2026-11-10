@@ -43,7 +43,7 @@ Decision D4 in [docs/decisions.md](docs/decisions.md).
 | `docs/protocols/` | `rs485.md` (motor/CFS bus), `mcu.md` (Klipper MCU commands) |
 | `docs/analysis/` | Hi firmware version diffs; K2 port feasibility with on-printer results |
 | `docs/roadmap.md` | Phases and next steps |
-| `docs/decisions.md` | Design decisions (D1 Jacob10383's Kalico as base, D2 own fork, D3 two repos, D4 git flow, D5 staged phase 1, D6 c_helper.so artifact) |
+| `docs/decisions.md` | Design decisions (D1 Jacob10383's Kalico as base, D2 own fork, D3 two repos, D4 git flow, D5 staged phase 1, D6 c_helper.so artifact, D7 phase 1 UI) |
 | `RESEARCH.md` | Method, sources, confidence levels, licensing notes |
 | `tools/fwextract.py` | Unpack OTA images, MCU dictionaries, kernel/DTB/config |
 | `tools/hi_probe.py` | Read-only probe run **on the printer** (MCU identify, motor params) |

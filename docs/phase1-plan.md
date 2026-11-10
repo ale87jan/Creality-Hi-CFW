@@ -308,13 +308,8 @@ No forma parte de la fase 1. Queda como diseño para cuando Kalico imprima:
 ## 10. Decisiones
 
 Aprobadas el 2026-11-10 y registradas en [decisions.md](decisions.md): instalación escalonada sin escribir en
-flash (§5.3, D5) y `c_helper.so` como artefacto del paquete de instalación (§6, D6).
-
-Pendientes de aprobación (enviadas el 2026-11-09; se trabaja con la recomendada):
-
-| # | Decisión | Recomendada | Alternativas |
-| - | - | - | - |
-| P3 | Interfaz en fase 1 | Consola SSH y después Fluidd (§5.3) | Solo consola; todo lo de stock encendido |
+flash (§5.3, D5), `c_helper.so` como artefacto del paquete de instalación (§6, D6) y consola SSH seguida de
+Fluidd como interfaz (§5.3, D7).
 
 Tomadas por defecto, reversibles (se pasarán a [decisions.md](decisions.md) al aprobarse):
 
