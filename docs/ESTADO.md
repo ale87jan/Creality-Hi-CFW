@@ -57,7 +57,9 @@ forma parte del `G28 Z` de stock. Ni el módulo de la K2 (pide `safeDist` y `z_a
 
 Análisis ligero hecho el 2026-11-10: [phase5-plan.md](phase5-plan.md). Tareas B31 a B35. Las capas de bus y
 protocolo del fork valen; `box.py` no vale tal cual (pin del sensor de corte, corte hacia -X y zona trasera de
-la K2 fijos en el código). Falta leer la lógica de carga y purga (B32) antes de decidir cómo adaptarlo.
+la K2 fijos en el código). `gitstonelabs/creality-cfs-klipper` (GPLv3, validado en una Hi) es la candidata para
+la coreografía, pero abre el puerto serie por su cuenta y hay que pasarlo a `serial_485`. Falta leer las dos
+lógicas (B32, B31b) antes de decidir.
 
 ## Fase 6 (macros y uso)
 

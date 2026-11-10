@@ -318,17 +318,17 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
   tiene test sin impresora.
 - **Riesgos:** ninguno; solo lectura.
 
-### B31b — Fase 5: contrastar con `gitstonelabs/creality-cfs-klipper` · M
+### B31b — Fase 5: contrastar con `gitstonelabs/creality-cfs-klipper` · M · EN CURSO
 
-- **Objetivo:** leer ese repositorio (protocolo del CFS documentado sobre una Hi) y compararlo con
-  `box_protocol.py` del fork: tramas, respuestas de la app 113, secuencias de carga, corte y purga. Pedido por
-  el usuario el 2026-11-10.
-- **Ficheros:** `external/creality-cfs-klipper` (clonado, solo lectura); `docs/protocols/rs485.md`,
-  `docs/phase5-plan.md`.
-- **Hecho cuando:** el plan tiene una tabla de diferencias con referencias a fichero y línea de las dos fuentes,
-  y dice qué se reutiliza de cada una. Revisar su licencia antes de copiar código.
-- **Riesgos:** ninguno; solo lectura. Necesita acceso al repositorio (en la nube, añadirlo a la sesión o
-  clonarlo en el PC).
+- **Hecho (2026-11-10):** primera lectura en [phase5-plan.md §1](phase5-plan.md): licencia GPLv3, Hi como
+  hardware de referencia, mismos códigos de función que el fork, geometría de corte igual a la de stock, y el
+  problema de que abre el puerto serie por su cuenta.
+- **Falta:** tabla trama a trama (carga útil y respuesta) entre `ref:src/creality_cfs.py`, `ref:docs/protocol.md`
+  y `fork:box_protocol.py`; leer la coreografía (`ref:src/creality_cfs.py:1100-3839`) y estimar el cambio de
+  transporte a `serial_485` (opción D).
+- **Hecho cuando:** el plan tiene la tabla y una recomendación para la decisión 1.
+- **Acceso:** repositorio público; en la nube se clona solo para leer en una carpeta aparte. En el PC, en
+  `external/`.
 
 ### B32 — Fase 5: leer la lógica de `box.py` y `box_change.py` · M
 

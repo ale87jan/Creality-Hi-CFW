@@ -12,6 +12,7 @@ y extruye: es la última pieza.
 
 ## 1. Conclusiones
 
+0. Notación adicional: `ref:` es `gitstonelabs/creality-cfs-klipper` en el commit `16309d8`.
 1. En stock, `box`, `auto_addr` y `filament_rack` son `.so` cerrados
    [verificado: stock:klippy/extras/box.py:1, auto_addr.py:1, filament_rack.py:1]. No hay código de la Hi que
    leer; la referencia es su config y el código abierto de la K2.
@@ -28,11 +29,34 @@ y extruye: es la última pieza.
 
 ### Referencia externa: `gitstonelabs/creality-cfs-klipper`
 
-El usuario la señala (2026-11-10) como referencia para implementar el CFS. Documenta el protocolo del CFS a
-partir de capturas del bus y `strings`, y **la Hi es su hardware de referencia** [verificado: RESEARCH.md:14-15].
-Eso la hace la mejor fuente para dos huecos de este análisis: las respuestas de la app `cfs0_000_113` de la Hi
-(conclusión 5) y la secuencia real de carga, corte y purga de esta máquina (§4, opción C). No la he leído en
-este análisis: es la tarea B31b. Es código de terceros: se clona en `external/` y se lee, no se ejecuta.
+El usuario la señala (2026-11-10) como referencia para implementar el CFS. Primera lectura hecha el mismo día
+sobre el commit `16309d8` (2026-07-30), clonado solo para leer; no he leído la lógica de `creality_cfs.py`
+(3839 líneas), solo cabecera, constantes, opciones y documentación [verificado: ref:README.md,
+ref:src/creality_cfs.py:1-700, 969-1023, ref:configs/printer.cfg.example].
+
+- **Licencia GPLv3** (`ref:LICENSE`), como Kalico: se puede reutilizar código citando el origen.
+- **La Hi (F018) es su hardware de referencia**. El protocolo sale de capturas del bus con CRC verificado; la
+  coreografía (carga, descarga, corte, purga) se validó en una Hi real con CFS hasta el 2026-07-01
+  (`ref:README.md`, sección Status; `ref:src/creality_cfs.py`, nota v1.4.0).
+- **Mismos códigos de función que el fork**: `0x02`, `0x03`, `0x04`, `0x05`, `0x08`, `0x0A`, `0x0D`, `0x0E`,
+  `0x10`, `0x11`, `0xA0`-`0xA2` y `0x0B` aparecen en los dos, con nombres distintos en algunos (`0x04`
+  `SET_BOX_MODE` frente a `CMD_TRACKING`; `0x08` `GET_HARDWARE_STATUS` frente a `CMD_SLOT_MASK`)
+  [verificado: ref:src/creality_cfs.py:353-394; fork:klippy/extras/box_protocol.py:24-38]. Falta comparar
+  cargas útiles y respuestas (B31b). La referencia añade `0x0F` (motor de conexión), `0x14` y `0xF0` (versión).
+- **Confirma la geometría de corte de la Hi**: `cut_switch_pin: !toolhead_mcu:PB1`, `pre_cut_pos_x: 240`,
+  `pre_cut_pos_y: 130`, `cut_pos_x: 283.5`, `cut_pos_x_max: 285` (`ref:configs/printer.cfg.example:99-107`).
+  Coincide con el stock (§2) y resuelve el supuesto de que `switch_pin` es el sensor de la cuchilla.
+- **Problema para usarlo tal cual en la Hi con Kalico**: el módulo abre él mismo el puerto serie y no comparte
+  `serial_485` (`ref:src/creality_cfs.py:101-107`). En la Hi ese puerto es el bus de los drivers de X/Y, que
+  `motor_control_hi` usa a través de `serial_485`. Dos módulos sobre el mismo puerto no pueden convivir. El
+  autor menciona una variante para la Hi sobre `serial_485` (`ref:src/creality_cfs.py:37-39`), que no está en
+  el repositorio [verificado: listado de ficheros].
+- **Envía una trama a la dirección de un driver**: su lectura de diagnóstico `0x0C` va a `0x81` con carga
+  `0B` (`ref:src/creality_cfs.py:2345-2358`). Para nosotros esa trama es `PROTECTION` consultar errores del
+  driver de X, de solo lectura [verificado: docs/protocols/rs485.md:48]. Su captura `f7 81 04 00 0c 0b`
+  coincide con nuestra descripción de la trama. No es peligrosa, pero no es del CFS.
+
+Con esto aparece una cuarta forma de adaptar el CFS (§4, opción D).
 
 ## 2. Config de stock de la Hi
 
@@ -56,8 +80,8 @@ este análisis: es la tarea B31b. Es código de terceros: se clona en `external/
 La Hi corta en +X (derecha), purga fuera de la cama por la izquierda (X=-18,5) y limpia en una pieza de teflón
 entre X=-5 y X=0. No tiene papelera ni almohadilla traseras.
 
-`switch_pin` es muy probablemente el sensor de la cuchilla [supuesto: el módulo es un `.so`; confirmarlo en el
-paso 5.1 empujando la cuchilla a mano y leyendo el pin].
+`switch_pin` es el sensor de la cuchilla [verificado: ref:configs/printer.cfg.example:99-102, que lo llama
+`cut_switch_pin`]. El paso 5.1 lo comprueba en la impresora.
 
 ## 3. Qué tiene fijo `box.py` de la K2
 
@@ -88,8 +112,15 @@ Lo que sí coincide: el nombre del sensor de filamento (`filament_switch_sensor 
   (`BOX_LOAD_MATERIAL_WITH_MATERIAL` y siguientes, `stock:box.cfg`). Menos funciones al principio (sin mapa de
   colores del laminador ni recuperación), pero cada movimiento es de la Hi.
 
-No tengo recomendación firme hasta leer la lógica (B32): depende de cuánto de `box.py` es geometría de la K2.
-Con lo visto me inclino por **A para el pin y el sentido del corte** y decidir la purga después.
+- **D. `creality_cfs.py` de gitstonelabs con el transporte cambiado a `serial_485`**: la coreografía ya está
+  hecha y validada sobre una Hi, con la geometría de stock. Hay que sustituir su capa serie (reactor propio)
+  por el bus compartido y quitar la lectura `0x0C` a `0x81`. Es otro juego de comandos (`CFS_INIT`,
+  `CFS_STATUS`, `CFS_EXTRUDE`, `CFS_RETRUDE`, `CFS_CUT`, `CFS_FLUSH`), distinto del de la K2 (`BOX_LOAD`...) y
+  del de stock (`BOX_*`).
+
+No tengo recomendación firme hasta leer la lógica (B32 y B31b): depende de cuánto de `box.py` es geometría de la K2.
+Con lo visto, **D** es la candidata: es la única coreografía probada en una Hi. La alternativa es A para el
+pin y el sentido del corte. La decisión depende de cuánto cuesta cambiar el transporte de D.
 
 ## 5. Plan en la impresora
 
@@ -104,7 +135,7 @@ Con lo visto me inclino por **A para el pin y el sentido del corte** y decidir l
 
 ## 6. Decisiones que necesito
 
-1. **Cómo adaptar `box.py`** (§4): A, B o C. Se decide después de B32 y B31b.
+1. **Cómo adaptar el CFS** (§4): A, B, C o D. Se decide después de B32 y B31b.
 2. **Purga en la Hi**: repetir la de stock (purga en X=-18,5 y limpieza en teflón) o usar solo torre de purga.
    Recomendada: la de stock, con sus valores.
 3. **Rack externo (`filament_rack`)**: dejarlo fuera de la primera versión (recomendada) o incluirlo.
