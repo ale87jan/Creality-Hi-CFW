@@ -93,3 +93,9 @@ ls: /usr/data/fluidd*: No such file or directory
 ls: /mnt/UDISK/fluidd*: No such file or directory
 /usr/share/fluidd
 /www
+## evdev abs ranges (EVIOCGABS on /dev/input/event0, read-only)
+ABS_MT_TOUCH_MAJOR value=0 min=0 max=255 fuzz=0 flat=0 res=0
+ABS_MT_WIDTH_MAJOR value=0 min=0 max=255 fuzz=0 flat=0 res=0
+ABS_MT_POSITION_X value=0 min=0 max=0 fuzz=0 flat=0 res=0
+ABS_MT_POSITION_Y value=0 min=0 max=0 fuzz=0 flat=0 res=0
+ABS_MT_TRACKING_ID value=0 min=0 max=255 fuzz=0 flat=0 res=0

@@ -44,7 +44,7 @@ Captura de solo lectura con el firmware de stock en marcha: `data/captures/2026-
 | Framebuffer | `/dev/fb0`, virtual 240x640, 32 bpp, `stride` 960 [verificado: probe:4,10-12]; `disp_reserve=307200` = 240·320·4 [verificado: probe:2] | Panel visible de 240x320 con dos páginas (doble búfer). LVGL con `fbdev` vale, con color de 32 bits |
 | Retroiluminación | No existe `/sys/class/backlight`; solo `pwmchip0` [verificado: probe:16-18] | El brillo va por la pila `disp` o por el PWM; cómo lo hace `display-server` [supuesto: `strings` del binario en el PC] |
 | Táctil | Un solo dispositivo, `gt9xxnew_ts` en `/dev/input/event0`; `tlsc6x` cargado pero sin dispositivo [verificado: probe:8,21,25,32-33] | El controlador real es el Goodix |
-| Ejes del táctil | `ABS=2650000 0`: solo ejes multitáctiles (`ABS_MT_POSITION_X/Y`, `TRACKING_ID`, `TOUCH_MAJOR`, `WIDTH_MAJOR`), sin `ABS_X/ABS_Y`; `BTN_TOUCH` presente [verificado: probe:28-29, decodificado a mano] | El `evdev` de `lv_drivers` debe leer los ejes MT. **El rango (¿240x320 o 480x800?) sigue sin medir** [supuesto: leerlo con el ioctl `EVIOCGABS`, que es de solo lectura] |
+| Ejes del táctil | `ABS=2650000 0`: solo ejes multitáctiles (`ABS_MT_POSITION_X/Y`, `TRACKING_ID`, `TOUCH_MAJOR`, `WIDTH_MAJOR`), sin `ABS_X/ABS_Y`; `BTN_TOUCH` presente [verificado: probe:28-29, decodificado a mano] | El `evdev` de `lv_drivers` debe leer los ejes MT. El driver **no declara rango** para X/Y (`EVIOCGABS` devuelve `max=0`) [verificado: probe:96-100]: no se puede saber si entrega 240x320 o 480x800 sin tocar la pantalla. [supuesto: leer eventos de `event0` mientras se tocan las esquinas, tarea B47] |
 | Quién usa la pantalla | `display-server` tiene abiertos `/dev/fb0` y `/dev/input/event0`, y cuatro ficheros de memoria compartida en `/tmp/shm/` (`device_state_shm`, `materail_box_shm`, `dev_maintain_shm`, `print_object_shm`) [verificado: probe:49-57] | Para usar el panel hay que parar `display-server`. Recibe el estado por memoria compartida; quien habla con `/tmp/klippy_uds` es otro proceso [supuesto: `master-server`] |
 | Motor gráfico de stock | Sin biblioteca LVGL dinámica; usa `libfreetype`, `libpng16`, `libjpeg` [verificado: probe:60-76] | [supuesto: LVGL enlazado en estático; no afecta al plan] |
 | Memoria | 488 MB, 365 MB disponibles con el stock en marcha; sin swap [verificado: probe:79-80] | Sobra para una UI LVGL (decenas de MB) |
@@ -246,7 +246,7 @@ free -m; df -h; python3 -c "import PIL; print(PIL.__version__)" 2>&1
 El `backlog.md` de las fases está en otra rama y no existe aún en `dev`; por eso las tareas quedan aquí para
 copiarlas al unir ramas. Siguientes ids tras B39: B40-B44. Todas U (sin analizar) salvo indicación.
 
-### B40 — Pantalla: captura de solo lectura de hardware y procesos de la UI · S (hecha 2026-11-10, ver §1b; falta el rango del táctil)
+### B40 — Pantalla: captura de solo lectura de hardware y procesos de la UI · S (hecha 2026-11-10, ver §1b)
 
 - **Objetivo:** ejecutar los comandos del §4 y guardar la salida en `data/captures/<fecha>_hi-screen/`.
 - **Hecho cuando:** quedan fijados (con [P]) la resolución y bpp del `fb0`, el modelo y rango del táctil,
@@ -296,3 +296,11 @@ copiarlas al unir ramas. Siguientes ids tras B39: B40-B44. Todas U (sin analizar
   hard-float; medir tamaño y qué vistas caben en 240x320.
 - **Hecho cuando:** binario ARMv7 estático generado y capturas del simulador a 240x320 guardadas.
 - **Riesgos:** ninguno en la impresora (no se ejecuta en la Hi en esta tarea).
+
+### B47 — Pantalla: medir las coordenadas reales del táctil · S
+
+- **Objetivo:** leer los eventos de `/dev/input/event0` (solo lectura, sin capturar el dispositivo) mientras
+  Alejandro toca las cuatro esquinas, y anotar los valores de `ABS_MT_POSITION_X/Y`.
+- **Hecho cuando:** quedan fijados el rango, la orientación y si hay ejes invertidos o intercambiados.
+- **Riesgos:** con `display-server` en marcha los toques actúan sobre la UI de stock: tocar en una pantalla
+  sin botones en las esquinas (p. ej. la de inicio) y con la impresora en reposo.
