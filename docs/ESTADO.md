@@ -27,7 +27,7 @@ config mínima en modo batch ([phase1-plan.md §3.2](phase1-plan.md)).
 1. **Usuario:** revisar los pull request hacia `dev` (B01).
 2. **Hecho (2026-11-10):** `c_helper.so` compilado y cargado en la Hi; paso 0 ejecutado (B03, B02).
    Salida en `data/captures/2026-11-10_hi-step0/`. `hi_install.sh --dry-run` correcto.
-   Escalón 1 (ficheros en `/mnt/UDISK/kalico-hi`) hecho; **Kalico arrancó en la Hi el 2026-11-10** (escalón 2: `ready` con las tres MCU, sin mover ni calentar aún).
+   Escalón 1 (ficheros en `/mnt/UDISK/kalico-hi`) hecho; **Kalico arrancó en la Hi el 2026-11-10** (escalón 2: `ready` con las tres MCU; drivers, sensores de Z, ventilador, calentadores, Z y extrusor probados; `stop` devuelve a stock). Detalle en [phase1-plan.md §8.1](phase1-plan.md).
 3. **Usuario, con el hilo de la guía:** escalones 2 y 3 de [phase1-plan.md §8](phase1-plan.md).
 
 En la impresora se han ejecutado el paso 0, la copia de ficheros del escalón 1 y el arranque del escalón 2.
