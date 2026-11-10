@@ -18,7 +18,7 @@ fases y aquí daría conflicto).
 | 0 Solo Fluidd | **Adoptada como base**: la pantalla queda parada durante Kalico hasta tener sustituto |
 | G Panel del CFS en Fluidd | **Planificado** (B45), tras fijar la interfaz del CFS en la fase 5 |
 | A UI de stock (A1 y A2) | **Descartada**; B41 deja de hacer falta |
-| Pantalla táctil | Preferencia: adaptar ADL-Screen o K1C-CFS-Power-Screen (opción H) o UI propia (E). Sin cerrar |
+| Pantalla táctil | Preferencia: adaptar ADL-Screen o K1C-CFS-Power-Screen (opción H) o UI propia (E). **Aplazada** hasta leer el panel real (B40) y fijar la interfaz del CFS (fase 5) |
 
 ## 1. Qué tiene la Hi
 
