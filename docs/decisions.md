@@ -263,3 +263,16 @@ si la limpieza falla a medias.
 - Tras un error de limpieza hay que lanzar `NOZZLE_CLEAN_RESET` (o reiniciar); si no, las siguientes limpiezas
   no hacen nada y no avisan.
 - La limpieza no se engancha al `G28 Z`: es siempre una orden explícita.
+
+## D15 — Módulos de la Hi que se portan en la fase 4 (2026-11-10)
+
+**Contexto.** La Hi trae cinco módulos legibles propios: `z_align`, `nozzle_clear`, `tmc_line_check`,
+`bl24c16f` y `timer_read` ([phase4-plan.md](phase4-plan.md)).
+
+**Decisión.** Se portan `z_align` (D13), la limpieza de boquilla (D14) y `tmc_line_check`. `bl24c16f` queda sin
+fecha y `timer_read` no se porta.
+
+**Consecuencias.**
+
+- `CHECK_ZMOTOR_LINE` permite comprobar los cables de Z y Z1 antes del primer `ZDOWN` (paso 4.2b).
+- Sin `bl24c16f` no hay recuperación de impresión tras un corte de luz.

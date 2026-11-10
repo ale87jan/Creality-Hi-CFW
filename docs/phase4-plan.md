@@ -279,7 +279,25 @@ lectura.
 - Usa `mcu_tmc.test_get_register`, un método añadido por Creality [verificado: stock:tmc_line_check.py:43]
   [supuesto: en Kalico se sustituye por `mcu_tmc.get_register(nombre)`; comprobarlo al portar].
 
-Diagnóstico de fábrica. Kalico ya ofrece `DUMP_TMC`. Baja prioridad.
+Diagnóstico de fábrica: en stock ninguna macro lo llama, solo `test_tmc.py`
+[verificado: búsqueda de `CHECK_ZMOTOR_LINE` en stock:klippy y en captura:printer-config].
+
+**Hecho el 2026-11-10 (D15).** `klippy/extras/tmc_line_check.py` del fork, con `[tmc_line_check]` en
+`config/hi/zalign.cfg` y 9 tests. Sin probar en la impresora.
+
+- El supuesto queda resuelto: se lee `DRV_STATUS` con `mcu_tmc.get_register("DRV_STATUS")`
+  [verificado: fork:klippy/extras/tmc_uart.py:305-306; fork:klippy/extras/tmc2208.py:27]. El criterio es el de
+  stock: cualquier bit del byte bajo (`otpw`, `ot`, `s2ga`, `s2gb`, `s2vsa`, `s2vsb`, `ola`, `olb`) es fallo
+  [verificado: stock:tmc_line_check.py:55, 77, 85].
+- Ante un fallo apaga motores, pone Klipper en `shutdown` y da error, como stock
+  [verificado: stock:tmc_line_check.py:20-26].
+- Diferencias: en stock, si falla Z1, `stepper_z` retrocede dos veces 0,5 mm
+  [verificado: stock:tmc_line_check.py:87, 91]; aquí cada motor retrocede una sola vez. Mensajes sin los
+  códigos `key4xx` de la pantalla de Creality.
+- En batch el registro se lee como 0, así que el caso de fallo solo está cubierto con drivers simulados
+  [verificado: fork:klippy/extras/tmc_uart.py:288-292]. Que un cable suelto levante `ola`/`olb` tras mover
+  0,5 mm es comportamiento del TMC2208 [supuesto: comprobar en la Hi leyendo `READ_REG_TMC` con todo conectado;
+  no desconectar motores para probarlo].
 
 ## 7. `timer_read`
 
@@ -305,6 +323,7 @@ Todo ello depende de que la fase 3 funcione en la Hi; se marca como no probado.
 | - | - | - |
 | 4.1 | Con stock: `QUERY_FILAMENT_SENSOR SENSOR=filament_sensor_4` y `_5` con el puente arriba del todo y a media altura. Confirma polaridad y qué sensor es cada husillo | No |
 | 4.2 | Con stock: `G28 Z` y copiar del log las líneas `send query_z_align` y `z_align_status`. Da los ticks, los pasos y el `deltaError1` de referencia | Mueve (stock) |
+| 4.2b | Con Kalico (`align.cfg`): `READ_REG_TMC STEP=z` y `STEP=z1` (solo lectura) y después `CHECK_ZMOTOR_LINE` | Mueve Z y Z1 0,5 mm |
 | 4.3 | Con Kalico: `CHECK_ZLIMIT` y después `ZDOWN` con el puente a menos de 30 mm de los sensores de arriba, mano en el interruptor | Mueve Z |
 | 4.4 | `ZDOWN` desde media altura; comparar `deltaError1` con el de 4.2 | Mueve Z |
 | 4.5 | `G28` completo (X/Y, `ZDOWN`, sonda) y comparar Z=0 y `zmax` con stock | Mueve todo |
@@ -315,6 +334,8 @@ Todo ello depende de que la fase 3 funcione en la Hi; se marca como no probado.
 
 Orden decidido (D12, 2026-11-10): esta fase se prueba **antes** que la sonda (fase 3).
 Decisión 1 cerrada (D13, 2026-11-10): B, portado del módulo de la Hi.
+Decisión 2 cerrada (D15, 2026-11-10): además de `z_align` y la limpieza se porta `tmc_line_check`; `bl24c16f`
+sin fecha; `timer_read` no se porta. Decisión 3 cerrada (D14): macros del usuario.
 
 ### Hecho el 2026-11-10 (B26)
 

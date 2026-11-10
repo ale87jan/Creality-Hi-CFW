@@ -302,10 +302,15 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
   resultados [P] en `docs/hardware.md`.
 - **Riesgos:** la MCU no se puede parar durante `ZDOWN`; empezar con el puente cerca del tope superior.
 
-### B30 — `bl24c16f` y `tmc_line_check` · M, sin fecha
+### B30 — `tmc_line_check` · M · HECHO 2026-11-10 (sin impresora)
 
-- **Objetivo:** portarlos solo si hacen falta (recuperación tras corte de luz; diagnóstico de cables de Z).
-  `timer_read` no se porta. Pendiente de la decisión 2 de la fase 4.
+- **Hecho:** `klippy/extras/tmc_line_check.py`, `[tmc_line_check]` en `config/hi/zalign.cfg`,
+  `test/test_hi_tmc_line_check.py` (9 tests). Decisión D15. Detalle en [phase4-plan.md §6](phase4-plan.md).
+- **Pendiente:** paso 4.2b en la impresora.
+
+### B30b — `bl24c16f` · M, sin fecha
+
+- **Objetivo:** portarlo solo si hace falta (recuperación tras corte de luz). `timer_read` no se porta (D15).
 - **Riesgos:** los comandos `EEPROM_WRITE_*` escriben en una memoria que también usa el stock.
 
 ### B31 — Fase 5: clasificar las tramas del CFS · M

@@ -67,7 +67,8 @@ Plan y análisis: [phase4-plan.md](phase4-plan.md).
 - [ ] `z_align.py` (el de la K2 no es compatible; el de la Hi depende de parches de Creality).
 - [ ] Limpieza de boquilla: macros del usuario portadas (`config/hi/clean.cfg` del fork), en lugar de
       reescribir `nozzle_clear.py`. Sin probar en la impresora.
-- [ ] `bl24c16f.py` y `tmc_line_check.py`: sin fecha. `timer_read.py`: no se porta (propuesta).
+- [ ] `tmc_line_check.py`: portado (D15), sin probar en la impresora.
+- [ ] `bl24c16f.py`: sin fecha. `timer_read.py`: no se porta (D15).
 
 ## Fase 5 — CFS
 
