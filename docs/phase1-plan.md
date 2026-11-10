@@ -312,6 +312,13 @@ en `data/captures/2026-11-10_hi-step0/step0.txt` [P salvo donde se indica].
 | Escalón 2, arranque | `hi_kalico.sh start` con aprobación del usuario, impresora fría y en `standby`: Kalico `v2026.11.00-57-g61602f77` llega a `ready` con las tres MCU configuradas (`mcu` gd32f303xe 117 órdenes, `nozzle_mcu` gd32f303xb 113, `bed_mcu` gd32e230x8 94). Boquilla 29,3 °C, cama 25,6 °C, `mcu_temp` 35,2 °C, ventiladores a 0. Capturas en `data/captures/2026-11-10_kalico-start/` |
 | Escalón 2, pasos 5 y 6 | `DUMP_TMC`: `stepper_z`, `stepper_z1` y `extruder` responden por UART (TMC220x, `IOIN` versión `0x20`), sin avisos de temperatura ni cortos; `GSTAT reset=1` es la marca de encendido. `QUERY_ENDSTOPS` en reposo: todo a 0. Con cartulina: sensor **izquierdo** activa `z` (`PB15`), sensor **derecho** activa `z1` (`PB14`); 1 = tapado, sin cruces |
 | Escalón 2, paso 7 | `M106 S128`: `power` 0,35, `speed` 0,25 (reescalado previsto en §3.1); los ventiladores de capa giran y `M107` los para. `hotend_fan` a 0 en frío; `rpm` nulo (sin tacómetro configurado). `aux_fan` respondía en `PB2`, pero la Hi no tiene ese ventilador: quitado de la config |
+| Escalón 2, paso 8 | Boquilla a 50 °C: de 29 a 51,7 °C en 10 s, pico 56,0 °C (6 °C de sobrepaso), 52,4 °C a los 42 s; `hotend_fan` se enciende al pasar de 50 °C. Cama a 40 °C: 26,7 a 40,2 °C en 182 s, máximo 40,5 °C, sin `verify_heater`. Lectura de cama sin la corrección de Creality (R6) |
+
+Sobrepaso de la boquilla: el PID es el de stock (`26.978 / 2.725 / 66.770`) [verificado: K:config/hi/base.cfg
+frente a captura:toolhead.cfg:27-30], ajustado para temperaturas de impresión; con una consigna de 50 °C el
+calentador satura toda la subida y la inercia hace el resto. Que stock sobrepase igual es [supuesto: repetir la
+misma consigna en stock]. Antes de ir a 200 °C se sube por escalones (120, 200) mirando el pico;
+`PID_CALIBRATE` queda como opción si el pico a 200 °C pasa de unos 5 °C.
 
 Primer arranque de Kalico en la Hi [P]: las MCU conservaban la configuración del Klipper de stock, así que Kalico
 detecta `CRC mismatch`, reinicia las tres con `restart_method = command` y vuelve a empezar 11 s después. En ese
