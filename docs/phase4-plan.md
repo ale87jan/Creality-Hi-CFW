@@ -129,6 +129,10 @@ serie) y que la macro de `G28` hay que mantenerla.
   `clear_start: 148, 266`, `probe_pos_diff: 0, 0`, `clear_lenght: 14, 2`, `upraise: 0.2`, `clear_cnt: 10`
   [verificado: stock:printer.cfg:351-360]. La zona de limpieza es una pieza de teflón en la
   parte trasera (Y=266 de 274) [usuario, 2026-11-10].
+- Junto al teflón hay una **placa metálica para sellar la boquilla** después de limpiar: evita que gotee y
+  mejora la detección de Z con la boquilla [usuario, 2026-11-10]. Encaja con la secuencia de stock: tras frotar
+  vuelve a `clear_start` desplazado 20 mm en X, hace `PROBE` y enfría hasta `closure_temp` (120 °C) con la
+  boquilla apoyada [verificado: stock:nozzle_clear.py:133-135, 151-161].
 - Dependencias que el fork no tiene:
   - `prtouch_v3.pres.tri_hold`, que modifica en caliente para subir el umbral de disparo
     [verificado: stock:nozzle_clear.py:75-77].
@@ -238,6 +242,27 @@ Todo ello depende de que la fase 3 funcione en la Hi; se marca como no probado.
 ## 10. Decisiones que necesito
 
 Orden decidido (D12, 2026-11-10): esta fase se prueba **antes** que la sonda (fase 3).
+Decisión 1 cerrada (D13, 2026-11-10): B, portado del módulo de la Hi.
+
+### Hecho el 2026-11-10 (B26)
+
+`klippy/extras/z_align_hi.py` (unas 300 líneas), `config/hi/zalign.cfg` (valores de stock), `config/hi/align.cfg`
+(fase 2 más alineación, sin sonda, para probar antes según D12), `config/hi/phase4.cfg` (fase 3 más alineación
+y macro de `G28`) y `test/test_hi_z_align.py` (12 tests) [verificado: fork en la rama de trabajo].
+
+- En batch la MCU recibe `config_z_align(_add)` y `config_z_align_up(_add)` con `PB4`/`PA5`/`PB15` y
+  `PB6`/`PB5`/`PB14`, `zd_up=0`, `zes_untrig=0`; `ZDOWN` envía `quickSpeed=7500`, `slowSpeed=30000`,
+  `risingDist=4000`, `filterCnt=10`, y `UP_SAFE_Z` `risingDist=12000` (reloj de 120 MHz, 32 micropasos, paso de
+  0,00125 mm). **Comparar con el log de stock en el paso 4.2** [supuesto hasta entonces].
+- Diferencias con el stock, a propósito: el `timeout` y el exceso de reintentos son errores (el stock avisaba y
+  seguía); en el `timeout` se apagan los motores, que es la única forma de parar el movimiento sin
+  `force_stop`; tras un fallo o tras `UP_SAFE_Z` Z queda sin homing; `UP_SAFE_Z` espera a que la MCU termine (el
+  stock volvía al segundo por un `return` mal sangrado, `stock:z_align.py:189`); el estado se lee con
+  `register_response` y los sensores con `[buttons]`.
+- No portado: el `zmax` real medido y `ADJUST_STEPPERS`. Tras `ZDOWN` Z queda en `position_max` (310).
+- La macro de `G28` de `phase4.cfg`: `UP_SAFE_Z` si Z no tiene homing, `G28 X Y`, centro de la cama, `ZDOWN`
+  (salvo `ZDOWN_SWITCH ENABLE=0`) y `G28 Z` con la sonda. Si X/Y no pueden hacer homing, el puente ya habrá
+  subido 15 mm; cada intento fallido lo sube otros 15 mm [supuesto: la MCU para en los sensores; paso 4.3].
 
 1. **Cómo portar `z_align`**: B, portar el módulo de la Hi con sus comandos y una macro de `G28`
    (recomendada); o A, derivarlo del módulo de la K2 para integrarlo en el `homing.py` del fork (§3).

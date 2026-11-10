@@ -69,7 +69,7 @@ Con esto aparece una cuarta forma de adaptar el CFS (§4, opción D).
 | Tope de búsqueda del corte | `check_cut_pos_x_max: 280`; `cut_pos_x: 283.5` comentado | box.cfg:16, 40 |
 | Límites de X | `position_min: -19`, `position_max: 285` | printer.cfg:79-80 |
 | Punto de purga | `extrude_pos_x: -18.50`, `extrude_pos_y: 130`, `has_extrude_pos: 1` | box.cfg |
-| Pasada junto a la papelera | `clean_left_pos_x: 0`, `clean_right_pos_x: -5`, Y=130, `clean_velocity: 12000` | box.cfg |
+| Pasada corta para soltar la purga | `clean_left_pos_x: 0`, `clean_right_pos_x: -5`, Y=130, `clean_velocity: 12000` | box.cfg |
 | Limpieza en el teflón trasero | `[nozzle_clear]`: `start_pos: 98, 266`, `clear_start: 148, 266` | printer.cfg:351-360 |
 | Rodeo del corte a la purga | `detour_pos_y: 261`, `detour_y: True` | box.cfg |
 | Retracción y carga | `Tn_retrude: -20`, `Tn_extrude: 140`, `Tn_extrude_temp: 220`, `buffer_empty_len: 30` | box.cfg |
@@ -80,8 +80,8 @@ Con esto aparece una cuarta forma de adaptar el CFS (§4, opción D).
 
 La Hi corta en +X (derecha), purga fuera de la cama por la izquierda (X=-18,5), **donde está la papelera**, y
 limpia en una pieza de teflón **trasera**, en la posición de `[nozzle_clear]` [usuario, 2026-11-10]. Los
-valores `clean_left_pos_x`/`clean_right_pos_x` de `[box]` (X entre -5 y 0, Y=130) son otra pasada, junto a la
-papelera; el comentario de stock también la llama teflón [supuesto: ver en la impresora qué hay en X=-5..0].
+valores `clean_left_pos_x`/`clean_right_pos_x` de `[box]` (X entre -5 y 0, Y=130) son otra pasada, corta, junto a
+la papelera, para soltar el material purgado [usuario, 2026-11-10].
 
 `switch_pin` es el sensor de la cuchilla [verificado: ref:configs/printer.cfg.example:99-102, que lo llama
 `cut_switch_pin`]. El paso 5.1 lo comprueba en la impresora.

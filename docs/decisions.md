@@ -231,3 +231,21 @@ el primer contacto de la boquilla con la cama con el puente ya nivelado y Z en u
 - `z_align_hi.py` (B26) pasa a ser la siguiente pieza de código, antes de probar `config/hi/phase3.cfg`.
 - Los números de fase del roadmap no cambian; cambia el orden de las pruebas: 1, 2, 4 (solo `z_align`), 3.
 
+## D13 — `z_align` portado del módulo de la Hi (2026-11-10)
+
+**Contexto.** Ni el `z_align.py` de la K2 (pide `safeDist` y `z_align_force_stop`) ni el de la Hi (depende de
+parches de Creality) valen tal cual ([phase4-plan.md](phase4-plan.md) §3). Opciones: portar el de la Hi con sus
+comandos y una macro de `G28`, o derivar el de la K2 integrado en el `homing.py` del fork.
+
+**Decisión.** Portar el de la Hi: `z_align_hi.py` con `ZDOWN`, `UP_SAFE_Z`, `CHECK_ZLIMIT` y `ZDOWN_SWITCH`.
+
+**Motivos.** Es la secuencia que la MCU de la Hi ya ejecuta en stock, el módulo es corto y no depende de
+protecciones de MCU que la Hi no tiene.
+
+**Consecuencias.**
+
+- El objeto se llama `z_align_hi`, así que el `homing.py` del fork no lo integra; la secuencia vive en la macro
+  `[homing_override]` de `config/hi/phase4.cfg`, en serie como el stock.
+- No hay forma de parar la MCU a mitad de una alineación: ante un `timeout` se apagan los motores.
+- Se pierde la corrección de `Z_TILT_ADJUST` en cada `ZDOWN` hasta portar un sustituto de `ADJUST_STEPPERS`.
+

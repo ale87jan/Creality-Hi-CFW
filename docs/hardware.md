@@ -67,7 +67,8 @@ Solo X e Y son de lazo cerrado. Z, Z1 y el extrusor usan TMC2208 por UART [F].
 ## CFS
 
 - Corte de filamento hacia +X (derecha); papelera a la izquierda, fuera de la cama (purga en X=-18,5, Y=130);
-  pieza de teflón para limpiar la boquilla detrás, en la posición de `[nozzle_clear]` (Y=266) [usuario].
+  pieza de teflón para limpiar la boquilla detrás, en la posición de `[nozzle_clear]` (Y=266), con una placa
+  metálica al lado para sellar la boquilla tras limpiar y que no gotee [usuario].
 
 - Unidad CFS v1 en el bus RS-485, direcciones 0x01-0x04 [F].
 - Bootloader `cfs0_050_G30` / `cfs0_050_G32`; app `cfs0_000_113` en V1.1.0.60 y `142` desde V1.1.0.73 [F].

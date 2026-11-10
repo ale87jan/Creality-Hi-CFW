@@ -267,17 +267,19 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
 - **Hecho cuando:** están en `decisions.md`.
 - **Riesgos:** B26 depende de la decisión 1; la decisión 3 espera a B27.
 
-### B26 — Fase 4: `z_align_hi.py` con tests · M
+### B26 — Fase 4: `z_align_hi.py` con tests · M · HECHO 2026-11-10
 
-- **Objetivo:** módulo de alineación de los dos Z para la MCU de la Hi (`query_z_align` sin `safeDist`, sin
-  `z_align_force_stop`), según la decisión 1, sin los parches de Creality de
-  [phase4-plan.md §3](phase4-plan.md).
-- **Ficheros:** Creality-Hi-Kalico `klippy/extras/z_align_hi.py`, `config/hi/phase4.cfg`,
-  `test/test_hi_z_align.py`.
-- **Hecho cuando:** en batch emite `config_z_align(_add)` y `config_z_align_up(_add)` con `PB15`/`PB14` y los
-  pines de Z y Z1, y `ZDOWN` envía `query_z_align` con los ticks de los valores de stock; un test con MCU
-  simulada cubre reintentos y `timeout`.
-- **Riesgos:** polaridades `zd_up`/`zes_untrig`; no existe sustituto de `ADJUST_STEPPERS`.
+- **Hecho:** módulo, `config/hi/zalign.cfg`, `align.cfg`, `phase4.cfg` y `test/test_hi_z_align.py` (12 tests:
+  pines y polaridades hacia la MCU, ticks y pasos, reintentos, `timeout`, sensores). Detalle y diferencias con
+  el stock en [phase4-plan.md §10](phase4-plan.md). Decisión D13.
+- **Pendiente:** sustituto de `ADJUST_STEPPERS` y del `zmax` real medido (B26b).
+
+### B26b — Fase 4: conservar la corrección de inclinación tras `ZDOWN` · M
+
+- **Objetivo:** que `ZDOWN` no obligue a repetir `Z_TILT_ADJUST`: guardar la última corrección y reaplicarla
+  (lo que hace `ADJUST_STEPPERS` en el `z_tilt.py` de stock, líneas 167-187), y medir y guardar el `zmax` real.
+- **Hecho cuando:** hay test que comprueba que la corrección guardada se reaplica tras `ZDOWN`.
+- **Riesgos:** leer antes el `z_tilt.py` de stock; puede no hacer falta si `Z_TILT_ADJUST` es rápido.
 
 ### B27 — Fase 4: leer `NOZZLE_CLEANUP` y `PRTOUCH_SCRUB` · M
 
