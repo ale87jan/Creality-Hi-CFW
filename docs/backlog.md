@@ -281,21 +281,17 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
 - **Hecho cuando:** hay test que comprueba que la corrección guardada se reaplica tras `ZDOWN`.
 - **Riesgos:** leer antes el `z_tilt.py` de stock; puede no hacer falta si `Z_TILT_ADJUST` es rápido.
 
-### B27 — Fase 4: leer `NOZZLE_CLEANUP` y `PRTOUCH_SCRUB` · M
+### B27 — Fase 4: leer `NOZZLE_CLEANUP` y `PRTOUCH_SCRUB` · M · HECHO 2026-11-10
 
-- **Objetivo:** saber si alguna de las dos limpiezas del fork se puede configurar para la zona de limpieza de
-  la Hi (`start_pos: 98, 266`) o hay que reescribir `nozzle_clear.py`.
-- **Ficheros:** Creality-Hi-Kalico `klippy/extras/nozzle_cleanup.py`, `klippy/extras/prtouch.py`
-  (`cmd_PRTOUCH_SCRUB`); `docs/phase4-plan.md` §4.
-- **Hecho cuando:** el plan tiene la comparación y una recomendación para la decisión 3.
-- **Riesgos:** ninguno; solo lectura.
+- **Hecho:** ninguna de las dos reproduce la limpieza de stock (una frota en frío, la otra solo comprueba
+  toques). Detalle en [phase4-plan.md §4](phase4-plan.md).
 
-### B28 — Fase 4: limpieza de boquilla · M
+### B28 — Fase 4: limpieza de boquilla · M · HECHO 2026-11-10 (sin impresora)
 
-- **Objetivo:** `NOZZLE_CLEAN` real según la decisión 3, con la secuencia de stock
-  (`nozzle_clear.py:84-167`) como especificación.
-- **Hecho cuando:** carga en batch y genera los movimientos esperados dentro de la zona de limpieza.
-- **Riesgos:** depende de la fase 3 probada en la Hi; calienta la boquilla y toca la cama.
+- **Hecho:** `config/hi/clean.cfg` (macros del usuario portadas a variables de `_HI_CLEAN`) y
+  `test/test_hi_clean.py` (4 tests). G-code contrastado línea a línea con el original.
+- **Pendiente:** probar en la Hi después de la sonda (paso 4.6); que el usuario revise las cuatro diferencias
+  de [phase4-plan.md §4](phase4-plan.md) (guarda de reentrada, no enganchada al `G28 Z`).
 
 ### B29 — Fase 4: pruebas en la impresora · U, después M
 

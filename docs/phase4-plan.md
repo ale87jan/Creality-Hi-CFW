@@ -183,6 +183,54 @@ Criterio del usuario (2026-11-10): si `PRTOUCH_SCRUB` funciona en la Hi, se mant
 limpieza propia de la Hi con `NOZZLE_CLEANUP` o con sus macros. Con lo leído, `PRTOUCH_SCRUB` no es
 equivalente y no se puede dar por bueno sin impresora; la opción con menos riesgo son sus macros.
 
+### Lectura de `NOZZLE_CLEANUP` (2026-11-10, B27)
+
+[verificado: fork:klippy/extras/nozzle_cleanup.py:83-173]
+
+- Desde la posición actual recorre un patrón en serpentina (`pattern_x` × `pattern_y`, paso `stepover`) y en
+  cada punto hace un toque con la sonda; termina cuando encadena `samples` toques buenos y da error si agota el
+  patrón. Tras un toque malo puede lanzar un G-code de frotado (`GcodeNozzleScrubber`).
+- Es compatible con el `prtouch.py` del fork, que devuelve `(posición, is_good)` en cada toque
+  [verificado: fork:klippy/extras/prtouch.py:68-72].
+- No calienta, no retrae, no frota en el teflón y no sella: comprueba que los toques son limpios, sobre la
+  superficie que haya debajo. No sustituye a la limpieza de stock; como mucho la complementa.
+
+Conclusión de B27: ninguna de las dos limpiezas del fork reproduce la de stock. Se portan las macros del
+usuario.
+
+### Hecho el 2026-11-10 (B28)
+
+`config/hi/clean.cfg` del fork: `NOZZLE_WIPE`, `NOZZLE_QUICK_WIPE` y `NOZZLE_CLEAN` (completa la primera vez,
+rápida después), con los valores de `[nozzle_clear]`, `[box] extrude_pos_x` y `PRINTER_PARAM` como variables de
+la macro `_HI_CLEAN`. `phase4.cfg` lo incluye. Nada probado en la impresora.
+
+- Contraste con el original: renderizadas las plantillas del usuario y las portadas con los mismos valores y la
+  misma semilla, el G-code de movimiento, temperatura y sonda es idéntico línea a línea (140 líneas la completa,
+  153 con limpieza fina, 62 la rápida) [verificado: comparación fuera del repo, 2026-11-10].
+- Valores: los del `toolhead.cfg` capturado en la impresora (`start_pos: 98, 268`, `clear_start: 148, 268`,
+  `touch_cnt: 4`), no los de fábrica (Y=266, `touch_cnt: 3`)
+  [verificado: captura:printer-config/toolhead.cfg:87-105, factory_printer.cfg:349-358].
+- `PROBE PROBE_SPEED=... SAMPLE_RETRACT_DIST=...` se acepta [verificado: fork:klippy/extras/probe.py:664, 693].
+  En batch la sonda no responde, así que los tests sustituyen `PROBE` por un contador: cubren la lógica y las
+  posiciones (referencia de Z en la placa metálica, X=128 Y=268), no el toque
+  [verificado: fork:test/test_hi_clean.py].
+
+Diferencias con el original, todas a revisar por el usuario:
+
+1. **No se engancha al `G28 Z`.** Las macros llaman ellas a `G28 Z`. El `homing.py` del fork solo llama a
+   `NOZZLE_CLEAN` antes del toque si `[prtouch]` tiene escrito `register_as_probe`
+   [verificado: fork:homing.py:1131-1135, valor por defecto `False` en esa lectura]; no se escribe, así que
+   limpiar es siempre una orden explícita.
+2. **Guarda de reentrada.** En el original, `NOZ_CLEAR` pone `inside_nozzle_cleaning=1` y después llama a
+   `NOZZLE_WIPE`, que solo actúa si vale 0. Como cada macro se evalúa al ejecutarse, por ese camino la limpieza
+   no haría nada y la variable se quedaría en 1 [supuesto: comprobar en la impresora de stock si `NOZ_CLEAR`
+   limpia de verdad]. En el port la guarda (`busy`) vive solo en las dos macros que trabajan.
+3. **Guarda tras un error.** Igual que en el original, si la macro falla a medias (por ejemplo, un toque que
+   no dispara) `busy` se queda en 1 y las limpiezas siguientes no hacen nada hasta reiniciar. Pendiente de
+   decidir si se quita la guarda.
+4. Sin `SET_VELOCITY_LIMIT` (fijaba los límites a su valor actual) ni los alias `NOZ_CLEAR`/`NOZZLE_CLEAR`
+   (fase 6).
+
 ## 5. `bl24c16f`
 
 - EEPROM I2C en la MCU Linux del host: `i2c_mcu: rpi`, `i2c_bus: i2c.1`, y `[mcu rpi]` en
@@ -238,6 +286,7 @@ Todo ello depende de que la fase 3 funcione en la Hi; se marca como no probado.
 | 4.3 | Con Kalico: `CHECK_ZLIMIT` y después `ZDOWN` con el puente a menos de 30 mm de los sensores de arriba, mano en el interruptor | Mueve Z |
 | 4.4 | `ZDOWN` desde media altura; comparar `deltaError1` con el de 4.2 | Mueve Z |
 | 4.5 | `G28` completo (X/Y, `ZDOWN`, sonda) y comparar Z=0 y `zmax` con stock | Mueve todo |
+| 4.6 | `NOZZLE_QUICK_WIPE` y después `NOZZLE_WIPE`, con la mano en el interruptor en el primer toque sobre la tira trasera (Y=268) | Mueve todo y calienta la boquilla (175 °C) |
 
 ## 10. Decisiones que necesito
 

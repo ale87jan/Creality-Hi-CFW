@@ -52,8 +52,9 @@ todos los `.cfg` y `HI_CONFIG` elige cuál arranca. Decisión 1 del §7 cerrada 
 Análisis hecho el 2026-11-10: [phase4-plan.md](phase4-plan.md). Tareas B25 a B30. Solo `z_align` es necesario:
 forma parte del `G28 Z` de stock. Ni el módulo de la K2 (pide `safeDist` y `z_align_force_stop`) ni el de la Hi
 (depende de cuatro parches de Creality) valen tal cual. Hecho `z_align_hi.py`, portado del de la Hi (D13), con
-`align.cfg` para probarlo antes que la sonda (D12) y `phase4.cfg` con la macro de `G28`; 12 tests. Faltan la
-limpieza de boquilla (B27, B28) y conservar la corrección de inclinación (B26b).
+`align.cfg` para probarlo antes que la sonda (D12) y `phase4.cfg` con la macro de `G28`; 12 tests. Limpieza de
+boquilla hecha (B27, B28): `clean.cfg` con las macros del usuario portadas, 4 tests, sin probar en la Hi.
+Falta conservar la corrección de inclinación (B26b).
 
 ## Fase 5 (CFS)
 
