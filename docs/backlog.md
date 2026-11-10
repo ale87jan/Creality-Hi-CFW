@@ -51,6 +51,12 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
 - **Hecho cuando:** `DUMP_TMC` y `QUERY_ENDSTOPS` devuelven su texto por la salida estándar y `selftest.sh` lo
   comprueba.
 
+### B03d — Avisos de Moonraker con Kalico · M
+
+- **Objetivo:** quitar los avisos vistos en el escalón 3 (2026-11-10): crear la carpeta `comms` o fijar la ruta
+  de `moonraker.sock` en la config temporal, y decidir si el paquete lleva `config_examples` y `docs`.
+- **Hecho cuando:** `start --ui` no deja trazas en el log de Moonraker y `selftest.sh` cubre el cambio.
+
 ### B03c — Arranque de Kalico sin el reinicio por `CRC mismatch` · M, opcional
 
 - **Objetivo:** valorar que `hi_kalico.sh start` reinicie las MCU antes de lanzar Kalico, para evitar el primer

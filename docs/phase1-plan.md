@@ -324,6 +324,7 @@ frente a captura:toolhead.cfg:27-30], ajustado para temperaturas de impresión; 
 calentador satura toda la subida y la inercia hace el resto. Que stock sobrepase igual es [supuesto: repetir la
 misma consigna en stock]. A 120 y 200 °C el pico fue de 3 y 1,9 °C (fila del paso 10), así que no hace falta
 `PID_CALIBRATE`.
+| Escalón 3 | `hi_kalico.sh start --ui`: `ready` en 30 s; el Moonraker de stock corre con `/tmp/kalico-hi-moonraker.conf` (socket `/tmp/kalico_uds`) y su config original queda intacta. `/printer/info` da Kalico `ready`, `/server/info` sin componentes fallidos, Fluidd responde en el 4408. Avisos de Moonraker: falta `/mnt/UDISK/printer_data/comms/` para `moonraker.sock` (traza no fatal), rutas `config_examples` y `docs` inexistentes en el paquete, y faltan `[pause_resume]`, `[virtual_sdcard]` y `[display_status]` en la config de fase 1 (están en `print.cfg`, fase 6) |
 
 Primer arranque de Kalico en la Hi [P]: las MCU conservaban la configuración del Klipper de stock, así que Kalico
 detecta `CRC mismatch`, reinicia las tres con `restart_method = command` y vuelve a empezar 11 s después. En ese
