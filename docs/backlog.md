@@ -243,13 +243,15 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
 - **Hecho cuando:** valida en batch; `G28 Z` se rechaza; `G28 X Y` genera pasos solo en X e Y.
 - **Riesgos:** depende de B16 y B18.
 
-### B20 — Fase 2: lecturas previas en la impresora · U, después M
+### B20 — Fase 2: lecturas previas en la impresora · U, después M · HECHO 2026-11-10
 
 - **Objetivo:** pasos 2.1 y 2.2 de [phase2-plan.md §8](phase2-plan.md): qué pin es cada final de carrera y qué
   hace el modo de stall 1.
 - **Ficheros:** `tools/hi_probe.py` (ampliar, solo lectura); salida en `data/captures/`.
 - **Hecho cuando:** las dos preguntas están respondidas con [P] en `docs/hardware.md`.
 - **Riesgos:** ninguna escritura; el homing del paso 2.2 es el de stock.
+- **Resultado (2026-11-10):** 2.1 hecho con `tools/hi_endstops.py`; 2.2 cerrado sin observar el efecto del modo 1
+  ([phase2-plan.md §8](phase2-plan.md), [hardware.md](hardware.md)).
 
 ### B21 — Fase 3: decisiones de diseño · U
 

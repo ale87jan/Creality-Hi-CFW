@@ -10,9 +10,9 @@ Generado por `claude-plugin/hi-dev/scripts/docs-index.py`; no editar a mano. Lee
 | [Diferencias entre firmwares OTA Creality Hi (CR4NU200360C20)](analysis/firmware-versions.md) | 113 | Versiones analizadas: V1.1.0.50, V1.1.0.60 (instalada), V1.1.0.65, V1.1.0.73 y V1.1.0.74. Análisis del 2026-11-09. |
 | [Viabilidad: portar el CFW de la K2 Plus a la Creality Hi](analysis/k2-port-feasibility.md) | 132 | Análisis del 2026-11-09: estático, más pruebas de solo lectura en la impresora (sección siguiente). |
 | [Arranque automático de Kalico: diseño (B13)](autostart-plan.md) | 88 | Estado: **diseño en papel** (2026-11-10, pedido por el usuario). Opción A elegida (D18). Nada de esto está escrito en scripts ni se ha ejecutado en la impresora. Hoy Kalico solo se arranca a mano con… |
-| [Backlog](backlog.md) | 431 | Tareas pequeñas y autocontenidas, pensadas para ejecutarse sin el contexto de la conversación que las creó. Antes de empezar una: leer ESTADO.md y la sección citada de phase1-plan.md. Al terminar: ma… |
-| [Decisiones](decisions.md) | 355 | Registro de decisiones de diseño. Cada entrada: contexto, decisión y consecuencias. |
-| [Hardware de la Creality Hi (F018)](hardware.md) | 76 | Nivel de confianza: **[P]** verificado en la impresora, **[F]** leído en el firmware o la config de stock, **[I]** inferido. Ver RESEARCH.md. |
+| [Backlog](backlog.md) | 433 | Tareas pequeñas y autocontenidas, pensadas para ejecutarse sin el contexto de la conversación que las creó. Antes de empezar una: leer ESTADO.md y la sección citada de phase1-plan.md. Al terminar: ma… |
+| [Decisiones](decisions.md) | 367 | Registro de decisiones de diseño. Cada entrada: contexto, decisión y consecuencias. |
+| [Hardware de la Creality Hi (F018)](hardware.md) | 83 | Nivel de confianza: **[P]** verificado en la impresora, **[F]** leído en el firmware o la config de stock, **[I]** inferido. Ver RESEARCH.md. |
 | [Fase 1 — Kalico arrancando en la Hi: análisis y plan](phase1-plan.md) | 399 | Fecha: 2026-11-09. Alcance: las tres MCU, steppers Z/Z1/E, temperaturas y ventiladores, sobre el Tina de stock V1.1.0.60. Fuera: motores X/Y, sonda, CFS, bus RS-485. |
 | [Fase 2 — Motores X/Y de lazo cerrado](phase2-plan.md) | 199 | Análisis del 2026-11-10, hecho sin impresora. Alcance: que Kalico hable con los drivers X/Y por RS-485, mueva X/Y y haga homing de X e Y. Fuera: homing de Z y sonda (fase 3), `z_align` (fase 4), CFS… |
 | [Fase 3 — Sonda de presión y homing de Z](phase3-plan.md) | 116 | Análisis del 2026-11-10, hecho sin impresora y **más ligero que el de la fase 2**: cubre la compatibilidad estática del módulo y el camino de `G28 Z`; no he leído entera la lógica de armado y disparo… |
@@ -46,6 +46,7 @@ Generado por `claude-plugin/hi-dev/scripts/docs-index.py`; no editar a mano. Lee
 - **D18 — Arranque automático con un servicio propio que conmuta (2026-11-10)**: Opción A, "por ahora" [usuario]: `/etc/init.d/kalico_hi` repite la conmutación manual de la fase 1, gobernado por ficheros bandera en `/mnt/UDISK/kalico-hi`. No se modifica ningún fichero de stock.
 - **D19 — Protección de ramas con rulesets de GitHub (2026-11-10)**: Rulesets activos [P, `gh api repos/.../rulesets`], todos sin push forzado ni borrado:
 - **D20 — Plugin `hi-dev` para ahorrar tokens (2026-11-10)**: [usuario] Plugin versionado en este repo (`claude-plugin/hi-dev`, marketplace `creality-hi`) con scripts de solo lectura, subagentes Haiku por defecto (Sonnet para verificar), skills de flujo y hooks…
+- **D21 — Apartar X del tope antes del homing y aparcarla en X0 después (2026-11-10)**: La macro `_HI_HOME_XY` (fork, `config/hi/motors.cfg`) aparta X 10 mm si está homeada a menos de 10 del tope y, tras el homing de X, la aparca en X0. Las usan los `homing_override` de `phase2.cfg` y `…
 
 Detalle de una: `docs-index.py --decision D12`.
 
@@ -53,7 +54,7 @@ Detalle de una: `docs-index.py --decision D12`.
 
 - Fase 0 — Investigación (hecha): 4/4
 - Fase 1 — Kalico arrancando en la Hi: 6/8
-- Fase 2 — Motores X/Y de lazo cerrado: 0/5
+- Fase 2 — Motores X/Y de lazo cerrado: 5/5
 - Fase 3 — Sonda: 0/3
 - Fase 4 — Módulos legibles de la Hi: 1/5
 - Fase 5 — CFS: 0/4
