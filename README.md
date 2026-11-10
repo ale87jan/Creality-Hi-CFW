@@ -30,6 +30,7 @@ Mismo reparto que el CFW de la K2 ([docs/decisions.md](docs/decisions.md), D3).
 ## Estructura de este repo
 
 ```text
+guia/        guía de usuario (esqueleto)
 docs/        hardware, protocolos, análisis y hoja de ruta
 data/        capturas de la impresora y datos extraídos de las OTA
 firmware/    imágenes OTA y extracciones (no versionadas)
@@ -51,6 +52,7 @@ python -m unittest discover -s tools/tests -v
 
 ## Documentación
 
+- [guia/](guia/README.md): guía de usuario (instalar, volver a stock, configuración, macros, CFS, problemas, FAQ). Esqueleto.
 - [docs/hardware.md](docs/hardware.md): SoC, puertos serie, MCU, motores, sonda y CFS.
 - [docs/protocols/rs485.md](docs/protocols/rs485.md): trama, direcciones y funciones de motores y CFS.
 - [docs/protocols/mcu.md](docs/protocols/mcu.md): comandos de las MCU y compatibilidad con Kalico.
