@@ -199,8 +199,11 @@ Límites y pendientes:
    `serial_485` descarta lo que no responde a una petición pendiente [verificado: fork:serial_485.py:565-570].
    El estado se sigue viendo al consultar. Pendiente: gancho en `serial_485` para tramas no pedidas.
 3. `CFS_FLUSH` extruye donde esté la boquilla; no va a la papelera (X=-18,5)
-   [verificado: fork:creality_cfs.py, `cmd_CFS_FLUSH`: solo `M83`, `G1 E` y `G91`/`G90`]. Hace falta una macro de
-   la Hi que coloque la boquilla antes y haga la pasada de expulsión (decisión 2).
+   [verificado: fork:creality_cfs.py, `cmd_CFS_FLUSH`: solo `M83`, `G1 E` y `G91`/`G90`]. Hecho en `cfs.cfg`: `CFS_PURGE`
+   va antes a la papelera y `_HI_CFS_SHAKE` hace la pasada corta tras cada ciclo, enganchada por
+   `nozzle_clean_macro` [verificado: test `test_purge_runs_the_flush_over_the_waste_bin`]. El orden de la pasada
+   corta (X 0, -5, 0, -18,5) es [supuesto: verlo en la Hi, paso 5.5]. No reproduce el rodeo por Y=261 de stock
+   (`detour_pos_y`): no usar `CFS_PURGE` con una pieza en la cama todavía.
 4. `cut_velocity: 3000` es el valor del ejemplo de la referencia; el stock usa 15000
    [verificado: captura:box.cfg, `cut_velocity`]. Se mantiene el lento hasta el paso 5.4.
 5. Comandos `T0`..`T3` y los `BOX_*` de stock que llaman las macros y el laminador: sin hacer (fase 6).
