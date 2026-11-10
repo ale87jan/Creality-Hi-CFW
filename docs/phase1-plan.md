@@ -309,15 +309,28 @@ saneado está pendiente de subir a `data/captures/` [P salvo donde se indica].
 
 Otros hallazgos:
 
-- El overlay ya contiene cambios en `/usr/share/klipper`, `moonraker`, `frontend`, `klippy-env` y 31 ficheros en
-  `printer_data/config`. Consecuencia: el `klippy/` que corre en la Hi puede no ser el de la OTA leída en
-  [phase6-plan.md §3](phase6-plan.md) [supuesto: comparar con `find /overlay/upper/usr/share/klipper -type f`].
-- `mcu_update.log`: `Fail to Open …/fw/F018/rfid`; en RS-485 lista `mot2 [85][86] 002_071`, `rfd0 [11]` y
-  `cfs0 [01]`. Los drivers responden en `0x81`/`0x82` [P, hardware.md]; `[85][86]` lo escribe
-  `mcu_util_485`, un binario cerrado que `mcu_update` lanza en el arranque (S13, antes de Klipper) tras enviar
-  `F7 EB 03 FF 56 CF` a 230400 baudios por `/dev/ttyS5` [verificado: OTA:etc/init.d/mcu_update:9, 223-226].
-  Qué significan es [supuesto: direcciones del modo de actualización; comparar con una lectura `READ_ADDR` de
-  `tools/hi_probe.py` en la misma sesión].
+- El overlay contiene cambios en `moonraker`, `frontend`, `klippy-env` y 31 ficheros en `printer_data/config`.
+  En `/usr/share/klipper` solo cambia `klippy/extras/cfs_materials.py` (y su `.pyc`): el `klippy/` que corre es
+  el de la OTA leída en [phase6-plan.md §3](phase6-plan.md) salvo ese fichero [P].
+- `mcu_update.log` lista los esclavos RS-485 que ve `mcu_util_485`, el binario cerrado que `mcu_update` lanza en
+  el arranque (S13, antes de Klipper) tras enviar `F7 EB 03 FF 56 CF` a 230400 baudios por `/dev/ttyS5`
+  [verificado: OTA:etc/init.d/mcu_update:9, 223-226] [P]:
+
+  | Dirección | Versión |
+  | - | - |
+  | `[85]` | `mot2_033_C30-mot2_002_071` |
+  | `[86]` | `mot2_023_C30-mot2_002_071` |
+  | `[11]` | `rfd0_010_G21-rfd0_000_009` (`dev: rfid`) |
+  | `[01]` | `cfs0_050_G32-cfs0_000_113` |
+
+  Los dos drivers tienen hardware distinto (`033` y `023`) y el mismo firmware `002_071`. En Klipper responden
+  en `0x81`/`0x82` [P, hardware.md]; que `[85][86]` sean sus direcciones antes de que Klipper las reasigne con
+  los pines `DIR`/`STEP` es [supuesto: `READ_ADDR` con `tools/hi_probe.py` justo tras el arranque, con Klipper
+  parado]. También registra `Fail to Open /usr/share/klipper/fw/F018/rfid!`: no hay firmware de `rfid` en la
+  imagen y la actualización se da por hecha.
+- Paquete de la fase 1 generado el 2026-11-10 desde el fork `61602f77b6d0`: `kalico-hi-61602f77b6d0.tar.gz`,
+  929113 bytes, SHA-256 `2d8ca01e0c3893a79804c8281a06cdd01402267dd931c2a20cc7a0239282d183`; el `c_helper.so`
+  recompilado desde esa rama tiene el mismo SHA-256 que el anterior [P, PC del usuario].
 
 ## 9. Slot A/B y vuelta a stock más adelante
 
