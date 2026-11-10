@@ -243,8 +243,7 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
   decodificada hacia las MCU de `printer.cfg` y `phase2.cfg` es idéntica a la de antes.
 - **Consecuencia:** el paquete lleva ahora todos los `.cfg` (`make_bundle.sh`), `hi_install.sh` los instala uno
   a uno sin pisar los existentes, y `HI_CONFIG=phase2.cfg hi_kalico.sh start` elige la config.
-- **Pendiente:** el usuario no ha confirmado en la tarjeta la decisión 1 (módulo de la K2 tal cual); la config
-  asume esa opción.
+- La decisión 1 (módulo de la K2 tal cual) quedó cerrada como D11.
 
 ### B23 — Fase 3: leer entera la lógica de `prtouch.py` · M
 

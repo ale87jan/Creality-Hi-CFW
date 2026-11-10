@@ -198,3 +198,21 @@ calibración no se envían en ningún nivel.
 **Motivos.** No juntar en las mismas pruebas el riesgo de los motores con el de choque contra la cama.
 
 **Consecuencias.** En la fase 2 no hay posición de Z real: antes de mover X/Y hay que levantar Z a mano.
+
+## D11 — Sonda: `prtouch.py` de la K2 tal cual (2026-11-10)
+
+**Contexto.** El `prtouch.py` del fork habla con las MCU de la Hi sin cambios ([phase3-plan.md](phase3-plan.md)
+§2). Opciones: usarlo tal cual, solo con config, o una copia aparte recortada como en D8.
+
+**Decisión.** Tal cual. La Hi solo aporta `config/hi/phase3.cfg`.
+
+**Motivos.** A diferencia de `motor_control`, el módulo ya funciona con la Hi y no escribe nada persistente; los
+arreglos de upstream llegan al sincronizar.
+
+**Consecuencias.**
+
+- `PRTOUCH_SCRUB`, `PRTOUCH_SCAN_CALIBRATE` y `PRTOUCH_AXIS_TWIST_COMPENSATION` quedan registrados pero no se
+  usan; `PRTOUCH_SCRUB` necesita `extended_zone_transform`, que la Hi no carga.
+- La limpieza de boquilla es aparte ([phase4-plan.md](phase4-plan.md) §4). Criterio del usuario: `PRTOUCH_SCRUB`
+  si funciona en la Hi; si no, `NOZZLE_CLEANUP` o sus macros de `nozzle_cleaning_macros.cfg`.
+
