@@ -349,7 +349,9 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
 - **Hecho (2026-11-10):** `klippy/extras/creality_cfs.py` con transporte opcional por `serial_485`,
   `config/hi/cfs.cfg`, `phase5.cfg`, `test/test_hi_cfs.py` (12 tests); `CFS_PURGE` y `_HI_CFS_SHAKE` (purga en la papelera). Detalle en
   [phase5-plan.md §5](phase5-plan.md), "Hecho el 2026-11-10".
-- **Falta:** leer la coreografía completa (`load_process`, `unload_process`, `CFS_CUT`, `CFS_FLUSH`); cambio de herramienta `T0`..`T3`; gancho para tramas no pedidas en `serial_485`.
+- **Hecho (2026-11-10):** `T0`..`T3` (`_HI_CFS_CHANGE`), 15 tests en total.
+- **Falta:** leer la coreografía completa (`load_process`, `unload_process`, `CFS_CUT`, `CFS_FLUSH`); recordar
+  el filamento cargado entre reinicios; alias `BOX_*`; gancho para tramas no pedidas en `serial_485`.
 - **Riesgos:** el módulo de la referencia no se ha ejercitado en hardware (su `NOTICES.md`).
 
 ### B34b — Proponer el transporte compartido a gitstonelabs · U

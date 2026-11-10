@@ -217,7 +217,14 @@ Límites y pendientes:
    2026-11-10]. `CFS_PURGE` deja la boquilla sobre la papelera; la vuelta a la pieza es del cambio de herramienta (fase 6).
 4. `cut_velocity: 3000` es el valor del ejemplo de la referencia; el stock usa 15000
    [verificado: captura:box.cfg, `cut_velocity`]. Se mantiene el lento hasta el paso 5.4.
-5. Comandos `T0`..`T3` y los `BOX_*` de stock que llaman las macros y el laminador: sin hacer (fase 6).
+5. `T0`..`T3` hechos en `cfs.cfg` (`_HI_CFS_CHANGE`): sube Z, corta (`CFS_CUT`), va a la papelera, descarga
+   (`CFS_RETRUDE`), carga (`CFS_EXTRUDE`), purga (`CFS_FLUSH`) y vuelve: X con la cama aún en Y=261, luego Y,
+   luego Z [verificado: tests `test_change_*` y `test_first_load_*`, con los comandos del CFS sustituidos]. El
+   orden sigue el de `configs/cfs_macros.cfg` de la referencia y el de `BOX_LOAD_MATERIAL_WITH_MATERIAL` de
+   stock [verificado: captura:box.cfg:103-115]. Tras un reinicio el módulo no sabe qué filamento hay cargado
+   (`active_tool` = -1): hay que decírselo con `PREV=` [verificado: fork:creality_cfs.py, `_active_tool`].
+   Pendiente: guardar el filamento cargado entre reinicios; los alias `BOX_*` de stock (fase 6); el corte
+   cruza a Y=130 (`pre_cut_pos_y`) con solo la subida de Z de margen [supuesto: comprobar en el paso 5.4].
 6. Proponer el cambio al autor desde un fork de su repositorio (tarea del usuario, B34b).
 
 ## 6. Decisiones que necesito
