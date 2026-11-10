@@ -10,7 +10,7 @@ for a in "$@"; do
   case "$a" in --fetch) fetch=1 ;; --prs) prs=1 ;; *) echo "unknown option: $a" >&2; exit 2 ;; esac
 done
 for d in "$root"/*/; do
-  [ -e "$d/.git" ] || continue
+  [ -d "$d/.git" ] || continue   # clones only; worktrees (.git is a file) are skipped
   n=$(basename "$d")
   [ "$fetch" = 1 ] && git -C "$d" fetch --all --prune -q 2>/dev/null
   br=$(git -C "$d" rev-parse --abbrev-ref HEAD 2>/dev/null)

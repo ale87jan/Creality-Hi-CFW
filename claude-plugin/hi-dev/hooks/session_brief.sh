@@ -8,8 +8,12 @@ echo "[hi-dev] Project brief (token saver)"
 "$here/scripts/repos-status.sh" 2>/dev/null | head -8
 estado="$root/Creality-Hi-CFW/docs/ESTADO.md"
 if [ -f "$estado" ]; then
-  echo "ESTADO.md:"
-  grep -m2 -E '^- \*\*(Fase actual|Ramas protegidas)' "$estado" | cut -c1-300
+  # Only the phase number and where the detail lives; the full text stays in the file.
+  ln=$(grep -n -m1 -E '^- \*\*Fase actual' "$estado" | cut -d: -f1)
+  if [ -n "$ln" ]; then
+    ph=$(sed -n "${ln}p" "$estado" | sed -E 's/^- \*\*Fase actual:\*\* *([0-9]+).*/\1/')
+    echo "Fase actual: $ph -> detalle en docs/ESTADO.md:$ln (Read con offset/limit)"
+  fi
 fi
 if [ -f "$root/Creality-Hi-CFW/docs/INDEX.md" ]; then
   (cd "$root/Creality-Hi-CFW" && python3 -I "$here/scripts/docs-index.py" --check 2>/dev/null) \
