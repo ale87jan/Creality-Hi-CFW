@@ -201,7 +201,8 @@ impresora [verificado: data/captures/2026-11-09_hi-v1.1.0.60/printer-config/prin
   Z y Z1 reciben la misma secuencia de pasos [verificado: salida del modo batch].
 - **Finales de carrera de Z**: se usan `PB15` y `PB14`, los sensores fotoeléctricos de `[z_align]` de stock, solo
   para verlos con `QUERY_ENDSTOPS`. `position_endstop: 0` es un valor de relleno que no se usa.
-- **Ventilador auxiliar**: `[output_pin fan0]` de stock (PB2) pasa a `[fan_generic aux_fan]`.
+- **Ventilador auxiliar**: no hay. `[output_pin fan0]` de stock (PB2) es una salida virtual sin ventilador
+  conectado [usuario, 2026-11-10]; `[fan_generic aux_fan]` se quitó de `base.cfg`.
 
 ### 7.2 Lo que se deja fuera y por qué
 
@@ -268,7 +269,7 @@ fichero antes de subirlo.
 | 4 | `hi_kalico.sh temps` | Boquilla, cama y MCU a temperatura ambiente coherente (±5 °C entre sí) | Ninguno |
 | 5 | `hi_kalico.sh gcode "DUMP_TMC STEPPER=stepper_z"` y lo mismo con `stepper_z1` y `extruder` | Registros sin error de UART | Ninguno: solo lee |
 | 6 | `hi_kalico.sh gcode "QUERY_ENDSTOPS"` | Respuesta para x, y, z | Ninguno: solo lee |
-| 7 | `hi_kalico.sh gcode "SET_FAN_SPEED FAN=aux_fan SPEED=0.5"`, `M106 S128`, `M107` | Los ventiladores giran y paran | Bajo |
+| 7 | `hi_kalico.sh gcode "M106 S128"`, `M107` | Los ventiladores giran y paran | Bajo |
 | 8 | `hi_kalico.sh gcode "SET_HEATER_TEMPERATURE HEATER=extruder TARGET=50"`; después cama a 40 | Sube, se estabiliza, arranca el ventilador del hotend a 50 °C; apagar con `TURN_OFF_HEATERS` | Medio: vigilar; `verify_heater` activo |
 | 9 | Con la boquilla a más de 30 mm de la cama: `SET_KINEMATIC_POSITION Z=50 SET_HOMED=z`, `G91`, `G1 Z2 F300`, `G1 Z-2 F300` | El puente sube y baja 2 mm nivelado | Medio: Z y Z1 sin alinear ni finales de carrera. Movimientos cortos y hacia arriba primero |
 | 10 | Con la boquilla a 200 °C y sin filamento cargado: `M83`, `G1 E5 F120` | El extrusor gira | Bajo |
@@ -310,6 +311,7 @@ en `data/captures/2026-11-10_hi-step0/step0.txt` [P salvo donde se indica].
 | 13 | Sin paquetes marcados `MODIFIED` |
 | Escalón 2, arranque | `hi_kalico.sh start` con aprobación del usuario, impresora fría y en `standby`: Kalico `v2026.11.00-57-g61602f77` llega a `ready` con las tres MCU configuradas (`mcu` gd32f303xe 117 órdenes, `nozzle_mcu` gd32f303xb 113, `bed_mcu` gd32e230x8 94). Boquilla 29,3 °C, cama 25,6 °C, `mcu_temp` 35,2 °C, ventiladores a 0. Capturas en `data/captures/2026-11-10_kalico-start/` |
 | Escalón 2, pasos 5 y 6 | `DUMP_TMC`: `stepper_z`, `stepper_z1` y `extruder` responden por UART (TMC220x, `IOIN` versión `0x20`), sin avisos de temperatura ni cortos; `GSTAT reset=1` es la marca de encendido. `QUERY_ENDSTOPS` en reposo: todo a 0. Con cartulina: sensor **izquierdo** activa `z` (`PB15`), sensor **derecho** activa `z1` (`PB14`); 1 = tapado, sin cruces |
+| Escalón 2, paso 7 | `M106 S128`: `power` 0,35, `speed` 0,25 (reescalado previsto en §3.1); los ventiladores de capa giran y `M107` los para. `hotend_fan` a 0 en frío; `rpm` nulo (sin tacómetro configurado). `aux_fan` respondía en `PB2`, pero la Hi no tiene ese ventilador: quitado de la config |
 
 Primer arranque de Kalico en la Hi [P]: las MCU conservaban la configuración del Klipper de stock, así que Kalico
 detecta `CRC mismatch`, reinicia las tres con `restart_method = command` y vuelve a empezar 11 s después. En ese

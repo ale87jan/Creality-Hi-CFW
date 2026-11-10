@@ -44,6 +44,13 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
 - **Riesgos:** en Git Bash las rutas de `docker build` pueden necesitar `MSYS_NO_PATHCONV=1`.
 - **Estado (2026-11-10):** hecho; el `.so` carga en la Hi. Recompilar desde la rama del PR #2 para el paquete.
 
+### B03b — `hi_gcode.py` no muestra las respuestas · M
+
+- **Objetivo:** que `hi_kalico.sh gcode` imprima la respuesta de la orden (hoy hay que leerla en `klippy.log`),
+  visto en el escalón 2 del 2026-11-10.
+- **Hecho cuando:** `DUMP_TMC` y `QUERY_ENDSTOPS` devuelven su texto por la salida estándar y `selftest.sh` lo
+  comprueba.
+
 ### B04 — Registrar las decisiones aprobadas · M
 
 - **Objetivo:** pasar a [decisions.md](decisions.md) las decisiones de [phase1-plan.md §10](phase1-plan.md) según
