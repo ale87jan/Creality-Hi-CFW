@@ -358,7 +358,11 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
 
 - **Objetivo:** fork de `gitstonelabs/creality-cfs-klipper` y pull request con la opción `serial`, después de
   probarla en la Hi. El cambio ya es aditivo y no altera el comportamiento sin la opción.
-- **Quién:** el usuario crea el fork; el parche sale del diff entre el commit `16309d8` y el fichero del fork.
+- **Hecho (2026-11-10):** fork `ale87jan/creality-cfs-klipper` creado por el usuario; rama
+  `feat/shared-serial-bus` con el cambio sobre `16309d8` (solo `src/creality_cfs.py`). Sin pull request al autor.
+- **Falta:** probar en la Hi; documentar la opción en su README y su ejemplo de config; tests en su suite; abrir
+  el pull request (lo decide el usuario).
+- **Quién:** el usuario creó el fork; el parche sale del diff entre el commit `16309d8` y el fichero del fork.
 
 ### B35 — Fase 5: pruebas en la impresora · U, después M
 
