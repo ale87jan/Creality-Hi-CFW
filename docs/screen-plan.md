@@ -28,7 +28,7 @@ fases y aquí daría conflicto).
 | Acceso al panel | Framebuffer del kernel, pila `DISP2_SUNXI` con `FB`, `G2D` y `CMA` activos [verificado: data/derived/kernel-config/hi-v1.1.0.74.config:2644,2667,1611,727]. Los nodos `disp`/`lcd0`/`lcd_fb0` están en `status = okay` [verificado: dtb:1362-1366,1632-1633,1707-1712] |
 | Retroiluminación | PWM canal 5, 10 kHz, y pin de habilitación `lcd_bl_en` [verificado: dtb:1699-1704] |
 | Táctil | Capacitivo en I2C `twi3`: Goodix `gt9xxnew_ts` en 0x14 o TLSC `tlsc6x` en 0x2e, ambos módulos de kernel (`=m`), con el IRQ en el mismo pin [verificado: dtb:1224-1248; config:1515,1518]. Evdev activo [verificado: config:1437] |
-| Resolución del táctil | El DTB declara **480x800** (`0x1e0 x 0x320`), distinta de la del panel [verificado: dtb:1232-1233]. [supuesto: restos copiados de la K2; leer el rango real en `/proc/bus/input/devices`/`evtest`, ver §4] |
+| Resolución del táctil | El DTB declara 480x800 (`0x1e0 x 0x320`) [verificado: dtb:1232-1233], pero el táctil entrega 240x320 (medido, §1b) |
 | UI de stock | `display-server`, `master-server`, `app-server`, `web-server` (binarios cerrados) y `lvgl_klipper` [verificado: docs/analysis/firmware-versions.md:25,34]. La pantalla y la nube hablan con `/tmp/klippy_uds` con órdenes propias, no con las de Moonraker [verificado: phase1-plan.md:158-161, rama de fases; phase6-plan.md:17-18] |
 | Recursos | SoC T113-i, Cortex-A7, glibc 2.29, Python 3.9.12 [verificado: docs/hardware.md:8-11]. RAM libre y espacio: [supuesto: `free -m` y `df -h`, ver §4] |
 
@@ -44,7 +44,7 @@ Captura de solo lectura con el firmware de stock en marcha: `data/captures/2026-
 | Framebuffer | `/dev/fb0`, virtual 240x640, 32 bpp, `stride` 960 [verificado: probe:4,10-12]; `disp_reserve=307200` = 240·320·4 [verificado: probe:2] | Panel visible de 240x320 con dos páginas (doble búfer). LVGL con `fbdev` vale, con color de 32 bits |
 | Retroiluminación | No existe `/sys/class/backlight`; solo `pwmchip0` [verificado: probe:16-18] | El brillo va por la pila `disp` o por el PWM; cómo lo hace `display-server` [supuesto: `strings` del binario en el PC] |
 | Táctil | Un solo dispositivo, `gt9xxnew_ts` en `/dev/input/event0`; `tlsc6x` cargado pero sin dispositivo [verificado: probe:8,21,25,32-33] | El controlador real es el Goodix |
-| Ejes del táctil | `ABS=2650000 0`: solo ejes multitáctiles (`ABS_MT_POSITION_X/Y`, `TRACKING_ID`, `TOUCH_MAJOR`, `WIDTH_MAJOR`), sin `ABS_X/ABS_Y`; `BTN_TOUCH` presente [verificado: probe:28-29, decodificado a mano] | El `evdev` de `lv_drivers` debe leer los ejes MT. El driver **no declara rango** para X/Y (`EVIOCGABS` devuelve `max=0`) [verificado: probe:96-100]: no se puede saber si entrega 240x320 o 480x800 sin tocar la pantalla. [supuesto: leer eventos de `event0` mientras se tocan las esquinas, tarea B47] |
+| Ejes del táctil | `ABS=2650000 0`: solo ejes multitáctiles (`ABS_MT_POSITION_X/Y`, `TRACKING_ID`, `TOUCH_MAJOR`, `WIDTH_MAJOR`), sin `ABS_X/ABS_Y`; `BTN_TOUCH` presente [verificado: probe:28-29, decodificado a mano] | El `evdev` de `lv_drivers` debe leer los ejes MT. El driver no declara rango (`EVIOCGABS` devuelve `max=0`) [verificado: probe:96-100], pero medido tocando las esquinas entrega **X 1-239, Y 0-314: coordenadas 1:1 con el panel de 240x320** [verificado: probe:102-117]. El 480x800 del DTB no se aplica. Orientación: el ciclo de esquinas sale en sentido contrario al pedido, lo que indica **un eje invertido** respecto al orden indicado [supuesto: confirmar cuál con un toque único en una esquina conocida] |
 | Quién usa la pantalla | `display-server` tiene abiertos `/dev/fb0` y `/dev/input/event0`, y cuatro ficheros de memoria compartida en `/tmp/shm/` (`device_state_shm`, `materail_box_shm`, `dev_maintain_shm`, `print_object_shm`) [verificado: probe:49-57] | Para usar el panel hay que parar `display-server`. Recibe el estado por memoria compartida; quien habla con `/tmp/klippy_uds` es otro proceso [supuesto: `master-server`] |
 | Motor gráfico de stock | Sin biblioteca LVGL dinámica; usa `libfreetype`, `libpng16`, `libjpeg` [verificado: probe:60-76] | [supuesto: LVGL enlazado en estático; no afecta al plan] |
 | Memoria | 488 MB, 365 MB disponibles con el stock en marcha; sin swap [verificado: probe:79-80] | Sobra para una UI LVGL (decenas de MB) |
@@ -297,7 +297,7 @@ copiarlas al unir ramas. Siguientes ids tras B39: B40-B44. Todas U (sin analizar
 - **Hecho cuando:** binario ARMv7 estático generado y capturas del simulador a 240x320 guardadas.
 - **Riesgos:** ninguno en la impresora (no se ejecuta en la Hi en esta tarea).
 
-### B47 — Pantalla: medir las coordenadas reales del táctil · S
+### B47 — Pantalla: medir las coordenadas reales del táctil · S (hecha 2026-11-10: rango 240x320; falta confirmar el eje invertido)
 
 - **Objetivo:** leer los eventos de `/dev/input/event0` (solo lectura, sin capturar el dispositivo) mientras
   Alejandro toca las cuatro esquinas, y anotar los valores de `ABS_MT_POSITION_X/Y`.

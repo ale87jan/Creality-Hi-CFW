@@ -99,3 +99,19 @@ ABS_MT_WIDTH_MAJOR value=0 min=0 max=255 fuzz=0 flat=0 res=0
 ABS_MT_POSITION_X value=0 min=0 max=0 fuzz=0 flat=0 res=0
 ABS_MT_POSITION_Y value=0 min=0 max=0 fuzz=0 flat=0 res=0
 ABS_MT_TRACKING_ID value=0 min=0 max=255 fuzz=0 flat=0 res=0
+## touch corners (read-only read of /dev/input/event0 for 90 s; user tapped the four corners in cycles)
+## asked order: top-left, top-right, bottom-right, bottom-left; first touch of each press shown (excerpt)
+t= 26.3 touch x=231 y=18
+t= 27.3 touch x=33 y=28
+t= 28.4 touch x=27 y=295
+t= 29.9 touch x=227 y=288
+t= 30.9 touch x=232 y=8
+t= 32.1 touch x=9 y=30
+t= 33.1 touch x=1 y=289
+t= 35.2 touch x=238 y=286
+t= 36.9 touch x=238 y=9
+t= 38.6 touch x=34 y=27
+t= 39.6 touch x=30 y=303
+t= 41.2 touch x=238 y=313
+reports=1870
+x min=1 max=239  y min=0 max=314
