@@ -1,0 +1,20 @@
+[hi_install] checks
+[hi_install] ok: model F018
+[hi_install] ok: firmware 1.1.0.60
+[hi_install] ok: active slot: boot_partition=bootB root_partition=rootfsB (not changed by this script)
+[hi_install] ok: bundle sha256 2d8ca01e0c3893a79804c8281a06cdd01402267dd931c2a20cc7a0239282d183
+[hi_install] ok: bundle layout (312 entries)
+[hi_install] ok: space: 4358864 kB free, 25922 kB needed
+[hi_install] ok: python 3.9 with cffi, greenlet, jinja2, markupsafe, serial, numpy, zlib
+[hi_install] ok: Kalico is not running
+[hi_install] install into /mnt/UDISK/kalico-hi
+[dry-run] mkdir -p /mnt/UDISK/kalico-hi/logs /mnt/UDISK/kalico-hi/config
+[dry-run] rm -rf /mnt/UDISK/kalico-hi/new
+[dry-run] mkdir -p /mnt/UDISK/kalico-hi/new
+[dry-run] tar -xzf /tmp/kalico-hi-61602f77b6d0.tar.gz -C /mnt/UDISK/kalico-hi/new
+[dry-run] verify every file against /mnt/UDISK/kalico-hi/new/kalico-hi/SHA256SUMS
+[dry-run] load test: /usr/bin/python3 tools/chelper_load.py kalico/klippy/chelper/c_helper.so
+[dry-run] cffi test: klippy.chelper.get_ffi()
+[dry-run] rm -rf /mnt/UDISK/kalico-hi/previous; mv /mnt/UDISK/kalico-hi/current /mnt/UDISK/kalico-hi/previous; mv /mnt/UDISK/kalico-hi/new/kalico-hi /mnt/UDISK/kalico-hi/current
+[dry-run] cp /mnt/UDISK/kalico-hi/current/config/*.cfg /mnt/UDISK/kalico-hi/config/ (each only if missing; otherwise <name>.new)
+[hi_install] dry run finished: nothing was written

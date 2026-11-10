@@ -1,0 +1,5 @@
+[hi_kalico] stock print state: standby
+[dry-run] /etc/init.d/app stop
+[dry-run] /etc/init.d/klipper stop
+[dry-run] HOME=/mnt/UDISK/kalico-hi /usr/bin/python3 /mnt/UDISK/kalico-hi/current/tools/hi_spawn.py /tmp/kalico-hi.pid /usr/bin/python3 /mnt/UDISK/kalico-hi/current/kalico/klippy/klippy.py /mnt/UDISK/kalico-hi/config/printer.cfg -l /mnt/UDISK/kalico-hi/logs/klippy.log -a /tmp/kalico_uds -I /tmp/kalico_printer
+[hi_kalico] done. Back to stock: '/mnt/UDISK/kalico-hi/current/tools/hi_kalico.sh stop' or reboot.

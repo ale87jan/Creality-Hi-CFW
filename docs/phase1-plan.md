@@ -296,7 +296,8 @@ en `data/captures/2026-11-10_hi-step0/step0.txt` [P salvo donde se indica].
 
 | Sección | Resultado |
 | - | - |
-| — | `hi_install.sh --dry-run` del paquete: correcto (salida 0), 4,3 GB libres frente a 26 MB necesarios, nada escrito salvo 3 ficheros en `/tmp` |
+| — | `hi_install.sh --dry-run` del paquete: correcto (salida 0), 4,3 GB libres frente a 26 MB necesarios, nada escrito salvo 3 ficheros en `/tmp` (`install-dryrun.txt`) |
+| Escalón 1 | Instalado en `/mnt/UDISK/kalico-hi` con aprobación del usuario: 299 ficheros coinciden con `SHA256SUMS`, `c_helper.so` carga (armv7l, Python 3.9.12, glibc 2.29), enlace cffi correcto, 16 `.cfg` copiados (`install.txt`). `hi_kalico.sh start --dry-run` lee `standby` y lista parar `app` y `klipper` y lanzar Kalico (`start-dryrun.txt`) |
 | 01 | F018, firmware 1.1.0.60. `board=CR4NU200360C21` (la documentación decía `C20`); stock la trata igual: el arranque compara con el prefijo `CR4NU200360C2` [verificado: OTA:etc/init.d/klipper, `copy_config`, caso `F018`] |
 | 02 | Slot activo **B**, libre A. `bootcmd` usa `setargs_nand` (ubiblock), pero la línea de arranque real es `root=/dev/mmcblk0p7`: hay que aclararlo antes de usar §9 |
 | 03 | eMMC `mmcblk0` con los nombres esperados en `/dev/by-name` (no SPI NAND, como decía `hardware.md` [F]) |
