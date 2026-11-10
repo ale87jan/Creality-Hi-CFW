@@ -113,16 +113,23 @@ Consecuencias:
 - En la fase 2 la config bloquea `G28 Z` con un `[homing_override]` que solo deja pasar X e Y. Sin Z en homing,
   Kalico rechaza los movimientos de Z, igual que en la fase 1.
 
-## 6. Diseño propuesto (pendiente de decisiones, §9)
+## 6. Diseño (D8 decidida; el resto pendiente, §9)
 
-Cambios en el fork, todos como opciones nuevas con los valores de la K2 por defecto:
+Decisión D8: el módulo de la Hi es una **copia aparte**, `klippy/extras/motor_control_hi.py`, recortada.
+`motor_control.py` de la K2 no se toca.
 
-| Opción nueva en `[motor_control]` | Valor en la Hi | Sustituye a |
+| En `motor_control_hi.py` | Valor en la Hi | En la K2 era |
 | - | - | - |
-| `extruder_motor: False` | sin motor E en el bus | `EXTRUDER_AXES` fijo |
-| `motor_x_stall`, `motor_y_stall` | `PA8`, `PA6` | `STALL_PIN_LAYOUT` |
-| `motor_x_addr`, `motor_y_addr` | `0x81`, `0x82` | `_addr` de `motor_map.json` y `PIN_DIR_SEQUENCE` |
-| `startup_writes` | `none` al principio | secuencia fija de arranque |
+| Ejes | solo `x`, `y` | `x, y, z, z1` + `e` fijo |
+| Transporte | solo `serial_485` | más el túnel `transparent` de la boquilla |
+| `motor_x_stall`, `motor_y_stall` (config) | `PA8`, `PA6` | `STALL_PIN_LAYOUT` fijo |
+| Direcciones y niveles DIR/STEP | X = 0x81, Y = 0x82 | x = 0x82, y = 0x81 |
+| `startup_writes` (config) | `none` al principio | secuencia fija de arranque |
+| Calibración de corte y `MOTOR_CALIBRATE` | no se registran | comandos de la K2 |
+
+El objeto se registra también como `motor_control` para que `homing.py` (que hace
+`lookup_object("motor_control")` e importa constantes de `.motor_control`
+[verificado: fork:klippy/extras/homing.py:10, 590]) funcione sin cambios.
 
 Niveles de `startup_writes`:
 
@@ -139,7 +146,7 @@ parámetros. `MOTOR_FLASH_PARAM` y `MOTOR_CALIBRATE` quedan sin registrar en la 
 
 | Trabajo | Depende de resultados de la Hi |
 | - | - |
-| Opciones nuevas de `motor_control.py` con tests | No |
+| `motor_control_hi.py` con tests | No |
 | Port de `io_remap.py` y test en batch con los diccionarios reales | No |
 | Simulador del bus RS-485 para tests (responde `READ_ADDR`, `PROTECTION`, `GET`, `SYS_PARAM 02`) | No |
 | `config/hi/` de la fase 2 validada en batch | No (los valores salen de la captura) |
@@ -162,8 +169,8 @@ Todo empieza en solo lectura. Ninguna escritura de parámetros sin aprobación e
 
 ## 9. Decisiones que necesito
 
-1. **Cómo adaptar `motor_control.py`**: opciones nuevas en el módulo compartido (recomendada, §6), un módulo
-   solo de la Hi que herede del de la K2, o una copia aparte.
+1. **Cómo adaptar `motor_control.py`**: decidida el 2026-11-10, copia aparte (D8 en
+   [decisions.md](decisions.md)).
 2. **Escrituras en el arranque**: niveles `none` → `stall` → `params` (recomendada, §6) o el arranque de la K2
    sin claves de parámetros.
 3. **Homing en la fase 2**: solo X/Y con Z bloqueado (recomendada, §5) o adelantar el homing de Z.

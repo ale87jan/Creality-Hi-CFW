@@ -163,18 +163,19 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
 - **Objetivo:** cerrar las cuatro decisiones de [phase2-plan.md §9](phase2-plan.md) y anotarlas en
   [decisions.md](decisions.md).
 - **Hecho cuando:** las decisiones están en `decisions.md` y el plan deja de decir "pendiente".
-- **Riesgos:** B16 a B20 dependen de la decisión 1 y 2.
+- **Estado:** decisión 1 cerrada (D8, copia aparte). Faltan la 2, la 3 y el dato de los finales de carrera.
+- **Riesgos:** B16 a B20 dependen de la decisión 2.
 
-### B16 — Fase 2: opciones de `motor_control.py` para la Hi · M
+### B16 — Fase 2: `motor_control_hi.py` · M
 
-- **Objetivo:** `extruder_motor`, `motor_x_stall`/`motor_y_stall`, `motor_x_addr`/`motor_y_addr` y
-  `startup_writes` ([phase2-plan.md §6](phase2-plan.md)), con los valores de la K2 por defecto.
-- **Ficheros:** Creality-Hi-Kalico `klippy/extras/motor_control.py`, `test/test_hi_motor_control.py`.
-- **Hecho cuando:** con la config de la K2 el comportamiento no cambia (test); con la de la Hi no se registra
-  `config_transparent`, los pines de stall son `PA8`/`PA6`, las direcciones son 0x81/0x82 y con
-  `startup_writes: none` no sale ninguna trama de escritura aunque la config traiga claves de parámetros (test
-  con el bus simulado de B17).
-- **Riesgos:** conflictos con upstream; mantener cada opción en un commit.
+- **Objetivo:** copia recortada de `motor_control.py` para la Hi (D8, [phase2-plan.md §6](phase2-plan.md)):
+  solo X/Y, sin motor E ni túnel, pines de stall y `startup_writes` por config, direcciones de stock.
+- **Ficheros:** Creality-Hi-Kalico `klippy/extras/motor_control_hi.py`, `test/test_hi_motor_control.py`.
+- **Hecho cuando:** `motor_control.py` no cambia; con la config de la Hi no se registra `config_transparent`, los
+  pines de stall son `PA8`/`PA6`, las direcciones son 0x81/0x82 y con `startup_writes: none` no sale ninguna
+  trama de escritura aunque la config traiga claves de parámetros (test con el bus simulado de B17);
+  `homing.py` encuentra el objeto `motor_control`.
+- **Riesgos:** los arreglos de upstream no llegan solos; anotar en la cabecera el commit de origen de la copia.
 
 ### B17 — Fase 2: bus RS-485 simulado para tests · M
 

@@ -147,3 +147,22 @@ añade cuando ya se sabe que el núcleo funciona.
 
 - La pantalla queda sin servicio mientras dura una sesión de Kalico.
 - Falta comprobar que el Moonraker de stock funciona contra Kalico (backlog B10).
+
+## D8 — `motor_control` de la Hi como copia aparte (2026-11-10)
+
+**Contexto.** `motor_control.py` del fork no arranca en la Hi ([phase2-plan.md](phase2-plan.md) §3). Opciones:
+opciones nuevas en el módulo compartido (la recomendada por el modelo), un módulo de la Hi que herede del de la
+K2, o una copia aparte recortada.
+
+**Decisión.** Copia aparte: `klippy/extras/motor_control_hi.py` en el fork, recortada para la Hi (solo X/Y, sin
+motor E, sin túnel `transparent`, sin calibración de corte). `motor_control.py` de la K2 no se toca.
+
+**Motivos.** Elección del usuario. Cero conflictos al sincronizar con upstream y un módulo más pequeño y
+auditable para un hardware donde no se pueden probar los caminos de la K2.
+
+**Consecuencias.**
+
+- Los arreglos de upstream en `motor_control.py` no llegan solos a la Hi: revisar el diff en cada sincronización.
+- `homing.py` busca el objeto `motor_control` e importa constantes de `.motor_control`: el módulo de la Hi se
+  registra también con ese nombre para no tocar `homing.py`.
+- Sustituye a la regla del `CLAUDE.md` del fork ("preferir opciones nuevas") solo para este módulo.
