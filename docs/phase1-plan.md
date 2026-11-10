@@ -289,6 +289,36 @@ fichero antes de subirlo.
 | R7 | Moonraker de stock (`dde9bcc`) frente a la API de Kalico | Escalón 3 separado y opcional |
 | R8 | `pgrep -f`, `tar -tzf`, `sha256sum -c` de busybox se comportan distinto que en el autotest | `--dry-run` primero; el paso 0 lista las herramientas |
 
+### 8.1 Resultado del paso 0 (2026-11-10)
+
+Ejecutado por el usuario en la Hi, solo lectura. Datos comunicados por el hilo que guía la fase 1; el fichero
+saneado está pendiente de subir a `data/captures/` [P salvo donde se indica].
+
+| Sección | Resultado |
+| - | - |
+| 01 | F018, firmware 1.1.0.60. `board=CR4NU200360C21` (la documentación decía `C20`); stock la trata igual: el arranque compara con el prefijo `CR4NU200360C2` [verificado: OTA:etc/init.d/klipper, `copy_config`, caso `F018`] |
+| 02 | Slot activo **B**, libre A. `bootcmd` usa `setargs_nand` (ubiblock), pero la línea de arranque real es `root=/dev/mmcblk0p7`: hay que aclararlo antes de usar §9 |
+| 03 | eMMC `mmcblk0` con los nombres esperados en `/dev/by-name` (no SPI NAND, como decía `hardware.md` [F]) |
+| 04 | `/` es overlay (capa superior en `mmcblk0p10`, 233 MB libres); `UDISK` con 4,2 GB libres; 500 MB de RAM |
+| 05, 06 | Dos núcleos Cortex-A7 con `neon` y `vfpv4`; Python 3.9.12 y bibliotecas en las versiones del plan; solo falla `can` |
+| 08 | `c_helper.so` (SHA-256 `80db4330…a9ad0`, igual en PC y Hi) carga con glibc 2.29. Se compiló desde `dev` (`5b944e9`); para el paquete se recompila desde la rama del PR #2 |
+| 09 | Faltan además `timeout` y `unsquashfs`; hay `start-stop-daemon`, `flock`, `rsync`, `strace`, `fw_setenv`. Los scripts `hi_*.sh` no usan `timeout` [verificado: búsqueda en scripts/hi_*.sh; solo lo lista hi_step0.sh:98] |
+| 11 | `mcu0_110_G32-mcu0_020_000` y `noz0_110_G30-noz0_019_000`, como en `hardware.md`; cama `bed0_110_G21-bed0_017_000` |
+| 12 | El `klippy.log` de stock no tiene líneas `Stats`: no hay referencia de `sysload` para el paso 11 del escalón 2. Carga en reposo: `0.23 0.52 0.53` |
+| 13 | Sin paquetes marcados `MODIFIED` |
+
+Otros hallazgos:
+
+- El overlay ya contiene cambios en `/usr/share/klipper`, `moonraker`, `frontend`, `klippy-env` y 31 ficheros en
+  `printer_data/config`. Consecuencia: el `klippy/` que corre en la Hi puede no ser el de la OTA leída en
+  [phase6-plan.md §3](phase6-plan.md) [supuesto: comparar con `find /overlay/upper/usr/share/klipper -type f`].
+- `mcu_update.log`: `Fail to Open …/fw/F018/rfid`; en RS-485 lista `mot2 [85][86] 002_071`, `rfd0 [11]` y
+  `cfs0 [01]`. Los drivers responden en `0x81`/`0x82` [P, hardware.md]; `[85][86]` lo escribe
+  `mcu_util_485`, un binario cerrado que `mcu_update` lanza en el arranque (S13, antes de Klipper) tras enviar
+  `F7 EB 03 FF 56 CF` a 230400 baudios por `/dev/ttyS5` [verificado: OTA:etc/init.d/mcu_update:9, 223-226].
+  Qué significan es [supuesto: direcciones del modo de actualización; comparar con una lectura `READ_ADDR` de
+  `tools/hi_probe.py` en la misma sesión].
+
 ## 9. Slot A/B y vuelta a stock más adelante
 
 No forma parte de la fase 1. Queda como diseño para cuando Kalico imprima:

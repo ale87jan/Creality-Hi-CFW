@@ -31,6 +31,8 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
 - **Hecho cuando:** `step0.txt` está en el repo y el plan no tiene supuestos de las secciones 02, 04, 06, 08, 09
   y 13 sin resolver.
 - **Riesgos:** ninguno para la impresora (solo lectura). Revisar que el fichero no lleve datos personales.
+- **Estado (2026-11-10):** ejecutado; resultado en [phase1-plan.md §8.1](phase1-plan.md). Falta subir el
+  fichero saneado y resolver los dos supuestos nuevos (overlay con `klipper` modificado, `[85][86]`).
 
 ### B03 — Compilar con prueba de carga en Docker Desktop · U
 
@@ -40,6 +42,7 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
 - **Hecho cuando:** `build/chelper/loadtest.txt` empieza por `OK:` y el SHA-256 de `c_helper.info` coincide con
   el de [phase1-plan.md §4](phase1-plan.md) si los fuentes de `klippy/chelper` no han cambiado.
 - **Riesgos:** en Git Bash las rutas de `docker build` pueden necesitar `MSYS_NO_PATHCONV=1`.
+- **Estado (2026-11-10):** hecho; el `.so` carga en la Hi. Recompilar desde la rama del PR #2 para el paquete.
 
 ### B04 — Registrar las decisiones aprobadas · M
 

@@ -11,7 +11,7 @@ Punto de entrada para retomar el trabajo sin contexto previo. Se actualiza en ca
 | Entregable | Dónde | Verificación |
 | - | - | - |
 | Cross-compilación reproducible de `c_helper.so` | `scripts/build_chelper.sh`, `scripts/Dockerfile.chelper`, `scripts/chelper_build.py` | Dos builds desde caché vacía dan el mismo SHA-256; carga en ARMv7 emulado con glibc 2.28 (`scripts/chelper_load.py`) |
-| Paso 0: inventario de solo lectura de la impresora | `scripts/hi_step0.sh` | Sintaxis y ejecución con `busybox ash` en PC; **falta ejecutarlo en la Hi** |
+| Paso 0: inventario de solo lectura de la impresora | `scripts/hi_step0.sh` | Sintaxis y ejecución con `busybox ash` en PC; ejecutado en la Hi el 2026-11-10: [phase1-plan.md §8.1](phase1-plan.md) |
 | Paquete de instalación | `scripts/make_bundle.sh` | Determinista (mismo SHA-256 en dos ejecuciones) |
 | Instalación, arranque de sesión y vuelta a stock | `scripts/hi_install.sh`, `scripts/hi_kalico.sh`, `scripts/hi_restore.sh` | `scripts/selftest.sh`: 31 comprobaciones con impresora simulada; **sin probar en la Hi** |
 | Config mínima de fase 1 | Creality-Hi-Kalico `config/hi/printer.cfg` | Modo batch contra los diccionarios reales de las tres MCU (`test/test_hi_config.py`) |
@@ -25,10 +25,11 @@ config mínima en modo batch ([phase1-plan.md §3.2](phase1-plan.md)).
 ## Siguiente acción
 
 1. **Usuario:** revisar los pull request hacia `dev` (B01).
-2. **Usuario:** compilar `c_helper.so` en su PC y ejecutar el paso 0 en la impresora (B03, B02).
-3. **Modelo:** analizar `step0.txt` (B02).
+2. **Hecho (2026-11-10):** `c_helper.so` compilado y cargado en la Hi; paso 0 ejecutado (B03, B02). Falta subir
+   `step0.txt` saneado.
+3. **Usuario, con el hilo de la guía:** escalones 1 a 3 de [phase1-plan.md §8](phase1-plan.md).
 
-Nada se ha ejecutado todavía en la impresora.
+En la impresora solo se ha ejecutado el paso 0 (solo lectura).
 
 El CI del fork está en rojo en el pull request Creality-Hi-Kalico #2 por fallos que ya tiene `dev` (B07); los
 tests de la Hi pasan. El usuario decidió el 2026-11-10 no tocarlo por ahora.
