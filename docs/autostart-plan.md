@@ -1,6 +1,6 @@
 # Arranque automático de Kalico: diseño (B13)
 
-Estado: **diseño en papel** (2026-11-10, pedido por el usuario). Nada de esto está escrito en scripts ni se ha
+Estado: **diseño en papel** (2026-11-10, pedido por el usuario). Opción A elegida (D18). Nada de esto está escrito en scripts ni se ha
 ejecutado en la impresora. Hoy Kalico solo se arranca a mano con `hi_kalico.sh start` y un reinicio devuelve a
 stock ([phase1-plan.md §5.3](phase1-plan.md)). `OTA:` es el rootfs de la imagen V1.1.0.60, solo leído.
 

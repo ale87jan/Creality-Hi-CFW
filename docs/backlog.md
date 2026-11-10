@@ -148,8 +148,8 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
 - **Hecho cuando:** hay diseño con opciones en `docs/` y aprobación del usuario antes de escribir nada en el
   overlay.
 - **Riesgos:** el overlay es común a los dos slots ([phase1-plan.md §5.2](phase1-plan.md)).
-- **Estado (2026-11-10):** diseño con opciones en [autostart-plan.md](autostart-plan.md), pendiente de que el
-  usuario lo revise. Sin scripts escritos.
+- **Estado (2026-11-10):** diseño con opciones en [autostart-plan.md](autostart-plan.md), opción A elegida
+  (D18). Sin scripts escritos: esperan a la fase 1 en la Hi.
 
 ### B14 — Diseño de la instalación en el slot A/B libre · M
 

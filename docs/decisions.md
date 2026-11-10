@@ -304,3 +304,14 @@ fuerza. `ZDOWN_SWITCH ENABLE=0` sigue desactivándola siempre.
 
 **Consecuencias.** La corrección de `Z_TILT_ADJUST` se conserva entre `G28 Z` de la misma sesión (reduce B26b
 a un ahorro tras el primer `G28`). Tras `M84`, un error o un reinicio se vuelve a alinear.
+
+## D18 — Arranque automático con un servicio propio que conmuta (2026-11-10)
+
+**Contexto.** [autostart-plan.md](autostart-plan.md) compara tres formas de arrancar Kalico sin intervención:
+servicio propio al final del arranque (A), línea en `/etc/rc.local` (B) y deshabilitar los servicios de stock (C).
+
+**Decisión.** Opción A, "por ahora" [usuario]: `/etc/init.d/kalico_hi` repite la conmutación manual de la fase 1,
+gobernado por ficheros bandera en `/mnt/UDISK/kalico-hi`. No se modifica ningún fichero de stock.
+
+**Consecuencias.** Los scripts se escriben cuando la conmutación manual esté probada en la Hi (fase 1), que es
+requisito del diseño. Instalarlo es la primera escritura en el overlay y necesita aprobación expresa.
