@@ -122,6 +122,28 @@ Recomiendo **B**: es el comportamiento que la MCU de la Hi tiene verificado en f
 auditable, y no depende de protecciones que la MCU no ofrece. El coste es que el homing de Z tarda más (en
 serie) y que la macro de `G28` hay que mantenerla.
 
+### `z_tilt` de Kalico frente a `z_align` (2026-11-10)
+
+Pregunta del usuario: ¿puede `z_tilt` sustituir a `z_align`? Son dos pasos distintos y el stock usa los dos:
+
+| | `z_align` (`ZDOWN`) | `z_tilt` (`Z_TILT_ADJUST`) |
+| - | - | - |
+| Referencia | Sensores ópticos de arriba (chasis) | Cama, dos toques con la boquilla (X=20 y X=240, Y=130) |
+| Necesita | Nada: ni Z conocido ni sonda | Z con homing y sonda fiable |
+| Resultado | Puente paralelo al chasis y Z ≈ `zmax` conocido | Puente paralelo a la cama (tolerancia 0,1 mm) |
+| Código | `z_align_hi.py` (propio) | `z_tilt.py` de Kalico, sin cambios |
+
+- `[z_tilt]` con los valores de la impresora está en `config/hi/phase4.cfg` y carga en batch
+  [verificado: captura:printer-config/printer.cfg:218-226; fork:test/test_hi_z_align.py carga `phase4.cfg`].
+- `Z_TILT_ADJUST` después de cada `G28` cubre lo que hacía `ADJUST_STEPPERS` a cambio de dos toques más; B26b
+  (reaplicar la corrección guardada) queda como mejora de tiempo, no como requisito.
+- `z_tilt` solo corrige la inclinación fina. Sin `ZDOWN`, el `G28 Z` baja con la sonda desde una altura
+  desconocida y con el puente tal como haya quedado; si los dos husillos se han descuadrado mucho (motores sin
+  corriente), el primer toque se hace con el puente torcido [supuesto: medir en la Hi cuánto se descuadra al
+  apagar; paso 4.4 da el `deltaError1`].
+- Prescindir de `ZDOWN` ya es posible sin tocar código: `ZDOWN_SWITCH ENABLE=0`. Se decide con datos de la
+  impresora (paso 4.7).
+
 ## 4. `nozzle_clear`
 
 - Comandos: `NOZ_CLEAR` y `FORECEZ` [verificado: stock:nozzle_clear.py:47-48].
@@ -287,6 +309,7 @@ Todo ello depende de que la fase 3 funcione en la Hi; se marca como no probado.
 | 4.4 | `ZDOWN` desde media altura; comparar `deltaError1` con el de 4.2 | Mueve Z |
 | 4.5 | `G28` completo (X/Y, `ZDOWN`, sonda) y comparar Z=0 y `zmax` con stock | Mueve todo |
 | 4.6 | `NOZZLE_QUICK_WIPE` y después `NOZZLE_WIPE`, con la mano en el interruptor en el primer toque sobre la tira trasera (Y=268) | Mueve todo y calienta la boquilla (175 °C) |
+| 4.7 | `G28` y `Z_TILT_ADJUST` con `ZDOWN` y, si 4.4 da un descuadre pequeño, repetir con `ZDOWN_SWITCH ENABLE=0`: decide si `z_align` es prescindible | Mueve todo |
 
 ## 10. Decisiones que necesito
 

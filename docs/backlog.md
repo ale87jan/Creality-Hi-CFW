@@ -280,6 +280,8 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
   (lo que hace `ADJUST_STEPPERS` en el `z_tilt.py` de stock, líneas 167-187), y medir y guardar el `zmax` real.
 - **Hecho cuando:** hay test que comprueba que la corrección guardada se reaplica tras `ZDOWN`.
 - **Riesgos:** leer antes el `z_tilt.py` de stock; puede no hacer falta si `Z_TILT_ADJUST` es rápido.
+- **Nota 2026-11-10:** `[z_tilt]` de Kalico ya está en `phase4.cfg`; esta tarea es solo ahorro de tiempo. Ver
+  la comparación `z_tilt`/`z_align` en [phase4-plan.md §3](phase4-plan.md).
 
 ### B27 — Fase 4: leer `NOZZLE_CLEANUP` y `PRTOUCH_SCRUB` · M · HECHO 2026-11-10
 
