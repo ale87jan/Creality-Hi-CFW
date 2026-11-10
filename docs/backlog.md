@@ -90,7 +90,7 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
   un commit aparte. Comprobar antes si el CI del fork de Jacob falla igual y si acepta los cambios upstream.
 - **Decisión del usuario (2026-11-10):** no tocar `cartographer.py`. El fallo de `homing.py` no afecta a la Hi:
   en la fase 1 `[homing_override]` sustituye al `G28` y desde la fase 2 la config tendrá `[motor_control]`; solo
-  haría falta para hacer homing de Z antes de portar `motor_control`. Pendiente de decidir si se toca algo más.
+  haría falta para hacer homing de Z antes de portar `motor_control`. El CI se deja en rojo por ahora: el PR #2 se revisa así.
 - **Hecho cuando:** `ruff` y `Test Klippy` pasan en un pull request hacia `dev`, sin saltar tests.
 - **Riesgos:** (1) toca 24 ficheros compartidos y complica los merges con upstream: decisión del usuario.
   (2) cambia el camino de homing de la K2: probar con `[motor_control]` presente.

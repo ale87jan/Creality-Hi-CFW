@@ -31,7 +31,7 @@ config mínima en modo batch ([phase1-plan.md §3.2](phase1-plan.md)).
 Nada se ha ejecutado todavía en la impresora.
 
 El CI del fork está en rojo en el pull request Creality-Hi-Kalico #2 por fallos que ya tiene `dev` (B07); los
-tests de la Hi pasan. Arreglarlo es una tarea aparte que necesita decisión del usuario.
+tests de la Hi pasan. El usuario decidió el 2026-11-10 no tocarlo por ahora.
 
 ## Dónde está el trabajo
 
