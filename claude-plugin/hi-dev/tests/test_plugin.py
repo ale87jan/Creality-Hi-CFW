@@ -37,6 +37,29 @@ class GuardBash(unittest.TestCase):
     def test_commit_on_task_branch_allowed(self):
         self.assertIsNone(guard("Bash", {"command": "git commit -m 'feat: x' -- a.txt"}, make_repo("feat/x")))
 
+    def test_text_and_readonly_git_are_not_commands(self):
+        r = make_repo("dev")
+        for c in ("git merge-base origin/dev HEAD", "git merge-base --is-ancestor a b",
+                  "git log --oneline -3 && git branch -r --merged",
+                  "echo 'git merge main' > note.txt",
+                  "cat <<'EOF' > x.md\ngit merge dev\ngit commit -m x\nEOF",
+                  "git status && echo \"see git push origin dev\"",
+                  "git commit-tree HEAD^{tree}"):
+            self.assertIsNone(guard("Bash", {"command": c}, r), c)
+
+    def test_real_git_writes_still_denied(self):
+        r = make_repo("dev")
+        for c in ("git merge feat/x", "cd . && git commit -m 'feat: x'", "git status; git rebase main",
+                  "FOO=1 git reset --hard", "git -C . commit -m 'a b'", "ls | git am x.patch"):
+            self.assertEqual(guard("Bash", {"command": c}, r), "deny", c)
+
+    def test_cd_in_the_chain_sets_the_repo(self):
+        dev, task = make_repo("dev"), make_repo("feat/x")
+        self.assertIsNone(guard("Bash", {"command": "git status && cd %s && git commit -m 'feat: x'" % task}, dev))
+        self.assertIsNone(guard("Bash", {"command": "cd /tmp && cd %s && git commit -m 'feat: x'" % task}, dev))
+        self.assertEqual(guard("Bash", {"command": "cd %s && git commit -m 'feat: x'" % dev}, task), "deny")
+        self.assertEqual(guard("Bash", {"command": "cd %s && git add f && git commit -m 'feat: x'" % task + " && cd %s && git merge y" % dev}, task), "deny")
+
     def test_attribution_denied(self):
         self.assertEqual(guard("Bash", {"command": "git commit -m 'x' -m 'Co-Authored-By: a'"},
                                make_repo("feat/x")), "deny")

@@ -28,10 +28,11 @@ PRIVATE = re.compile(
     r"|_ssh_key|/mnt/c/Users|C:\\Users|/home/[a-z][a-z0-9_-]*/"
     r"|-----BEGIN [A-Z ]*PRIVATE KEY-----"
 )
-GIT_WRITE = re.compile(r"\bgit\s+(?:-C\s+(\S+)\s+)?(commit|push|merge|rebase|reset|cherry-pick|am)\b")
+GIT_START = r"(?:^|[;&|(\n])\s*(?:\w+=\S+\s+)*git\s+"   # git as a command, not as text
+GIT_WRITE = re.compile(GIT_START + r"(?:-C\s+(\S+)\s+)?(commit|push|merge|rebase|reset|cherry-pick|am)(?![\w-])")
 ATTRIBUTION = re.compile(r"co-authored-by|generated with", re.I)
-BLANKET_ADD = re.compile(r"\bgit\s+(?:-C\s+\S+\s+)?add\s+(?:-\S+\s+)*(-A|--all|-u|--update|\.)(\s|$|&|;)")
-BLANKET_COMMIT = re.compile(r"\bgit\s+(?:-C\s+\S+\s+)?commit\b[^\n]*\s(-a|-am|--all)(\s|$)")
+BLANKET_ADD = re.compile(GIT_START + r"(?:-C\s+\S+\s+)?add\s+(?:-\S+\s+)*(-A|--all|-u|--update|\.)(\s|$|&|;)")
+BLANKET_COMMIT = re.compile(GIT_START + r"(?:-C\s+\S+\s+)?commit(?![\w-])[^\n]*\s(-a|-am|--all)(\s|$)")
 RULESET_CHANGE = re.compile(
     r"gh\s+api\b(?=[^\n]*rulesets)[^\n]*(?:-X|--method)[ =]*(?:DELETE|PUT|PATCH)", re.I
 )
@@ -54,32 +55,49 @@ def git(args, cwd):
         return ""
 
 
-def effective_cwd(cmd, cwd, dash_c):
-    m = re.match(r"\s*cd\s+(\S+)\s*(?:&&|;)", cmd)
-    base = os.path.join(cwd, os.path.expanduser(m.group(1))) if m else cwd
+CD = re.compile(r"(?:^|[;&|(\n])\s*cd\s+(\S+)")
+
+
+def effective_cwd(cmd, cwd, dash_c, upto):
+    """Directory a git call runs in: the start cwd moved by every `cd` that precedes it in the chain."""
+    base = cwd
+    for m in CD.finditer(cmd[:upto]):
+        target = os.path.expandvars(os.path.expanduser(m.group(1).strip("'\"")))
+        base = os.path.normpath(os.path.join(base, target))
     if dash_c:
-        base = os.path.join(base, os.path.expanduser(dash_c))
+        base = os.path.normpath(os.path.join(base, os.path.expanduser(dash_c)))
     return base
 
 
-def check_bash(cmd, cwd):
-    if REACHES_PRINTER.search(cmd) and MOTOR_WRITE.search(cmd):
+HEREDOC = re.compile(r"<<-?\s*(['\"]?)(\w+)\1[^\n]*\n.*?\n[ \t]*\2[ \t]*(?=\n|$)", re.S)
+QUOTED = re.compile(r"\"(?:[^\"\\]|\\.)*\"|'[^']*'", re.S)
+
+
+def code_only(cmd):
+    """Drop heredoc bodies and quoted text with spaces, so words inside messages are not read as commands."""
+    cmd = HEREDOC.sub("", cmd)
+    return QUOTED.sub(lambda m: '""' if re.search(r"\s", m.group(0)) else m.group(0), cmd)
+
+
+def check_bash(raw, cwd):
+    cmd = code_only(raw)
+    if REACHES_PRINTER.search(raw) and MOTOR_WRITE.search(raw):
         out("ask", "this command can write motor parameters or calibrate; it needs the user's explicit approval")
-    if RULESET_CHANGE.search(cmd):
+    if RULESET_CHANGE.search(raw):
         out("ask", "changing or deleting a GitHub ruleset needs the user's approval")
     if BLANKET_ADD.search(cmd) or BLANKET_COMMIT.search(cmd):
         out("deny", "the clone may be shared with another thread: stage and commit explicit paths only "
                     "(git add <file>..., git commit -m ... -- <file>...), never -A, -a, -u or '.'")
     for m in GIT_WRITE.finditer(cmd):
         verb = m.group(2)
-        where = effective_cwd(cmd, cwd, m.group(1))
+        where = effective_cwd(cmd, cwd, m.group(1), m.start())
         top = git(["rev-parse", "--show-toplevel"], where)
         if top and os.path.basename(top) in READ_ONLY_REPOS:
             out("deny", "%s is a read-only reference repository" % os.path.basename(top))
         branch = git(["rev-parse", "--abbrev-ref", "HEAD"], where)
         if verb != "push" and branch in PROTECTED:
             out("deny", "git %s on protected branch %s: create a task branch off dev (pr-flow.sh start)" % (verb, branch))
-        if verb == "commit" and ATTRIBUTION.search(cmd):
+        if verb == "commit" and ATTRIBUTION.search(raw):
             out("deny", "commits carry no Co-Authored-By or 'Generated with' lines (project rule)")
         if verb == "push":
             tail = cmd[m.end():].split("&&")[0].split(";")[0]
