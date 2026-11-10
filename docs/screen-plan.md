@@ -35,6 +35,29 @@ fases y aquí daría conflicto).
 Consecuencia clave: **240x320 está por debajo de lo que soportan los proyectos de UI existentes** (§2), y
 solo un proceso puede usar el framebuffer a la vez.
 
+## 1b. Lectura en la impresora (B40, 2026-11-10)
+
+Captura de solo lectura con el firmware de stock en marcha: `data/captures/2026-11-10_hi-screen/screen-probe.txt` (abreviado `probe`).
+
+| Dato | Valor medido | Consecuencia |
+| - | - | - |
+| Framebuffer | `/dev/fb0`, virtual 240x640, 32 bpp, `stride` 960 [verificado: probe:4,10-12]; `disp_reserve=307200` = 240·320·4 [verificado: probe:2] | Panel visible de 240x320 con dos páginas (doble búfer). LVGL con `fbdev` vale, con color de 32 bits |
+| Retroiluminación | No existe `/sys/class/backlight`; solo `pwmchip0` [verificado: probe:16-18] | El brillo va por la pila `disp` o por el PWM; cómo lo hace `display-server` [supuesto: `strings` del binario en el PC] |
+| Táctil | Un solo dispositivo, `gt9xxnew_ts` en `/dev/input/event0`; `tlsc6x` cargado pero sin dispositivo [verificado: probe:8,21,25,32-33] | El controlador real es el Goodix |
+| Ejes del táctil | `ABS=2650000 0`: solo ejes multitáctiles (`ABS_MT_POSITION_X/Y`, `TRACKING_ID`, `TOUCH_MAJOR`, `WIDTH_MAJOR`), sin `ABS_X/ABS_Y`; `BTN_TOUCH` presente [verificado: probe:28-29, decodificado a mano] | El `evdev` de `lv_drivers` debe leer los ejes MT. **El rango (¿240x320 o 480x800?) sigue sin medir** [supuesto: leerlo con el ioctl `EVIOCGABS`, que es de solo lectura] |
+| Quién usa la pantalla | `display-server` tiene abiertos `/dev/fb0` y `/dev/input/event0`, y cuatro ficheros de memoria compartida en `/tmp/shm/` (`device_state_shm`, `materail_box_shm`, `dev_maintain_shm`, `print_object_shm`) [verificado: probe:49-57] | Para usar el panel hay que parar `display-server`. Recibe el estado por memoria compartida; quien habla con `/tmp/klippy_uds` es otro proceso [supuesto: `master-server`] |
+| Motor gráfico de stock | Sin biblioteca LVGL dinámica; usa `libfreetype`, `libpng16`, `libjpeg` [verificado: probe:60-76] | [supuesto: LVGL enlazado en estático; no afecta al plan] |
+| Memoria | 488 MB, 365 MB disponibles con el stock en marcha; sin swap [verificado: probe:79-80] | Sobra para una UI LVGL (decenas de MB) |
+| Disco | `/mnt/UDISK` 4,2 GB libres; overlay 233 MB libres [verificado: probe:85,88] | Sin problema de espacio |
+| Python | PIL 8.2.0 instalado [verificado: probe:90] | Un prototipo en Python que dibuje en `fb0` es viable sin compilar nada |
+| Fluidd | `/usr/share/fluidd` (en el SquashFS de solo lectura) [verificado: probe:94] | El panel del CFS (G) necesita una copia de Fluidd fuera de `/rom` o un cambio en el overlay |
+
+Dos datos fuera del tema de la pantalla, para el hilo de fases:
+
+- El almacenamiento aparece como `mmcblk0` con particiones GPT (`rootfs_data@mmcblk0p10`, `UDISK@mmcblk0p11`)
+  [verificado: probe:2], no como SPI NAND con UBI como dice `docs/hardware.md:12`.
+- La impresora arrancó con `root=/dev/mmcblk0p7`, que es `rootfsB` [verificado: probe:2]: el slot libre es el A.
+
 ## 2. Opciones
 
 ### Opción 0 — Sin pantalla útil; solo Fluidd (la de la decisión actual)
@@ -223,7 +246,7 @@ free -m; df -h; python3 -c "import PIL; print(PIL.__version__)" 2>&1
 El `backlog.md` de las fases está en otra rama y no existe aún en `dev`; por eso las tareas quedan aquí para
 copiarlas al unir ramas. Siguientes ids tras B39: B40-B44. Todas U (sin analizar) salvo indicación.
 
-### B40 — Pantalla: captura de solo lectura de hardware y procesos de la UI · S
+### B40 — Pantalla: captura de solo lectura de hardware y procesos de la UI · S (hecha 2026-11-10, ver §1b; falta el rango del táctil)
 
 - **Objetivo:** ejecutar los comandos del §4 y guardar la salida en `data/captures/<fecha>_hi-screen/`.
 - **Hecho cuando:** quedan fijados (con [P]) la resolución y bpp del `fb0`, el modelo y rango del táctil,

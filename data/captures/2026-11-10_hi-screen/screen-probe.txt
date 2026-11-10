@@ -1,0 +1,95 @@
+## cmdline
+earlyprintk=sunxi-uart,0x02500000 clk_ignore_unused initcall_debug=0 user_debug=0x00 console=ttyS0,115200 loglevel=8 root=/dev/mmcblk0p7 init=/init rdinit=/rdinit partitions=boot-resource@mmcblk0p1:env@mmcblk0p2:env-redund@mmcblk0p3:bootA@mmcblk0p4:bootB@mmcblk0p5:rootfsA@mmcblk0p6:rootfsB@mmcblk0p7:dsp0@mmcblk0p8:private@mmcblk0p9:rootfs_data@mmcblk0p10:UDISK@mmcblk0p11 cma=16M snum= mac_addr= wifi_mac=<redacted> bt_mac= specialstr= gpt=1 androidboot.mode=normal androidboot.hardware=sun8iw20p1 boot_type=2 androidboot.boot_type=2 gpt=1 uboot_message=2018.07(08/06/2025-13:05:19) mbr_offset=1032192 disp_reserve=307200,0x5c921000 lcm_id=gc9307_9bit_spi_tjc_240_320 androidboot.dramsize=512
+## dev
+crw-------    1 root     root       29,   0 Jan  1  2020 /dev/fb0
+
+/dev/input/:
+total 0
+crw-------    1 root     root       13,  64 Jan  1  2020 event0
+## fb0
+virtual_size: 240,640
+bits_per_pixel: 32
+stride: 960
+name:
+rotate: 0
+## backlight
+ls: /sys/class/backlight: No such file or directory
+/sys/class/pwm:
+pwmchip0
+## input
+I: Bus=0018 Vendor=dead Product=beef Version=28bb
+N: Name="gt9xxnew_ts"
+P: Phys=<binary>
+S: Sysfs=/devices/virtual/input/input0
+U: Uniq=
+H: Handlers=kbd event0
+B: PROP=2
+B: EV=b
+B: KEY=400 0 0 7f8 0 0 0 100000 0 0 0
+B: ABS=2650000 0
+
+## lsmod
+gt9xxnew_ts            53248  0
+tlsc6x                 69632  0
+## ps
+ 2803 root      0:00 nginx: master process /usr/sbin/nginx -c /etc/nginx/nginx.conf -g daemon off;
+ 2845 nobody    0:03 nginx: worker process
+ 3759 root      1:26 /usr/bin/master-server
+ 3762 root      0:02 /usr/bin/app-server
+ 3763 root      4:07 /usr/bin/display-server
+ 3765 root      0:13 /usr/bin/web-server
+ 3884 root      2:34 /usr/share/moonraker-env/bin/python /usr/share/moonraker/moonraker.py -c /usr/share/moonraker/moonraker.conf -l /mnt/UDISK/printer_data/logs/moonraker.log
+ 4275 root      7:39 /usr/share/klippy-env/bin/python /usr/share/klipper/klippy/klippy.py /mnt/UDISK//printer_data/config/printer.cfg -l /mnt/UDISK//printer_data/logs/klippy.log -a /tmp/klippy_uds
+## display-server
+pid=3763
+/usr/bin/display-server
+total 0
+lr-x------    1 root     root            64 Nov 10 05:56 0 -> /dev/null
+l-wx------    1 root     root            64 Nov 10 05:56 1 -> /dev/null
+lrwx------    1 root     root            64 Nov 10 05:56 10 -> /tmp/shm/materail_box_shm
+lrwx------    1 root     root            64 Nov 10 05:56 11 -> /tmp/shm/dev_maintain_shm
+lrwx------    1 root     root            64 Nov 10 05:56 12 -> /tmp/shm/print_object_shm
+l-wx------    1 root     root            64 Nov 10 05:56 2 -> /dev/null
+lrwx------    1 root     root            64 Nov 10 05:56 3 -> /mnt/UDISK/creality/userdata/log/display-server.log
+lr-x------    1 root     root            64 Nov 10 05:56 4 -> anon_inode:inotify
+lrwx------    1 root     root            64 Nov 10 05:56 5 -> /tmp/shm/device_state_shm
+lrwx------    1 root     root            64 Nov 10 05:56 6 -> /dev/fb0
+lrwx------    1 root     root            64 Nov 10 05:56 7 -> /dev/input/event0
+lr-x------    1 root     root            64 Nov 10 05:56 8 -> /etc/sysConfig/defData/SourceHanSansSC-Bold.otf
+lr-x------    1 root     root            64 Nov 10 05:56 9 -> /etc/sysConfig/defData/SourceHanSansSC-Bold.otf
+/dev/fb0
+/lib/ld-2.29.so
+/lib/libc-2.29.so
+/lib/libdl-2.29.so
+/lib/libm-2.29.so
+/lib/libpthread-2.29.so
+/lib/librt-2.29.so
+/usr/lib/libCrLog.so
+/usr/lib/libcrypto.so.1.1
+/usr/lib/libfreetype.so.6.17.0
+/usr/lib/libinotifytools.so.0.4.1
+/usr/lib/libjpeg.so.62.3.0
+/usr/lib/libjson-c.so.5.1.0
+/usr/lib/libpng16.so.16.37.0
+/usr/lib/libprotobuf-c.so
+/usr/lib/libssl.so.1.1
+/usr/lib/libz.so.1.2.11
+## mem
+              total        used        free      shared  buff/cache   available
+Mem:            488         109         178           4         200         365
+Swap:             0           0           0
+Filesystem                Size      Used Available Use% Mounted on
+/dev/root               114.3M    114.3M         0 100% /rom
+devtmpfs                235.5M         0    235.5M   0% /rom/dev
+tmpfs                   244.1M      4.4M    239.7M   2% /tmp
+/dev/mmcblk0p10         239.9M      2.8M    233.1M   1% /overlay
+overlayfs:/overlay      239.9M      2.8M    233.1M   1% /
+tmpfs                   512.0K         0    512.0K   0% /dev
+/dev/by-name/UDISK        6.2G      2.0G      4.2G  33% /mnt/UDISK
+## pil
+8.2.0
+## fluidd
+ls: /usr/data/fluidd*: No such file or directory
+ls: /mnt/UDISK/fluidd*: No such file or directory
+/usr/share/fluidd
+/www
