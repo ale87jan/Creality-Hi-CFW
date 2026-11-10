@@ -133,5 +133,18 @@ class DocsIndex(unittest.TestCase):
         self.assertIn("New text.", (self.root / "docs/INDEX.md").read_text())
 
 
+class Manifests(unittest.TestCase):
+    def test_json_files_are_valid(self):
+        plugin = json.loads((PLUGIN / ".claude-plugin" / "plugin.json").read_text())
+        self.assertEqual(plugin["name"], "hi-dev")
+        self.assertRegex(plugin["version"], r"^\d+\.\d+\.\d+$")
+        hooks = json.loads((PLUGIN / "hooks" / "hooks.json").read_text())["hooks"]
+        self.assertIn("PreToolUse", hooks)
+        market = PLUGIN.parent.parent / ".claude-plugin" / "marketplace.json"
+        data = json.loads(market.read_text())
+        for entry in data["plugins"]:
+            self.assertTrue((market.parent.parent / entry["source"] / ".claude-plugin" / "plugin.json").is_file())
+
+
 if __name__ == "__main__":
     unittest.main()
