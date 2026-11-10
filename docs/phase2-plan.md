@@ -117,7 +117,7 @@ Consecuencias:
 - En la fase 2 la config bloquea `G28 Z` con un `[homing_override]` que solo deja pasar X e Y. Sin Z en homing,
   Kalico rechaza los movimientos de Z, igual que en la fase 1.
 
-## 6. Diseño (D8 decidida; el resto pendiente, §9)
+## 6. Diseño (D8 y D9)
 
 Decisión D8: el módulo de la Hi es una **copia aparte**, `klippy/extras/motor_control_hi.py`, recortada.
 `motor_control.py` de la K2 no se toca.
@@ -182,8 +182,7 @@ Todo empieza en solo lectura. Ninguna escritura de parámetros sin aprobación e
 
 1. **Cómo adaptar `motor_control.py`**: decidida el 2026-11-10, copia aparte (D8 en
    [decisions.md](decisions.md)).
-2. **Escrituras en el arranque**: niveles `none` → `stall` → `params` (recomendada, §6) o el arranque de la K2
-   sin claves de parámetros.
+2. **Escrituras en el arranque**: decidida el 2026-11-10, niveles `none` → `stall` → `params` (D9).
 3. **Homing en la fase 2**: solo X/Y con Z bloqueado (recomendada, §5) o adelantar el homing de Z.
 4. **Dato tuyo**: respondido el 2026-11-10. Hay sensores físicos en X e Y; el orden no es obligatorio; hay que
    levantar Z antes (§4 y §5).

@@ -163,8 +163,8 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
 - **Objetivo:** cerrar las cuatro decisiones de [phase2-plan.md §9](phase2-plan.md) y anotarlas en
   [decisions.md](decisions.md).
 - **Hecho cuando:** las decisiones están en `decisions.md` y el plan deja de decir "pendiente".
-- **Estado:** decisión 1 cerrada (D8, copia aparte) y dato de los finales de carrera recibido. Faltan la 2 y
-  la 3.
+- **Estado:** decisión 1 cerrada (D8, copia aparte) y dato de los finales de carrera recibido. Decisión 2
+  cerrada (D9, niveles). Falta la 3.
 - **Riesgos:** B16 a B20 dependen de la decisión 2.
 
 ### B16 — Fase 2: `motor_control_hi.py` · M

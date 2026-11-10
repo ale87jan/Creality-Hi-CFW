@@ -166,3 +166,23 @@ auditable para un hardware donde no se pueden probar los caminos de la K2.
 - `homing.py` busca el objeto `motor_control` e importa constantes de `.motor_control`: el módulo de la Hi se
   registra también con ese nombre para no tocar `homing.py`.
 - Sustituye a la regla del `CLAUDE.md` del fork ("preferir opciones nuevas") solo para este módulo.
+
+## D9 — Escrituras a los drivers X/Y por niveles (2026-11-10)
+
+**Contexto.** El arranque de `motor_control` de la K2 escribe en los drivers: modo de stall, borrado de fallos
+y, si la config trae parámetros, `SYS_PARAM` ([phase2-plan.md](phase2-plan.md) §2). Opciones: niveles empezando
+en lectura, el arranque de la K2 sin claves de parámetros, o solo lectura siempre.
+
+**Decisión.** Opción `startup_writes` en `[motor_control_hi]` con tres niveles: `none` (asigna direcciones y solo
+lee; valor por defecto), `stall` (añade el modo de stall y el borrado de fallos; necesario para el homing) y
+`params` (añade `SYS_PARAM` en RAM; solo con aprobación expresa del usuario). Las tramas de flash y de
+calibración no se envían en ningún nivel.
+
+**Motivos.** Cumple la regla de empezar en solo lectura y deja un camino hasta el homing sin tocar código.
+
+**Consecuencias.**
+
+- Con `none` no hay homing de X/Y: `G28 X` responde con un error que pide `startup_writes: stall`.
+- Asignar direcciones (broadcast `READ_ADDR 01`) ocurre en todos los niveles; se asume que el stock hace lo
+  mismo en cada arranque (por confirmar en el paso 2.1).
+- Subir a `params` es una decisión aparte, con los ids ya verificados para `mot2_002_071`.
