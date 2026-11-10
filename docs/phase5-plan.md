@@ -212,8 +212,9 @@ Límites y pendientes:
    subir Z antes]. En stock el rodeo en Y lo hace el módulo (`detour_y: True`, `detour_pos_y: 261`) y no hay
    subida de Z en la config: `detour_z` está comentado y las macros `BOX_*` no mueven Z [verificado:
    captura:box.cfg:57-59, 103-150]. Si el laminador sube Z en su G-code de cambio de filamento es [supuesto:
-   mirar el "G-code de cambio de filamento" del perfil de la Hi]. `CFS_PURGE` deja la boquilla sobre la
-   papelera; la vuelta a la pieza es del cambio de herramienta (fase 6).
+   mirar el "G-code de cambio de filamento" del perfil de la Hi]. La purga se hace en Y=261, sin volver a Y=130 como
+   stock (`extrude_pos_y`): la papelera cuelga del pórtico y la posición de la cama no importa [usuario,
+   2026-11-10]. `CFS_PURGE` deja la boquilla sobre la papelera; la vuelta a la pieza es del cambio de herramienta (fase 6).
 4. `cut_velocity: 3000` es el valor del ejemplo de la referencia; el stock usa 15000
    [verificado: captura:box.cfg, `cut_velocity`]. Se mantiene el lento hasta el paso 5.4.
 5. Comandos `T0`..`T3` y los `BOX_*` de stock que llaman las macros y el laminador: sin hacer (fase 6).
