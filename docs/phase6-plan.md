@@ -91,6 +91,16 @@ Base decidida: la configuración del usuario (§6, decisión 1). Inventario repe
   error de carga en batch]; `SET_ADJUSTMENTS_FLAG` se quita [supuesto: guardaba la corrección de inclinación
   para el siguiente `ZDOWN`; leerlo en stock, B36]. Diferencia propia: se restaura la aceleración tras el
   mallado (su macro la dejaba a un cuarto). `PRINT_PREPARED` no se llama hasta portar `START_PRINT`.
+- **Hecho (2026-11-10):** `config/hi/print.cfg` con `START_PRINT`, `END_PRINT`, `_PURGE_LINE`, el enfriado
+  asistido y sus macros de apoyo; 5 tests en `test/test_hi_print.py`. De 306 líneas, 19 difieren del original
+  [verificado: comparación línea a línea con los ficheros de la captura, 2026-11-10]. Sustituciones:
+  `BOX_GO_TO_EXTRUDE_POS` es `_HI_CFS_GO_BIN`; `ZDOWN_SWITCH` + `G28 Z` es `G28 Z ALIGN=1`; `FORCE_MOVE_E E=-4`
+  es `FORCE_MOVE` del extrusor a 5 mm/s (velocidad nuestra); `BOX_END` es `_HI_CFS_PRINT_END` (`CFS_RETRUDE`
+  del filamento cargado y apagar calentadores) [supuesto]. Sin portar, a la espera de leer stock:
+  `BOX_START_PRINT`, `BOX_END_PRINT`, `ENABLE_PRESSURE_ADVANCE`, `NEXT_HOMEZ_NACCU`. Añadido: `START_PRINT`
+  vuelve a preparar si algún eje no está referenciado, porque `PRINT_PREPARE_CLEAR` aún no está portado.
+  `tools/cfg_commands.py` sobre `config/hi/` da cero comandos ausentes.
+- Faltan `PAUSE`, `RESUME`, `CANCEL_PRINT`, `FIRST_FLOOR_*`, `print_modes.cfg` y `multimaterial.cfg`.
 - B36 necesita el `klippy/` de stock, que no está en git: hay que traerlo del PC del usuario (carpeta
   `firmware`), que debe estar encendido.
 
