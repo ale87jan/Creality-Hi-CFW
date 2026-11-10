@@ -315,3 +315,26 @@ gobernado por ficheros bandera en `/mnt/UDISK/kalico-hi`. No se modifica ningún
 
 **Consecuencias.** Los scripts se escriben cuando la conmutación manual esté probada en la Hi (fase 1), que es
 requisito del diseño. Instalarlo es la primera escritura en el overlay y necesita aprobación expresa.
+
+## D19 — Protección de ramas con rulesets de GitHub (2026-11-10)
+
+**Contexto.** D4 define el flujo de ramas, pero nada lo imponía. Los dos repos son públicos, así que los
+rulesets están disponibles en el plan Free.
+
+**Decisión.** Rulesets activos [P, `gh api repos/.../rulesets`], todos sin push forzado ni borrado:
+
+| Repo | Rama | Reglas |
+| - | - | - |
+| Creality-Hi-Kalico | `main` (espejo) | Historial lineal; sin PR, para poder avanzar por fast-forward desde `Jacob10383/kalico` |
+| Creality-Hi-Kalico | `main-hi` | Solo por PR, 1 aprobación |
+| Creality-Hi-Kalico | `dev` | Solo por PR, sin aprobación obligatoria |
+| Creality-Hi-CFW | `main` | Igual que `main-hi` |
+| Creality-Hi-CFW | `dev` | Igual que `dev` de Kalico |
+
+`creality-cfs-klipper` no se toca. Además, `delete_branch_on_merge` está activo en los dos repos y se borran
+las ramas muertas en local tras cada fusión.
+
+**Consecuencias.** Un único colaborador no puede aprobar su propio PR, así que `main-hi` y `main` de CFW llevan un
+bypass del rol de administrador **solo en modo `pull_request`** [usuario]: se fusiona por PR sin aprobación, pero
+no hay push directo. Los rulesets no pueden limitar la rama origen: "`main-hi` solo desde `dev`" sigue siendo una
+convención. Todo cambio, también de docs, va por rama y PR.
