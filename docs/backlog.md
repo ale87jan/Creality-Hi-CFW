@@ -278,11 +278,12 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
   simulada cubre reintentos y `timeout`.
 - **Riesgos:** polaridades `zd_up`/`zes_untrig`; no existe sustituto de `ADJUST_STEPPERS`.
 
-### B27 — Fase 4: leer `nozzle_cleanup.py` de la K2 · M
+### B27 — Fase 4: leer `NOZZLE_CLEANUP` y `PRTOUCH_SCRUB` · M
 
-- **Objetivo:** saber si el módulo de la K2 se puede configurar para la zona de limpieza de la Hi
-  (`start_pos: 98, 266`) o hay que reescribir `nozzle_clear.py`.
-- **Ficheros:** Creality-Hi-Kalico `klippy/extras/nozzle_cleanup.py`; `docs/phase4-plan.md` §4.
+- **Objetivo:** saber si alguna de las dos limpiezas del fork se puede configurar para la zona de limpieza de
+  la Hi (`start_pos: 98, 266`) o hay que reescribir `nozzle_clear.py`.
+- **Ficheros:** Creality-Hi-Kalico `klippy/extras/nozzle_cleanup.py`, `klippy/extras/prtouch.py`
+  (`cmd_PRTOUCH_SCRUB`); `docs/phase4-plan.md` §4.
 - **Hecho cuando:** el plan tiene la comparación y una recomendación para la decisión 3.
 - **Riesgos:** ninguno; solo lectura.
 
@@ -305,3 +306,41 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
 - **Objetivo:** portarlos solo si hacen falta (recuperación tras corte de luz; diagnóstico de cables de Z).
   `timer_read` no se porta. Pendiente de la decisión 2 de la fase 4.
 - **Riesgos:** los comandos `EEPROM_WRITE_*` escriben en una memoria que también usa el stock.
+
+### B31 — Fase 5: clasificar las tramas del CFS · M
+
+- **Objetivo:** tabla de las tramas de `box_protocol.py` y `box_addr.py` (lectura, escritura volátil, escritura
+  persistente, movimiento) en `docs/protocols/rs485.md`, y herramienta de solo lectura para el paso 5.2.
+- **Ficheros:** Creality-Hi-Kalico `klippy/extras/box_protocol.py`, `box_addr.py`; Creality-Hi-CFW
+  `docs/protocols/rs485.md`, `tools/`.
+- **Hecho cuando:** cada trama tiene clase y referencia a línea; la herramienta solo envía las de lectura y
+  tiene test sin impresora.
+- **Riesgos:** ninguno; solo lectura.
+
+### B32 — Fase 5: leer la lógica de `box.py` y `box_change.py` · M
+
+- **Objetivo:** secuencias de carga, descarga, corte, purga y cambio; qué parte es geometría de la K2 y qué
+  hace `box.py` al arrancar. Con ello, recomendación para la decisión 1 de [phase5-plan.md §6](phase5-plan.md).
+- **Hecho cuando:** el plan tiene las secuencias con referencias a línea y la recomendación.
+- **Riesgos:** ninguno; solo lectura. Es larga (unas 5000 líneas).
+
+### B33 — Fase 5: decisiones de diseño · U
+
+- **Objetivo:** cerrar las tres decisiones de [phase5-plan.md §6](phase5-plan.md).
+- **Hecho cuando:** están en `decisions.md`.
+- **Riesgos:** la 1 depende de B32.
+
+### B34 — Fase 5: CFS para la Hi con tests · M
+
+- **Objetivo:** adaptación según la decisión 1: pin del sensor de corte configurable, corte en +X y purga de la
+  Hi; `config/hi/phase5.cfg` con los valores de stock.
+- **Hecho cuando:** carga en batch; un test rechaza `PB9` como sensor y otro comprueba que el corte no sale de
+  los límites de X de la Hi.
+- **Riesgos:** depende de las fases 2 a 4 probadas.
+
+### B35 — Fase 5: pruebas en la impresora · U, después M
+
+- **Objetivo:** pasos 5.1 a 5.6 de [phase5-plan.md §5](phase5-plan.md).
+- **Hecho cuando:** cambio de color completo sin intervención; resultados [P] en `docs/hardware.md`.
+- **Riesgos:** golpe en el corte; purga fuera de sitio.
+

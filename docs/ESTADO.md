@@ -52,6 +52,12 @@ Análisis hecho el 2026-11-10: [phase4-plan.md](phase4-plan.md). Tareas B25 a B3
 forma parte del `G28 Z` de stock. Ni el módulo de la K2 (pide `safeDist` y `z_align_force_stop`) ni el de la Hi
 (depende de cuatro parches de Creality) valen tal cual. Sin código todavía: espera las decisiones del §10.
 
+## Fase 5 (CFS)
+
+Análisis ligero hecho el 2026-11-10: [phase5-plan.md](phase5-plan.md). Tareas B31 a B35. Las capas de bus y
+protocolo del fork valen; `box.py` no vale tal cual (pin del sensor de corte, corte hacia -X y zona trasera de
+la K2 fijos en el código). Falta leer la lógica de carga y purga (B32) antes de decidir cómo adaptarlo.
+
 ## Dónde está el trabajo
 
 - Rama `claude/project-thread-fnrqje` en los dos repos, creada desde `dev` y subida a GitHub el 2026-11-10, con

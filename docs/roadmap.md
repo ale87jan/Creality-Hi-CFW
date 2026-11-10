@@ -68,6 +68,8 @@ Plan y análisis: [phase4-plan.md](phase4-plan.md).
 
 ## Fase 5 — CFS
 
+Plan y análisis: [phase5-plan.md](phase5-plan.md).
+
 - [ ] Prueba de solo lectura con `box_protocol.py` (A2, 0x0A, 0x05, 0x08, 0x0E).
 - [ ] Corte: la cuchilla de la Hi está en +X (la K2 corta en -X).
 - [ ] Purga y limpieza: la Hi no tiene papelera trasera; el pin del sensor de corte de la K2

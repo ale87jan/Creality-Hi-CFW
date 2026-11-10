@@ -131,8 +131,16 @@ serie) y que la macro de `G28` hay que mantenerla.
   - `[box] extrude_pos_x` cuando `extr_enable` [verificado: stock:nozzle_clear.py:46].
   - `SET_PIN PIN=fan0` [verificado: stock:nozzle_clear.py:104].
 - El `homing.py` del fork llama a `NOZZLE_CLEAN` (otro nombre) antes de tocar la cama si `[prtouch]` tiene
-  `register_as_probe` [verificado: fork:homing.py:1131-1135]. El fork trae `nozzle_cleanup.py`, el módulo de la
-  K2 [verificado: fork:klippy/extras/]; no lo he leído.
+  `register_as_probe` [verificado: fork:homing.py:1131-1135]. Ese comando lo registra `box.py` y usa la
+  almohadilla trasera de la K2 [verificado: fork:klippy/extras/box.py:634]; sin `[box]` hay que definirlo como
+  macro.
+
+El fork trae otras dos limpiezas, ninguna pensada para la Hi:
+
+| Comando | Módulo | Config | Encaje en la Hi |
+| - | - | - | - |
+| `PRTOUCH_SCRUB` | `fork:prtouch.py:148-168, 253` | `[prtouch] scrub_x_start: 173`, `scrub_x_end: 223`, `scrub_y_min: 353`, `scrub_y_max: 356` | Los valores por defecto caen fuera de la cama (Y máx. 274) y busca la lengüeta flexible trasera de la K2. No he comprobado si sirve cambiando solo las coordenadas |
+| `NOZZLE_CLEANUP` | `fork:nozzle_cleanup.py` (178 líneas, genérico de Kalico) | Sección propia: `pattern_x: 10`, `pattern_y: 4`, `pattern_stepover`, `samples: 3` | Toques con la sonda en un patrón sobre la cama. Solo he leído el esquema (líneas 29-57, 103-173) |
 
 Portarlo es reescribirlo sobre la API del `prtouch.py` del fork, después de la fase 3. La secuencia de
 movimientos y temperaturas de stock (líneas 84-167) sirve de especificación. Sin él, la sonda toca la cama con
@@ -201,9 +209,9 @@ Todo ello depende de que la fase 3 funcione en la Hi; se marca como no probado.
    (recomendada); o A, derivarlo del módulo de la K2 para integrarlo en el `homing.py` del fork (§3).
 2. **Qué módulos se portan**: solo `z_align` y `nozzle_clear` (recomendada); `bl24c16f` y `tmc_line_check`
    quedan en el backlog sin fecha y `timer_read` no se porta. Alternativa: portarlos todos ahora.
-3. **Limpieza de boquilla**: reescribir `nozzle_clear` de la Hi sobre el `prtouch.py` del fork (recomendada);
-   o adaptar el `nozzle_cleanup.py` de la K2 a la geometría de la Hi. Se decide después de leer
-   `nozzle_cleanup.py` (tarea B27).
+3. **Limpieza de boquilla**: reescribir `nozzle_clear` de la Hi sobre el `prtouch.py` del fork, con los
+   valores de stock (recomendada por ahora); usar `NOZZLE_CLEANUP` de Kalico; o `PRTOUCH_SCRUB` con coordenadas
+   de la Hi. Se decide después de leer las dos alternativas (tarea B27).
 
 ## 11. Riesgos
 
