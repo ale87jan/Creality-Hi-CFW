@@ -144,6 +144,13 @@ Propuesta por Alejandro. Código leído en clones de solo lectura: `ADL-Screen@e
   vistas nuevas de 240x320 vertical (inicio, impresión, CFS). Se prueba en el PC con el simulador SDL del
   propio Makefile (compilación sin `CROSS_COMPILE`) antes de tocar la Hi.
 
+- **Prueba en simulador (2026-11-10, en la nube, sin impresora):** ADL-Screen@e3ecc09 compilado con SDL a
+  240x320, 320x240 y 800x480, sin Moonraker (vista de inicio en espera). A 800x480 se ve bien; a 240x320 y a
+  320x240 los textos se solapan y se cortan y la vista ocupa solo el tercio superior: **ilegible sin rehacer
+  las vistas** [verificado: capturas `pantalla/adl-screen-240-320-800.png` en los ficheros del proyecto]. El
+  tema usa una fuente mínima de 12 px que no baja con la escala [verificado: src/main.cpp:149-151]. No se
+  probaron las demás vistas (necesitan un Moonraker) ni PowerScreen, que comparte este código de escalado.
+
 Frente a la opción E (UI propia): H ahorra el cliente de Moonraker, el modelo de estado y el del CFS, a cambio
 de heredar 20 000 líneas pensadas para otra pantalla. En la práctica H es «UI propia sobre el motor de
 PowerScreen».
