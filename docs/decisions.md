@@ -338,3 +338,15 @@ las ramas muertas en local tras cada fusión.
 bypass del rol de administrador **solo en modo `pull_request`** [usuario]: se fusiona por PR sin aprobación, pero
 no hay push directo. Los rulesets no pueden limitar la rama origen: "`main-hi` solo desde `dev`" sigue siendo una
 convención. Todo cambio, también de docs, va por rama y PR.
+
+## D20 — Apartar X del tope antes del homing y aparcarla en X0 después (2026-11-10)
+
+**Contexto.** En la prueba de la fase 2, `G28 X Y` con X ya en el tope solo movió Y [P]: el stock se aparta 10 mm
+antes (`_HOME_X`) y la config de la fase 2 no. Además, el homing deja X en `-19`, pulsando el interruptor de la
+papelera de purgas, lo que no es bueno [usuario].
+
+**Decisión.** La macro `_HI_HOME_XY` (fork, `config/hi/motors.cfg`) aparta X 10 mm si está homeada a menos de
+10 del tope y, tras el homing de X, la aparca en X0. Las usan los `homing_override` de `phase2.cfg` y `phase4.cfg`.
+
+**Consecuencias.** El `G28` de la Hi termina con X=0. Sin probar en la Hi hasta fusionar
+[Creality-Hi-Kalico#3](https://github.com/ale87jan/Creality-Hi-Kalico/pull/3).
