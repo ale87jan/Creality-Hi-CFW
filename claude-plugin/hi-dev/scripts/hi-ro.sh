@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Read-only access to the printer over SSH, with a command allowlist and capped output.
+# Read-only access to the printer (SSH commands; Moonraker GET straight from this PC), with a command allowlist and capped output.
 #
 # Usage:
 #   hi-ro.sh [--dry] [--max BYTES] run <command...>   e.g. run cat /etc/os-release
@@ -47,15 +47,20 @@ case "$mode" in
   moon)
     [ $# -eq 1 ] || die "moon needs exactly one path"
     [[ "$1" =~ $MOON_RE ]] || die "Moonraker path not in the read-only allowlist: $1"
-    url="http://127.0.0.1:7125$1"
-    remote="if command -v curl >/dev/null; then curl -s '$url'; else wget -qO- '$url'; fi"
+    moon_path="$1"   # fetched from this PC: the printer has neither curl nor wget
     ;;
   *) die "usage: hi-ro.sh [--dry] [--max BYTES] run <cmd...> | moon <path>" ;;
 esac
 
-if [ "$dry" = 1 ]; then echo "$remote"; exit 0; fi
+if [ "$dry" = 1 ]; then echo "${remote:-GET http://HOST:7125$moon_path}"; exit 0; fi
 : "${HI_HOST:?set HI_HOST in the environment or in $cfg}"
 : "${HI_KEY:?set HI_KEY in the environment or in $cfg}"
+if [ "$mode" = moon ]; then
+  out=$(curl -s --max-time 10 "http://${HI_HOST#*@}:7125$moon_path" 2>&1); rc=$?
+  printf '%s' "$out" | head -c "$max"
+  [ "${#out}" -gt "$max" ] && printf '\n[hi-ro: output cut at %s bytes]\n' "$max"
+  exit "$rc"
+fi
 out=$(timeout 25 ssh -i "$HI_KEY" -o BatchMode=yes -o ConnectTimeout=8 "$HI_HOST" "$remote" 2>&1)
 rc=$?
 printf '%s' "$out" | head -c "$max"
