@@ -308,6 +308,14 @@ en `data/captures/2026-11-10_hi-step0/step0.txt` [P salvo donde se indica].
 | 11 | `mcu0_110_G32-mcu0_020_000` y `noz0_110_G30-noz0_019_000`, como en `hardware.md`; cama `bed0_110_G21-bed0_017_000` |
 | 12 | El `klippy.log` de stock no tiene líneas `Stats`: no hay referencia de `sysload` para el paso 11 del escalón 2. Carga en reposo: `0.23 0.52 0.53` |
 | 13 | Sin paquetes marcados `MODIFIED` |
+| Escalón 2, arranque | `hi_kalico.sh start` con aprobación del usuario, impresora fría y en `standby`: Kalico `v2026.11.00-57-g61602f77` llega a `ready` con las tres MCU configuradas (`mcu` gd32f303xe 117 órdenes, `nozzle_mcu` gd32f303xb 113, `bed_mcu` gd32e230x8 94). Boquilla 29,3 °C, cama 25,6 °C, `mcu_temp` 35,2 °C, ventiladores a 0. Capturas en `data/captures/2026-11-10_kalico-start/` |
+
+Primer arranque de Kalico en la Hi [P]: las MCU conservaban la configuración del Klipper de stock, así que Kalico
+detecta `CRC mismatch`, reinicia las tres con `restart_method = command` y vuelve a empezar 11 s después. En ese
+segundo intento `mcu` tarda en responder y el registro deja dos `Timeout on connect` con su traza (`No
+communication with MCU`) antes de identificarse. Es el riesgo R3 previsto y no un fallo: después
+`bytes_invalid=0`, `bytes_retransmit=63` constante y `send_seq` igual a `receive_seq`. Pasará en cada conmutación
+desde stock [supuesto: confirmarlo con un segundo `start` tras `stop`].
 
 Otros hallazgos:
 

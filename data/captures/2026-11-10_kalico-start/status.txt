@@ -1,0 +1,22 @@
+=== status
+stock klippy : not running
+kalico       : running (pid 30607)
+moonraker    : stock
+bundle       : kalico_rev: 61602f77b6d0
+bundle       : kalico_version: v2026.11.00-57-g61602f77
+bundle       : tools_rev: 3dd86fbd8331
+bundle       : c_helper_sha256: 80db43303b1fac7dd5070fcff846bca81488a233b0532668b2d6ea26017a9ad0
+state: ready
+message: Printer is ready
+software_version: v2026.11.00-57-g61602f77
+=== info
+state: ready
+message: Printer is ready
+software_version: v2026.11.00-57-g61602f77
+=== temps
+extruder: {"can_extrude": false, "motion_queue": null, "nozzle_diameter": 0.4, "pid_profile": "default", "power": 0.0, "pressure_advance": 0.0, "smooth_time": 0.04, "target": 0.0, "temperature": 29.27}
+fan: {"power": 0.0, "rpm": null, "speed": 0.0, "value": 0.0}
+fan_generic aux_fan: {"power": 0.0, "rpm": null, "speed": 0.0, "value": 0.0}
+heater_bed: {"pid_profile": "default", "power": 0.0, "target": 0.0, "temperature": 25.57}
+heater_fan hotend_fan: {"power": 0.0, "rpm": null, "speed": 0.0, "value": 0.0}
+temperature_sensor mcu_temp: {"measured_max_temp": 35.38, "measured_min_temp": 34.82, "temperature": 35.18}
