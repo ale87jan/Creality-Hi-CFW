@@ -106,11 +106,14 @@ Base decidida: la configuración del usuario (§6, decisión 1). Inventario repe
   `pause_resume.resume_err` (parche de Creality, lo activa código cerrado) no se consulta [verificado:
   stock:extras/pause_resume.py:46, 185-187]; `RESUME_FLUSH` es una extrusión simple sobre la papelera a `F360`
   y `BOX_NOZZLE_CLEAN` es `_HI_CFS_SHAKE` [supuesto]; `ACCEL_TO_DECEL` pasa a `MINIMUM_CRUISE_RATIO`.
-- **Corte en la pausa, sin portar.** `IF_CUT_AND_COOLING` corta (`PAUSE_CUT`, en `box_wrapper`) solo si
+- **Corte en la pausa.** `IF_CUT_AND_COOLING` corta (`PAUSE_CUT`, en `box_wrapper`) solo si
   `printer.motor_control.cut.state` es verdadero, que es el enclavamiento de la comprobación de posición de
   corte del módulo de motores [verificado: captura:multimaterial.cfg; fork:motor_control.py:3700-3717, 4416].
-  `motor_control_hi` no porta esa comprobación, así que el estado sería siempre falso: el port usa solo la
-  rama sin corte (`_HI_PAUSE_PARK`: boquilla a 140 °C y cama al frente). Pendiente de decisión.
+  `motor_control_hi` no porta esa comprobación. Decisión del usuario (2026-11-10): `PAUSE` corta con `CFS_CUT`
+  si el CFS tiene un filamento cargado, y apaga la boquilla a los 15 minutos si sigue en pausa
+  (`_HI_PAUSE_PARK`, `_HI_PAUSE_COOL`) [verificado: test `test_pause_cuts_only_when_a_cfs_filament_is_loaded`].
+  Qué hace falta para reanudar tras un corte (recargar el filamento) es [supuesto: probarlo en la Hi tras el
+  paso 5.4]; `RESUME` no recarga.
 - Faltan `FIRST_FLOOR_*`, `print_modes.cfg` y el resto de `multimaterial.cfg` (`M600`, carga y descarga).
 - B36 necesita el `klippy/` de stock, que no está en git: hay que traerlo del PC del usuario (carpeta
   `firmware`), que debe estar encendido.
