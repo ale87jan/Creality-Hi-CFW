@@ -370,7 +370,10 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
 - **Hecho cuando:** cambio de color completo sin intervención; resultados [P] en `docs/hardware.md`.
 - **Riesgos:** golpe en el corte; purga fuera de sitio.
 
-### B36 — Fase 6: equivalencias de los comandos de Creality · M
+### B36 — Fase 6: equivalencias de los comandos de Creality · M · HECHO
+
+- **Hecho (2026-11-10):** tabla de [phase6-plan.md §3](phase6-plan.md) con referencias al stock V1.1.0.60. Quedan
+  como supuesto solo los comandos de `.so` cerrados (`NEXT_HOMEZ_NACCU`, `BOX_*`, `SET_COOL_TEMP`).
 
 - **Objetivo:** leer en el stock qué hace cada comando de [phase6-plan.md §3](phase6-plan.md) y `[custom_macro]`,
   y fijar su equivalente en Kalico.

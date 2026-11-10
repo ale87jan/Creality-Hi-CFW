@@ -106,19 +106,23 @@ Base decidida: la configuración del usuario (§6, decisión 1). Inventario repe
 
 ## 3. Comandos del núcleo de Creality
 
-| Comando | Candidato en Kalico | Estado |
-| - | - | - |
-| `SET_LIMITS` / `RESTORE_LIMITS` | `motion_limits.py` del fork (`save_motion_limits`, `restore_motion_limits`) o `SET_VELOCITY_LIMIT` | [supuesto: leer qué guarda cada uno] |
-| `FORCE_MOVE_E` | `FORCE_MOVE STEPPER=extruder` o `G1 E` con `M83` | [supuesto] |
-| `CXSAVE_CONFIG` | `SAVE_CONFIG RESTART=0` [verificado: fork:configfile.py:868] | Usado en `mesh.cfg`; que el de Creality no reinicia es [supuesto] |
-| `SET_COOL_TEMP` | Macro con `M104`/`M106` | [supuesto: ver qué hace en stock] |
-| `SET_QMODE_FLAG` / `SET_RMODE_FLAG` | Modos silencioso y rápido: macros con `SET_VELOCITY_LIMIT` | [supuesto] |
-| `ENABLE_PRESSURE_ADVANCE` | `SET_PRESSURE_ADVANCE` | [supuesto] |
-| `CX_PRINT_LEVELING_CALIBRATION` | `BED_MESH_CALIBRATE` más `Z_TILT_ADJUST` | [supuesto] |
-| `EXCLUDE_OBJECT_RESET` | Puede ser un falso positivo del inventario | Comprobar |
-| `[custom_macro]` | Módulo de Creality; ver qué comandos registra | Sin analizar |
+Leídos el 2026-11-10 en el `klippy/` de la OTA V1.1.0.60 (extraída del PC del usuario, solo lectura; `stock:` es
+`usr/share/klipper/klippy/`). B36 queda hecho salvo lo que está en `.so` cerrados.
 
-Ninguna equivalencia está comprobada: cada fila es una tarea de lectura del stock (B36).
+| Comando | Qué hace en stock | Equivalente en Kalico |
+| - | - | - |
+| `SET_ADJUSTMENTS_FLAG VALUE=1/0` | Pone `toolhead.G29_flag`. Con 0, `ZDOWN` restaura la altura guardada y vuelve a aplicar `ADJUST_STEPPERS`; con 1, `ZDOWN` fija Z en `position_max` y no restaura nada [verificado: stock:toolhead.py:305-311; stock:extras/z_align.py:258-281] | Se quita: con D17 no se repite `ZDOWN` y la corrección de `z_tilt` se conserva. Confirma lo supuesto en `mesh.cfg` |
+| `CXSAVE_CONFIG` | Escribe el bloque de autoguardado en el fichero de config sin reiniciar [verificado: stock:configfile.py:499-512] | `SAVE_CONFIG RESTART=0` [verificado: fork:configfile.py:868] |
+| `FORCE_MOVE_E E=<e> [F=300]` | `M83`, `G1 E<e> F300`, `G4 S1000` (no espera: el `G4` de stock solo lee `P`), `M400` y `G1 E<-e>`: **deshace el movimiento**; además salta la protección de extrusión en frío mientras dura [verificado: stock:kinematics/extruder.py:339-358, 266-270; stock:toolhead.py:710-713] | En `END_PRINT` del usuario (`E=-4`) el efecto neto es cero. El port retrae 4 mm a 5 mm/s y no vuelve: pendiente de decisión del usuario |
+| `ENABLE_PRESSURE_ADVANCE VALUE=0/1` | Bandera del extrusor: con 0 no se aplica `pressure_advance` [verificado: stock:kinematics/extruder.py:17-18, 98, 126-128] | `SET_PRESSURE_ADVANCE ADVANCE=0` y restaurar el valor; solo hace falta donde las macros lo pongan a 0 |
+| `SET_LIMITS` / `RESTORE_LIMITS` | `SET_LIMITS` pone los límites de X/Y a `position_min`/`position_max` de la config; `RESTORE_LIMITS` a los del raíl [verificado: stock:extras/gcode_move.py:62-76] | Ver qué límites usa el fork tras el homing antes de decidir (corte del CFS en X=283,5) |
+| `SET_QMODE_FLAG` / `SET_RMODE_FLAG` | Guardan una bandera y escriben `speed_mode` en un fichero para la pantalla [verificado: stock:extras/custom_macro.py:126-165] | Sin pantalla de Creality no hacen falta; quitar de `print_modes.cfg` |
+| `CX_PRINT_LEVELING_CALIBRATION` | Ejecuta `CHECK_BED_MESH AUTO_G29=1` [verificado: stock:extras/custom_macro.py:45-47] | `_MESH_IF_NEEDED` del usuario |
+| `EXCLUDE_OBJECT_RESET` | `M400` y `EXCLUDE_OBJECT_DEFINE RESET=1` si hay objetos [verificado: stock:extras/exclude_object.py:37-43] | `EXCLUDE_OBJECT_DEFINE RESET=1` |
+| `printer.custom_macro.g28_ext_temp` | Valor de config, 140 [verificado: captura:printer_params.cfg:24] | Variable `probe_temp` de `_HI_MESH` |
+| `NEXT_HOMEZ_NACCU` | En `prtouch_v3_wrapper` (cerrado); existe también `NEXT_HOMEZ_UNACCU` [verificado: cadenas del `.so`] | Sin portar [supuesto: el siguiente homing de Z es de baja precisión] |
+| `SET_COOL_TEMP` | En `filament_rack_wrapper` (cerrado) [verificado: cadenas del `.so`] | Rack externo, fuera de la primera versión |
+| `BOX_START_PRINT`, `BOX_END_PRINT`, `BOX_END` y resto de `BOX_*` | En `box_wrapper` (cerrado) | [supuesto]; referencia: `configs/cfs_macros.cfg` de gitstonelabs |
 
 ## 4. Frentes de la fase
 
