@@ -226,8 +226,8 @@ Diferencias con el original, todas a revisar por el usuario:
    no haría nada y la variable se quedaría en 1 [supuesto: comprobar en la impresora de stock si `NOZ_CLEAR`
    limpia de verdad]. En el port la guarda (`busy`) vive solo en las dos macros que trabajan.
 3. **Guarda tras un error.** Igual que en el original, si la macro falla a medias (por ejemplo, un toque que
-   no dispara) `busy` se queda en 1 y las limpiezas siguientes no hacen nada hasta reiniciar. Pendiente de
-   decidir si se quita la guarda.
+   no dispara) `busy` se queda en 1 y las limpiezas siguientes no hacen nada hasta reiniciar.
+   Decidido (D14, 2026-11-10): se mantiene la guarda y `NOZZLE_CLEAN_RESET` la libera a mano.
 4. Sin `SET_VELOCITY_LIMIT` (fijaba los límites a su valor actual) ni los alias `NOZ_CLEAR`/`NOZZLE_CLEAR`
    (fase 6).
 

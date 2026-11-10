@@ -289,7 +289,7 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
 ### B28 — Fase 4: limpieza de boquilla · M · HECHO 2026-11-10 (sin impresora)
 
 - **Hecho:** `config/hi/clean.cfg` (macros del usuario portadas a variables de `_HI_CLEAN`) y
-  `test/test_hi_clean.py` (4 tests). G-code contrastado línea a línea con el original.
+  `test/test_hi_clean.py` (5 tests), con `NOZZLE_CLEAN_RESET` (D14). G-code contrastado línea a línea con el original.
 - **Pendiente:** probar en la Hi después de la sonda (paso 4.6); que el usuario revise las cuatro diferencias
   de [phase4-plan.md §4](phase4-plan.md) (guarda de reentrada, no enganchada al `G28 Z`).
 

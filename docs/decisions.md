@@ -249,3 +249,17 @@ protecciones de MCU que la Hi no tiene.
 - No hay forma de parar la MCU a mitad de una alineación: ante un `timeout` se apagan los motores.
 - Se pierde la corrección de `Z_TILT_ADJUST` en cada `ZDOWN` hasta portar un sustituto de `ADJUST_STEPPERS`.
 
+## D14 — Limpieza de boquilla: macros del usuario con guarda y reset (2026-11-10)
+
+**Contexto.** Ninguna limpieza del fork (`PRTOUCH_SCRUB`, `NOZZLE_CLEANUP`) reproduce la de stock; las macros
+del usuario sí, solo con G-code ([phase4-plan.md](phase4-plan.md) §4). Su guarda de reentrada se queda puesta
+si la limpieza falla a medias.
+
+**Decisión.** `config/hi/clean.cfg` con sus macros portadas. Se mantiene la guarda (`busy`) y se añade
+`NOZZLE_CLEAN_RESET` para liberarla a mano.
+
+**Consecuencias.**
+
+- Tras un error de limpieza hay que lanzar `NOZZLE_CLEAN_RESET` (o reiniciar); si no, las siguientes limpiezas
+  no hacen nada y no avisan.
+- La limpieza no se engancha al `G28 Z`: es siempre una orden explícita.
