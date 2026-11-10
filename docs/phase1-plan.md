@@ -314,12 +314,13 @@ en `data/captures/2026-11-10_hi-step0/step0.txt` [P salvo donde se indica].
 | Escalón 2, paso 7 | `M106 S128`: `power` 0,35, `speed` 0,25 (reescalado previsto en §3.1); los ventiladores de capa giran y `M107` los para. `hotend_fan` a 0 en frío; `rpm` nulo (sin tacómetro configurado). `aux_fan` respondía en `PB2`, pero la Hi no tiene ese ventilador: quitado de la config |
 | Escalón 2, paso 8 | Boquilla a 50 °C: de 29 a 51,7 °C en 10 s, pico 56,0 °C (6 °C de sobrepaso), 52,4 °C a los 42 s; `hotend_fan` se enciende al pasar de 50 °C. Cama a 40 °C: 26,7 a 40,2 °C en 182 s, máximo 40,5 °C, sin `verify_heater`. Lectura de cama sin la corrección de Creality (R6) |
 | Escalón 2, paso 9 | `SET_KINEMATIC_POSITION Z=50 SET_HOMED=z` y `G1 Z5 F300` en relativo: los dos lados del puente suben a la vez; `G1 Z-5` los baja a la vez. Sentido de `stepper_z` y `stepper_z1` correcto. Incidencia: se ejecutó un `FORCE_MOVE STEPPER=stepper_z1 DISTANCE=-2` suelto por una impresión visual equivocada; el lado derecho queda 2 mm más bajo hasta deshacerlo con `DISTANCE=2` o hasta la próxima alineación de stock |
+| Escalón 2, paso 10 (térmico) | Boquilla sin filamento. 120 °C en 28 s, pico 123,0 °C, después ±0,5 °C. 200 °C: pico 201,9 °C y banda 199,7 a 200,4 °C durante 120 s con potencia 0,16 a 0,33; sin `verify_heater`. El PID de stock vale a temperatura de impresión; el usuario descartó `PID_CALIBRATE`. Falta el giro del extrusor |
 
 Sobrepaso de la boquilla: el PID es el de stock (`26.978 / 2.725 / 66.770`) [verificado: K:config/hi/base.cfg
 frente a captura:toolhead.cfg:27-30], ajustado para temperaturas de impresión; con una consigna de 50 °C el
 calentador satura toda la subida y la inercia hace el resto. Que stock sobrepase igual es [supuesto: repetir la
-misma consigna en stock]. Antes de ir a 200 °C se sube por escalones (120, 200) mirando el pico;
-`PID_CALIBRATE` queda como opción si el pico a 200 °C pasa de unos 5 °C.
+misma consigna en stock]. A 120 y 200 °C el pico fue de 3 y 1,9 °C (fila del paso 10), así que no hace falta
+`PID_CALIBRATE`.
 
 Primer arranque de Kalico en la Hi [P]: las MCU conservaban la configuración del Klipper de stock, así que Kalico
 detecta `CRC mismatch`, reinicia las tres con `restart_method = command` y vuelve a empezar 11 s después. En ese
