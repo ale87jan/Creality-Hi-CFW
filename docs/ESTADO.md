@@ -4,7 +4,7 @@ Punto de entrada para retomar el trabajo sin contexto previo. Se actualiza en ca
 
 - **Fase actual:** 1 — Kalico arrancando en la Hi con config mínima ([roadmap.md](roadmap.md)).
 - **Plan y análisis:** [phase1-plan.md](phase1-plan.md). **Tareas pequeñas pendientes:** [backlog.md](backlog.md).
-- **Última actualización:** 2026-11-09.
+- **Última actualización:** 2026-11-10.
 
 ## Hecho
 
@@ -25,7 +25,7 @@ config mínima en modo batch ([phase1-plan.md §3.2](phase1-plan.md)).
 ## Siguiente acción
 
 1. **Usuario:** dar permiso de escritura en GitHub o subir las ramas a mano (B01).
-2. **Usuario:** responder a las tres decisiones pendientes (abajo).
+2. **Usuario:** responder a las dos decisiones pendientes (abajo).
 3. **Usuario:** compilar `c_helper.so` en su PC y ejecutar el paso 0 en la impresora (B03, B02).
 4. **Modelo:** analizar `step0.txt` y registrar decisiones (B02, B04).
 
@@ -44,6 +44,6 @@ Nada se ha ejecutado todavía en la impresora.
 Enviadas el 2026-11-09 (se trabaja con la opción recomendada mientras tanto). Detalle en
 [phase1-plan.md §10](phase1-plan.md):
 
-1. Cómo se instala Kalico en fase 1 (recomendada: escalonada, sin escribir en flash).
+1. ~~Cómo se instala Kalico en fase 1~~: aprobada la escalonada sin flash el 2026-11-10 (D5).
 2. De dónde sale `c_helper.so` (recomendada: artefacto del paquete de instalación).
 3. Interfaz en fase 1 (recomendada: consola SSH y después Fluidd).

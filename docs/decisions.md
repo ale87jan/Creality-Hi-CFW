@@ -87,3 +87,25 @@ módulos (`extras/` + `manifest.json`) y la web de documentación (MkDocs + GitH
 
 **Motivos.** Los pull request dejan historial revisable, lanzan el CI de Kalico y encajan con los hilos del
 proyecto de claude.ai. `main` espejo en el fork hace que actualizar desde Jacob sea un avance directo.
+
+## D5 — Fase 1 escalonada, sin escribir en flash (2026-11-10)
+
+**Contexto.** El rootfs es SquashFS de solo lectura y el overlay (`rootfs_data`) es un único volumen para los
+slots A y B, así que el slot libre no aísla cambios de ficheros ([phase1-plan.md](phase1-plan.md) §5.2).
+Opciones: instalación escalonada sin flash, slot A/B libre desde el principio, o servicio persistente en el
+overlay.
+
+**Decisión.** Escalonada: Kalico vive en `/mnt/UDISK/kalico-hi` y se lanza a mano parando el Klipper de stock.
+
+**Motivos.**
+
+- Nada persistente fuera de `/mnt/UDISK/kalico-hi`: un reinicio devuelve a stock y la impresora no puede quedar
+  sin arrancar.
+- No se conoce todavía si U-Boot vuelve solo al otro slot cuando uno no arranca.
+
+**Consecuencias.**
+
+- En fase 1 no se tocan flash, overlay ni variables de U-Boot. Scripts: `scripts/hi_install.sh`,
+  `hi_kalico.sh`, `hi_restore.sh`.
+- Kalico no arranca solo al encender; el servicio persistente (backlog B13) y el slot A/B (B14, objetivo final
+  del proyecto) se diseñan cuando la fase 1 funcione.

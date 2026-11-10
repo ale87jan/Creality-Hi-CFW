@@ -142,7 +142,7 @@ Consecuencias:
 Implicación: lo que se escriba en `/etc` o `/usr` con el sistema en marcha va al overlay y vale para los dos
 slots. Cambiar de slot solo cambia kernel y SquashFS.
 
-### 5.3 Diseño de la fase 1 (recomendado; pendiente de tu aprobación)
+### 5.3 Diseño de la fase 1 (decisión D5)
 
 Tres escalones, cada uno reversible antes de pasar al siguiente:
 
@@ -307,11 +307,13 @@ No forma parte de la fase 1. Queda como diseño para cuando Kalico imprima:
 
 ## 10. Decisiones
 
+Aprobada: instalación escalonada sin escribir en flash (§5.3), registrada como D5 en
+[decisions.md](decisions.md) el 2026-11-10.
+
 Pendientes de aprobación (enviadas el 2026-11-09; se trabaja con la recomendada):
 
 | # | Decisión | Recomendada | Alternativas |
 | - | - | - | - |
-| P1 | Instalación en fase 1 | Escalonada sin escribir en flash (§5.3) | Slot A/B desde ya; servicio persistente en el overlay |
 | P2 | Origen de `c_helper.so` | Artefacto del paquete de instalación (§6) | Commit del binario en `dev` del fork |
 | P3 | Interfaz en fase 1 | Consola SSH y después Fluidd (§5.3) | Solo consola; todo lo de stock encendido |
 
