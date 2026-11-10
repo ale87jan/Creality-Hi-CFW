@@ -63,7 +63,7 @@ corrección de inclinación (B26b, solo ahorro de tiempo).
 Actualización 2026-11-10: comparadas las tramas del fork con las de la referencia de gitstonelabs (B31, B31b).
 La capa de órdenes del fork no coincide con la Hi en `0x0A`, `0x0D`, `0x0F` y `0x11`; recomendación: opción D
 (decidida: D16).
-Hecho `creality_cfs.py` con transporte por `serial_485`, `cfs.cfg` y `phase5.cfg` (B34, 11 tests, con `CFS_PURGE` en la papelera); sin probar en
+Hecho `creality_cfs.py` con transporte por `serial_485`, `cfs.cfg` y `phase5.cfg` (B34, 12 tests, con `CFS_PURGE` en la papelera); sin probar en
 la Hi. Faltan `T0`..`T3` y las tramas no pedidas.
 
 Análisis ligero hecho el 2026-11-10: [phase5-plan.md](phase5-plan.md). Tareas B31 a B35. Las capas de bus y

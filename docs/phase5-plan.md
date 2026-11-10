@@ -190,6 +190,11 @@ aditivo (48 líneas añadidas, 1 cambiada) para poder proponerlo al autor. `conf
 - La lectura de diagnóstico `0x0C` a `0x81`/`0x82` no se envía en el bus compartido (son los drivers de X/Y);
   ningún comando la llamaba [verificado: búsqueda de `read_buffer_block_0x0c(` en el fichero].
 
+Actualizado el mismo día a la rama `gitstonelabs-patch-1` de la referencia (`d6d01cb`) [usuario]: los bytes
+`b0`/`b1` de la respuesta `0x0A` son la temperatura (°C) y la humedad relativa (%) de la caja. `CFS_STATUS` las
+muestra y `get_status()` las da en `environment` [verificado: fork:creality_cfs.py, `get_box_state`; test
+`test_box_state_carries_temperature_and_humidity`]. Comprobarlo contra la pantalla del CFS en el paso 5.3.
+
 Límites y pendientes:
 
 1. `NOTICES.md` de la referencia dice que la coreografía se validó en una Hi con la implementación de la que

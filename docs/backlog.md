@@ -347,7 +347,7 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
 ### B34 — Fase 5: CFS para la Hi con tests · M · EN CURSO
 
 - **Hecho (2026-11-10):** `klippy/extras/creality_cfs.py` con transporte opcional por `serial_485`,
-  `config/hi/cfs.cfg`, `phase5.cfg`, `test/test_hi_cfs.py` (11 tests); `CFS_PURGE` y `_HI_CFS_SHAKE` (purga en la papelera). Detalle en
+  `config/hi/cfs.cfg`, `phase5.cfg`, `test/test_hi_cfs.py` (12 tests); `CFS_PURGE` y `_HI_CFS_SHAKE` (purga en la papelera). Detalle en
   [phase5-plan.md §5](phase5-plan.md), "Hecho el 2026-11-10".
 - **Falta:** leer la coreografía completa (`load_process`, `unload_process`, `CFS_CUT`, `CFS_FLUSH`); cambio de herramienta `T0`..`T3`; gancho para tramas no pedidas en `serial_485`.
 - **Riesgos:** el módulo de la referencia no se ha ejercitado en hardware (su `NOTICES.md`).
@@ -357,7 +357,7 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
 - **Objetivo:** fork de `gitstonelabs/creality-cfs-klipper` y pull request con la opción `serial`, después de
   probarla en la Hi. El cambio ya es aditivo y no altera el comportamiento sin la opción.
 - **Hecho (2026-11-10):** fork `ale87jan/creality-cfs-klipper` creado por el usuario; rama
-  `feat/shared-serial-bus` con el cambio sobre `16309d8` (solo `src/creality_cfs.py`). Sin pull request al autor.
+  `feat/shared-serial-bus` con el cambio (solo `src/creality_cfs.py`), unida a `gitstonelabs-patch-1` (`d6d01cb`, temperatura y humedad). Sin pull request al autor.
 - **Falta:** probar en la Hi; documentar la opción en su README y su ejemplo de config; tests en su suite; abrir
   el pull request (lo decide el usuario).
 - **Quién:** el usuario creó el fork; el parche sale del diff entre el commit `16309d8` y el fichero del fork.
