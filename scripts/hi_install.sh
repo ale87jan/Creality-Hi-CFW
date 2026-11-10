@@ -13,7 +13,7 @@
 # Layout after install:
 #   /mnt/UDISK/kalico-hi/current/   bundle (kalico/, tools/, config/, SHA256SUMS)
 #   /mnt/UDISK/kalico-hi/previous/  bundle installed before this one
-#   /mnt/UDISK/kalico-hi/config/    printer.cfg in use (kept across installs)
+#   /mnt/UDISK/kalico-hi/config/    printer.cfg and its includes in use (kept across installs)
 #   /mnt/UDISK/kalico-hi/logs/      klippy.log, install.log
 
 # The HI_* variables only exist for scripts/selftest.sh (HI_TEST=1 skips the
@@ -125,7 +125,7 @@ if [ $DRY -eq 1 ]; then
     echo "[dry-run] load test: $PY tools/chelper_load.py kalico/klippy/chelper/c_helper.so"
     echo "[dry-run] cffi test: klippy.chelper.get_ffi()"
     echo "[dry-run] rm -rf $ROOT/previous; mv $ROOT/current $ROOT/previous; mv $NEW/kalico-hi $ROOT/current"
-    echo "[dry-run] cp $ROOT/current/config/printer.cfg $ROOT/config/printer.cfg (only if missing; otherwise printer.cfg.new)"
+    echo "[dry-run] cp $ROOT/current/config/*.cfg $ROOT/config/ (each only if missing; otherwise <name>.new)"
     say "dry run finished: nothing was written"
     exit 0
 fi
@@ -145,14 +145,19 @@ $PY "$B/tools/chelper_load.py" "$B/kalico/klippy/chelper/c_helper.so" || { rm -r
 [ -d "$ROOT/current" ] && run mv "$ROOT/current" "$ROOT/previous"
 run mv "$B" "$ROOT/current"
 run rm -rf "$NEW"
-if [ -f "$ROOT/config/printer.cfg" ]; then
-    if ! cmp -s "$ROOT/current/config/printer.cfg" "$ROOT/config/printer.cfg"; then
-        run cp "$ROOT/current/config/printer.cfg" "$ROOT/config/printer.cfg.new"
-        say "kept the existing config; the bundle's config is in $ROOT/config/printer.cfg.new"
+# Config files (printer.cfg and the files it includes): a file already in
+# use is never overwritten; the bundle's version goes next to it as .new.
+for src in "$ROOT"/current/config/*.cfg; do
+    name=$(basename "$src")
+    if [ -f "$ROOT/config/$name" ]; then
+        if ! cmp -s "$src" "$ROOT/config/$name"; then
+            run cp "$src" "$ROOT/config/$name.new"
+            say "kept the existing $name; the bundle's version is in $ROOT/config/$name.new"
+        fi
+    else
+        run cp "$src" "$ROOT/config/$name"
     fi
-else
-    run cp "$ROOT/current/config/printer.cfg" "$ROOT/config/printer.cfg"
-fi
+done
 run chmod +x "$ROOT/current/tools/hi_kalico.sh" "$ROOT/current/tools/hi_restore.sh"
 {
     echo "$(date '+%Y-%m-%d %H:%M:%S') installed $(basename "$BUNDLE") sha256=$got fw=$fw slot=$slot_root"

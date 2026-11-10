@@ -169,7 +169,7 @@ límite y se quedan como estaban.
 ## 6. Paquete e instalación
 
 - `scripts/make_bundle.sh <ruta a Creality-Hi-Kalico>` genera `build/kalico-hi-<commit>.tar.gz` y su `.sha256`:
-  árbol `klippy/` del commit (`git archive`), el `c_helper.so` cruzado, `config/hi/printer.cfg`, las herramientas
+  árbol `klippy/` del commit (`git archive`), el `c_helper.so` cruzado, los `.cfg` de `config/hi/`, las herramientas
   `hi_*` y un `SHA256SUMS` por fichero [verificado: scripts/make_bundle.sh:51-66].
 - Es determinista: mismo par de commits, mismo SHA-256 [verificado: ejecutado dos veces]. Pesa unos 0,8 MB.
 - Se rechaza si hay cambios sin commit en `klippy/` o `config/hi`, o si el `.so` es de otro commit
@@ -187,7 +187,7 @@ límite y se quedan como estaban.
 
 ## 7. Config mínima
 
-Fichero: Creality-Hi-Kalico `config/hi/printer.cfg`. Pines y valores copiados de la config que corre en la
+Ficheros: Creality-Hi-Kalico `config/hi/printer.cfg`, que incluye `base.cfg` (desde el 2026-11-10). Pines y valores copiados de la config que corre en la
 impresora [verificado: data/captures/2026-11-09_hi-v1.1.0.60/printer-config/printer.cfg y toolhead.cfg].
 
 ### 7.1 Decisiones de la config

@@ -87,6 +87,7 @@ void extruder_stepper_alloc(void) {} void input_shaper_alloc(void) {} void trdis
 C
 gcc -shared -fPIC -o "$b/kalico/klippy/chelper/c_helper.so" "$T/stub.c"
 echo "[printer]" > "$b/config/printer.cfg"
+echo "# base" > "$b/config/base.cfg"
 cp "$here"/hi_kalico.sh "$here"/hi_restore.sh "$here"/hi_step0.sh "$here"/hi_gcode.py "$here"/hi_spawn.py "$here"/chelper_load.py "$b/tools/"
 echo "kalico_rev: selftest" > "$b/BUNDLE_INFO"
 (cd "$b" && find . -type f ! -name SHA256SUMS | LC_ALL=C sort | sed 's|^\./||' | xargs sha256sum > SHA256SUMS)
@@ -107,6 +108,7 @@ refuse "install refuses a bundle with a wrong checksum" $SH "$here/hi_install.sh
 check "nothing installed after the refusals" test ! -e "$HI_ROOT/current"
 check "install" $SH "$here/hi_install.sh" "$B"
 check "layout: current, config, logs" test -f "$HI_ROOT/current/kalico/klippy/klippy.py" -a -f "$HI_ROOT/config/printer.cfg" -a -f "$HI_ROOT/logs/install.log"
+check "install copies the included config files" test -f "$HI_ROOT/config/base.cfg"
 echo "# mine" >> "$HI_ROOT/config/printer.cfg"
 check "second install" $SH "$here/hi_install.sh" "$B"
 check "second install keeps the config and the previous bundle" test -d "$HI_ROOT/previous" -a -f "$HI_ROOT/config/printer.cfg.new" -a "$(tail -1 "$HI_ROOT/config/printer.cfg")" = "# mine"

@@ -5,7 +5,7 @@
 #
 # Output (default out-dir: build): kalico-hi-<rev>.tar.gz and its .sha256.
 # The bundle holds the tracked klippy/ tree of the checkout (HEAD), the
-# cross-compiled c_helper.so (build_chelper.sh), config/hi/printer.cfg and the
+# cross-compiled c_helper.so (build_chelper.sh), the config/hi files and the
 # on-printer tools of this repository. The archive is deterministic: the same
 # two commits give the same sha256.
 # --skip-build reuses build/chelper if it was built from the same sources.
@@ -52,7 +52,10 @@ git -C "$kalico" archive HEAD klippy COPYING | tar -x -C "$b/kalico"
 cp "$out/chelper/c_helper.so" "$b/kalico/klippy/chelper/c_helper.so"
 cp "$info" "$b/kalico/klippy/chelper/c_helper.info"
 printf '%s\n' "$version" > "$b/kalico/klippy/.version"
-git -C "$kalico" show HEAD:config/hi/printer.cfg > "$b/config/printer.cfg"
+# Every Hi config: printer.cfg includes base.cfg, and the later phases have
+# their own files.
+git -C "$kalico" archive HEAD:config/hi | tar -x -C "$b/config"
+[ -f "$b/config/printer.cfg" ] || { echo "config/hi/printer.cfg missing in $kalico" >&2; exit 1; }
 for f in hi_kalico.sh hi_restore.sh hi_step0.sh hi_gcode.py hi_spawn.py chelper_load.py; do
     cp "$here/$f" "$b/tools/$f"
 done

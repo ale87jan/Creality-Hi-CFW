@@ -27,7 +27,8 @@ PY=${HI_PY:-/usr/bin/python3}
 STOCK_KLIPPY=${HI_STOCK_KLIPPY:-/usr/share/klipper/klippy/klippy.py}
 CUR=$ROOT/current
 KLIPPY=$CUR/kalico/klippy/klippy.py
-CONF=$ROOT/config/printer.cfg
+# HI_CONFIG picks another phase config of the bundle (phase2.cfg, phase3.cfg).
+CONF=$ROOT/config/${HI_CONFIG:-printer.cfg}
 LOGDIR=$ROOT/logs
 SOCK=$TMP/kalico_uds
 TTY=$TMP/kalico_printer

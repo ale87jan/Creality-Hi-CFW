@@ -88,10 +88,20 @@ Cama y boquilla frías y limpias. Z siempre lejos de la cama hasta el paso 3.4.
 | 3.4 | `G28 X Y`, centro, `G28 Z` a 5 mm/s con la mano en el interruptor | **Choque con la cama si no dispara** | Se para al contacto; Z=0 coherente |
 | 3.5 | `PROBE` 5 veces en frío y con la boquilla a 170 °C; comparar con 3.1 | Bajo | Dispersión y Z similares a stock |
 
+### Hecho el 2026-11-10
+
+Las tres primeras filas están hechas en el fork: `config/hi/phase3.cfg`, `test/test_hi_prtouch.py` y el reparto
+de `config/hi/` en `base.cfg` y `motors.cfg`. En batch, la MCU principal recibe `config_prtouch_step` con los
+OID de `stepper_z` y `stepper_z1` y `swp_pin=PC7`, y la de la boquilla `config_prtouch_pres` con `PA15`, `PB13`
+y `PB14` [verificado: fork:test/test_hi_prtouch.py]. Con `startup_writes: none`, `G28`, `G28 Z`, `PROBE` y
+`G1 Z5` se rechazan sin generar pasos. La config usa los valores de `[prtouch_v3]` de la impresora
+(`samples: 3`, `average`, 10 reintentos) [verificado: captura:printer-config/printer.cfg].
+
 ## 7. Decisiones que necesito
 
 1. **Módulo de la sonda**: usar el `prtouch.py` de la K2 tal cual, solo con config (recomendada: no hace falta
-   tocar código y los arreglos de upstream llegan solos), o una copia aparte como en D8.
+   tocar código y los arreglos de upstream llegan solos), o una copia aparte como en D8. La config ya escrita
+   asume la primera; el usuario no lo ha confirmado todavía (2026-11-10).
 2. **Orden de las fases 3 y 4**: sonda antes que `z_align` (como está en el roadmap; el homing de Z funciona sin
    alinear) o `z_align` antes, para que el primer contacto con la cama sea con el puente ya alineado.
 3. **`NOZZLE_CLEAN` en la fase 3**: macro vacía (recomendada) o portar antes `nozzle_clear`.

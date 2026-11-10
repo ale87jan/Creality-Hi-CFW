@@ -233,16 +233,18 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
 - **Hecho cuando:** están en `decisions.md`.
 - **Riesgos:** B22 depende de la decisión 1; el orden de B22 y la fase 4, de la 2.
 
-### B22 — Fase 3: config y test en batch de la sonda · M
+### B22 — Fase 3: config y test en batch de la sonda · M · HECHO 2026-11-10
 
-- **Objetivo:** `config/hi/phase3.cfg` con `[prtouch]` (valores de stock, `home_xy: 130, 130`), `stepper_z` con
-  `probe:z_virtual_endstop`, `NOZZLE_CLEAN` vacía y `PC7` en `[duplicate_pin_override]`.
-- **Ficheros:** Creality-Hi-Kalico `config/hi/`, `test/test_hi_prtouch.py`.
-- **Hecho cuando:** carga en batch y emite `config_prtouch_step` con los OID de `stepper_z` y `stepper_z1` y
-  `config_prtouch_pres` con `PA15`, `PB13`, `PB14`; `G28 Z` sin homing de X/Y no genera pasos en Z.
-- **Riesgos:** la config de la fase 1 fija `endstop_pin` en `stepper_z1` y un `include` no puede quitarlo: hay
-  que repartir `config/hi/` en ficheros por subsistema (steppers, calentadores, ventiladores) que cada fase
-  combine.
+- **Hecho:** `config/hi/phase3.cfg` (`[prtouch]` con los valores de `[prtouch_v3]` de la impresora,
+  `home_xy: 130, 130`, Z y Z1 con `probe:z_virtual_endstop`, `NOZZLE_CLEAN` vacía, `PC7` en
+  `[duplicate_pin_override]`) y `test/test_hi_prtouch.py` (5 tests). Para poder quitar los finales de carrera
+  provisionales de Z, `config/hi/` se repartió en `base.cfg` (MCU, motores, calentadores, ventiladores) y
+  `motors.cfg` (bus y drivers X/Y); `printer.cfg`, `phase2.cfg` y `phase3.cfg` los combinan. La salida
+  decodificada hacia las MCU de `printer.cfg` y `phase2.cfg` es idéntica a la de antes.
+- **Consecuencia:** el paquete lleva ahora todos los `.cfg` (`make_bundle.sh`), `hi_install.sh` los instala uno
+  a uno sin pisar los existentes, y `HI_CONFIG=phase2.cfg hi_kalico.sh start` elige la config.
+- **Pendiente:** el usuario no ha confirmado en la tarjeta la decisión 1 (módulo de la K2 tal cual); la config
+  asume esa opción.
 
 ### B23 — Fase 3: leer entera la lógica de `prtouch.py` · M
 
@@ -355,7 +357,8 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
 ### B37 — Fase 6: `config/hi/` por subsistemas · M
 
 - **Objetivo:** un fichero por subsistema (`printer.cfg`, `motor_control.cfg`, `prtouch.cfg`, `macros.cfg`...),
-  como `config/k2/`. Lo necesita ya B22.
+  como `config/k2/`. Empezado en B22 (`base.cfg`, `motors.cfg`); falta sacar la sonda de `phase3.cfg` a su
+  fichero cuando exista la config de uso diario.
 - **Hecho cuando:** los tests en batch de las fases 1 y 2 pasan con la nueva estructura.
 - **Riesgos:** cambia rutas que usan `hi_kalico.sh` y el plan de la fase 1; actualizar los dos.
 
