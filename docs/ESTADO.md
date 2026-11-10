@@ -7,6 +7,7 @@ Punto de entrada para retomar el trabajo sin contexto previo. Se actualiza en ca
   ([phase2-plan.md](phase2-plan.md)), que empieza en solo lectura ([roadmap.md](roadmap.md)).
 - **Plan y análisis:** [phase1-plan.md](phase1-plan.md). **Tareas pequeñas pendientes:** [backlog.md](backlog.md).
 - **Última actualización:** 2026-11-10.
+- **Ramas protegidas** con rulesets de GitHub en los dos repos ([decisions.md](decisions.md), D19).
 
 ## Hecho
 
