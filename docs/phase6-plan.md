@@ -36,6 +36,26 @@ Orden: `python -I tools/cfg_commands.py data/captures/2026-11-09_hi-v1.1.0.60/pr
 Secciones sin módulo en el fork: `auto_addr`, `filament_rack` (fase 5); `prtouch_v3` (fase 3); `nozzle_clear`,
 `bl24c16f`, `tmc_line_check`, `timer_read` (fase 4); `custom_macro` (esta fase).
 
+## 2b. Módulos de Kalico que evitan portar código (2026-11-10)
+
+Pedido por el usuario. Inventario de `klippy/extras` del fork (168 módulos más `display/`, `indx/` y
+`load_cell/`) hecho con un subagente; en la tabla solo entra lo que he contrastado después con los ficheros.
+
+| Necesidad | En stock | Módulo de Kalico o del fork | Estado |
+| - | - | - | - |
+| Corrección de la temperatura de cama | `temp_offset_flag`, `adc_temp_list`, `actual_temp_list` (parche de Creality) [verificado: stock:adc_temperature.py:28-55] | `[adc_temperature]` con tabla propia `temperatureN`/`resistanceN` [verificado: fork:adc_temperature.py:204-240] | **Hecho**: sensor `hi_bed` en `config/hi/base.cfg`, sigue la tabla de stock con error ≤ 0,25 °C (test) |
+| Ajuste del termistor de boquilla | No hay tabla en la config de la boquilla | `[thermistor]` propio por tres puntos o `beta`; `pullup_resistor`, `inline_resistor` [verificado: fork:thermistor.py:83-84, 107-116]. No hay opción de offset en grados [verificado: búsqueda del subagente; `voltage_offset` es en voltios, fork:adc_temperature.py:157] | Disponible; hace falta medir con un termopar para tener puntos |
+| Inclinación fina del puente | `z_tilt` parcheado (`ADJUST_STEPPERS`) | `z_tilt.py` sin cambios; `z_tilt_ng.py` añade `Z_TILT_CALIBRATE` y `Z_TILT_AUTODETECT` [verificado: fork:z_tilt_ng.py existe; comandos según el subagente, líneas 235-246] | `[z_tilt]` hecho en `phase4.cfg`; `z_tilt_ng` sin evaluar |
+| Acelerómetros e input shaper | `[lis2dw x]`, `[lis2dw y]`, `[resonance_tester]` | `lis2dw.py`, `resonance_tester.py` | Las tres secciones de stock cargan sin cambios en batch [verificado: prueba del 2026-11-10 con captura:printer.cfg:144-165] |
+| Recuperación tras corte de luz | `bl24c16f` (EEPROM) y parches | `power_loss_recovery.py` del fork (`PLR_STATUS`, `PLR_RECOVER`, `PLR_DISCARD`) | No vale tal cual: exige el objeto `z_align` de la K2 (`capture_reference_frame`, `start_prepare`, `zmax`) [verificado: fork:power_loss_recovery.py:900, 1163, 1280, 1644]. Candidato a adaptar a `z_align_hi` en lugar de portar `bl24c16f` |
+| Vigilancia de ventiladores | `[fan_feedback]` con `fan0_pin`..`fan2_pin` [verificado: captura:printer_params.cfg:27-32] | `fan_feedback.py` del fork, sobre el `tachometer_pin` de cada ventilador, con valores por defecto de la K2 [verificado: fork:fan_feedback.py:4-30] | Otra sintaxis: hay que pasar los pines a `tachometer_pin` [supuesto: comprobar en batch] |
+| Limpieza de boquilla | `nozzle_clear` | `nozzle_cleanup.py` | Descartado (D14, [phase4-plan.md](phase4-plan.md) §4) |
+| Malla, objetos, arcos, pausa, SD virtual, sensores de filamento | Secciones estándar | `bed_mesh`, `exclude_object`, `gcode_arcs`, `pause_resume`, `virtual_sdcard`, `filament_switch_sensor` | Existen [verificado: listado del subagente]; las opciones añadidas por Creality se revisan por subsistema (B37) |
+
+Mejoras que Kalico ofrece y stock no, sin sustituir nada: control MPC (`control_mpc.py`, `MPC_CALIBRATE`),
+`axis_twist_compensation`, `z_thermal_adjust`, `firmware_retraction`, `save_variables`
+[verificado: existen en el listado del subagente; sin evaluar para la Hi].
+
 ## 3. Comandos del núcleo de Creality
 
 | Comando | Candidato en Kalico | Estado |

@@ -308,6 +308,13 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
   `test/test_hi_tmc_line_check.py` (8 tests). Decisión D15. Detalle en [phase4-plan.md §6](phase4-plan.md).
 - **Pendiente:** paso 4.2b en la impresora.
 
+### B40 — Módulos de Kalico que evitan portar código · M · HECHO 2026-11-10 (primera pasada)
+
+- **Hecho:** inventario y tabla en [phase6-plan.md §2b](phase6-plan.md); corrección de temperatura de cama
+  con `[adc_temperature hi_bed]`; `[z_tilt]` en `phase4.cfg`.
+- **Pendiente:** adaptar `power_loss_recovery.py` a `z_align_hi` (sustituye a B30b), `fan_feedback` con
+  `tachometer_pin`, evaluar `z_tilt_ng` y MPC.
+
 ### B30b — `bl24c16f` · M, sin fecha
 
 - **Objetivo:** portarlo solo si hace falta (recuperación tras corte de luz). `timer_read` no se porta (D15).

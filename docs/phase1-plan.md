@@ -207,7 +207,7 @@ impresora [verificado: data/captures/2026-11-09_hi-v1.1.0.60/printer-config/prin
 
 | Sección de stock | Motivo |
 | - | - |
-| `heater_bed`: `temp_offset_flag`, `adc_temp_list`, `actual_temp_list`, `power_calibration_*` | Opciones del Klipper de Creality; no existen en Kalico. **La temperatura de cama que muestre Kalico será la del termistor sin la corrección de Creality** (hasta ~3 °C a 80 °C según esa tabla) [verificado: printer-config/printer.cfg, sección `heater_bed`] |
+| `heater_bed`: `temp_offset_flag`, `adc_temp_list`, `actual_temp_list`, `power_calibration_*` | Opciones del Klipper de Creality; no existen en Kalico. La corrección de la tabla se reproduce desde el 2026-11-10 con un sensor `[adc_temperature hi_bed]` en `base.cfg` (error ≤ 0,25 °C); `power_calibration_*` sigue sin portar [verificado: printer-config/printer.cfg, sección `heater_bed`] |
 | `motor_control`, `serial_485`, `box`, `auto_addr`, `filament_rack` | Fases 2 y 5 |
 | `prtouch_v3`, `nozzle_clear`, `z_align`, `z_tilt`, `bed_mesh` | Fases 3 y 4 |
 | `mcu rpi`, `bl24c16f`, `io_remap`, `tmc_line_check`, `timer_read`, `fan_feedback`, `custom_macro` | Módulos de Creality por portar (fase 4) |
