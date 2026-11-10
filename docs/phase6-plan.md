@@ -83,6 +83,14 @@ Base decidida: la configuración del usuario (§6, decisión 1). Inventario repe
 - `G29` del usuario: el `ZDOWN_SWITCH ENABLE=1` + `G28 Z` tras el reposo térmico pasa a `G28 Z ALIGN=1` (D17).
   Usa `SET_ADJUSTMENTS_FLAG`, `CXSAVE_CONFIG` y `printer.custom_macro.g28_ext_temp`, sin equivalente comprobado
   (B36) [verificado: captura:custom_mesh.cfg:12-66].
+- **Hecho (2026-11-10):** `config/hi/heat.cfg` (sus `M140`/`M190`), `config/hi/mesh.cfg` (`[bed_mesh]`, `G29`,
+  `_MESH_IF_NEEDED`) y `phase6.cfg`; 3 tests en `test/test_hi_mesh.py`. Equivalencias usadas:
+  `CXSAVE_CONFIG` es `SAVE_CONFIG RESTART=0` [verificado: fork:configfile.py:868]; `g28_ext_temp` es un valor
+  de config, 140 [verificado: captura:printer_params.cfg:24]; `relative_reference_index: 40` es
+  `zero_reference_position: 130, 130`; `move_check_distance` sube de 1 a 3, el mínimo de Kalico [verificado:
+  error de carga en batch]; `SET_ADJUSTMENTS_FLAG` se quita [supuesto: guardaba la corrección de inclinación
+  para el siguiente `ZDOWN`; leerlo en stock, B36]. Diferencia propia: se restaura la aceleración tras el
+  mallado (su macro la dejaba a un cuarto). `PRINT_PREPARED` no se llama hasta portar `START_PRINT`.
 - B36 necesita el `klippy/` de stock, que no está en git: hay que traerlo del PC del usuario (carpeta
   `firmware`), que debe estar encendido.
 
@@ -92,7 +100,7 @@ Base decidida: la configuración del usuario (§6, decisión 1). Inventario repe
 | - | - | - |
 | `SET_LIMITS` / `RESTORE_LIMITS` | `motion_limits.py` del fork (`save_motion_limits`, `restore_motion_limits`) o `SET_VELOCITY_LIMIT` | [supuesto: leer qué guarda cada uno] |
 | `FORCE_MOVE_E` | `FORCE_MOVE STEPPER=extruder` o `G1 E` con `M83` | [supuesto] |
-| `CXSAVE_CONFIG` | `SAVE_CONFIG`, que reinicia; el de Creality no | [supuesto: comprobar en el stock si reinicia] |
+| `CXSAVE_CONFIG` | `SAVE_CONFIG RESTART=0` [verificado: fork:configfile.py:868] | Usado en `mesh.cfg`; que el de Creality no reinicia es [supuesto] |
 | `SET_COOL_TEMP` | Macro con `M104`/`M106` | [supuesto: ver qué hace en stock] |
 | `SET_QMODE_FLAG` / `SET_RMODE_FLAG` | Modos silencioso y rápido: macros con `SET_VELOCITY_LIMIT` | [supuesto] |
 | `ENABLE_PRESSURE_ADVANCE` | `SET_PRESSURE_ADVANCE` | [supuesto] |
