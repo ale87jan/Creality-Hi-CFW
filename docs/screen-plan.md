@@ -1,0 +1,173 @@
+# Pantalla de la Hi con Kalico: opciones
+
+Estado: análisis sin impresora (2026-11-10). **No hay decisión**: las opciones esperan tu elección. Mientras
+tanto sigue vigente la decisión D7 (consola SSH y luego Fluidd) y la recomendación de
+[phase6-plan.md](phase6-plan.md) §8.2: solo Fluidd hasta imprimir bien.
+
+Marcas: **[verificado: fichero:línea]** leído en el repo; **[supuesto: cómo comprobarlo]**. Las citas de
+proyectos externos vienen de sus páginas, leídas por un subagente y no contrastadas con el código fuente.
+
+## 1. Qué tiene la Hi
+
+| Elemento | Dato |
+| - | - |
+| Panel | GC9307 por SPI de 9 bits, **240x320 vertical** [verificado: docs/hardware.md:14; `lcd_driver_name = gc9307_9bit_spi_tjc_240_320`, `lcd_x/lcd_y = 240/320` en data/derived/dtb/hi-v1.1.0.74.txt:1685-1689] |
+| Acceso al panel | Framebuffer del kernel, pila `DISP2_SUNXI` con `FB`, `G2D` y `CMA` activos [verificado: data/derived/kernel-config/hi-v1.1.0.74.config:2644,2667,1611,727]. Los nodos `disp`/`lcd0`/`lcd_fb0` están en `status = okay` [verificado: dtb:1362-1366,1632-1633,1707-1712] |
+| Retroiluminación | PWM canal 5, 10 kHz, y pin de habilitación `lcd_bl_en` [verificado: dtb:1699-1704] |
+| Táctil | Capacitivo en I2C `twi3`: Goodix `gt9xxnew_ts` en 0x14 o TLSC `tlsc6x` en 0x2e, ambos módulos de kernel (`=m`), con el IRQ en el mismo pin [verificado: dtb:1224-1248; config:1515,1518]. Evdev activo [verificado: config:1437] |
+| Resolución del táctil | El DTB declara **480x800** (`0x1e0 x 0x320`), distinta de la del panel [verificado: dtb:1232-1233]. [supuesto: restos copiados de la K2; leer el rango real en `/proc/bus/input/devices`/`evtest`, ver §4] |
+| UI de stock | `display-server`, `master-server`, `app-server`, `web-server` (binarios cerrados) y `lvgl_klipper` [verificado: docs/analysis/firmware-versions.md:25,34]. La pantalla y la nube hablan con `/tmp/klippy_uds` con órdenes propias, no con las de Moonraker [verificado: phase1-plan.md:158-161, rama de fases; phase6-plan.md:17-18] |
+| Recursos | SoC T113-i, Cortex-A7, glibc 2.29, Python 3.9.12 [verificado: docs/hardware.md:8-11]. RAM libre y espacio: [supuesto: `free -m` y `df -h`, ver §4] |
+
+Consecuencia clave: **240x320 está por debajo de lo que soportan los proyectos de UI existentes** (§2), y
+solo un proceso puede usar el framebuffer a la vez.
+
+## 2. Opciones
+
+### Opción 0 — Sin pantalla útil; solo Fluidd (la de la decisión actual)
+
+- Qué es: durante la sesión de Kalico `hi_kalico.sh` para `app` y `klipper` de stock (D5); la pantalla queda
+  congelada o con el último estado, y se maneja todo desde Fluidd [verificado: phase1-plan.md:150-158, rama de
+  fases].
+- Riesgo: ninguno técnico. Coste: sin control en la máquina (parar, pausar, cambiar filamento) si falla la red.
+- Ejemplo de uso: abrir `http://<ip>:80` (Fluidd) y pulsar «Pausa»; el botón de emergencia es `M112` en Fluidd.
+
+### Opción A — Mantener la UI de stock contra Kalico
+
+Hay dos variantes.
+
+- **A1. Kalico en `/tmp/klippy_uds` y la UI de stock encendida.** La UI enviaría peticiones propietarias que
+  Kalico no implementa (es lo que llevó a parar los servicios en D5 [verificado: phase1-plan.md:158-161]).
+  Efecto probable: pantalla vacía o con errores, sin garantías de seguridad (órdenes ignoradas o mal
+  interpretadas). Esfuerzo bajo, valor casi nulo.
+- **A2. Pasarela UDS (shim) que traduce el protocolo propietario a Kalico/Moonraker.** Se conserva la UI
+  completa, incluida la de impresión y el CFS. Requiere capturar y documentar el protocolo (no está en el
+  repo [supuesto: `grep` en el fichero extraído del stock; `strings` en `display-server`/`master-server` solo
+  da nombres]) y que cada orden tenga equivalente en Kalico (muchas son los `BOX_*`, `SET_*` cerrados de
+  phase6-plan.md §3). Riesgo alto: la UI de stock asume el Klipper parcheado; cada versión OTA recompila
+  los binarios [verificado: firmware-versions.md:34,96]. Esfuerzo alto.
+- Ejemplo (A2, esquema): `display-server ⇄ /tmp/klippy_uds (shim) ⇄ Kalico /tmp/kalico_uds`, donde el shim
+  responde `info`/estado y reenvía solo lo que Kalico entiende.
+
+### Opción B — HelixScreen (LVGL, GPL-3.0)
+
+- Qué es: UI táctil en C++/LVGL sin X11; dibuja en `/dev/fb0` (o DRM/KMS) y lee el táctil por evdev; habla con
+  Moonraker en el puerto 7125; ~15 MB de RAM en objetivos embebidos. Soporta Creality K1 y K2 Plus; la Hi
+  figura como «Preliminary… untested» [fuente: <https://github.com/prestonbrown/helixscreen>, `/reference/faq/`,
+  `/dev/printers/creality-k2/`; no contrastado con el código].
+- Binarios `armv7-a` hard-float publicados para otros equipos (K2: `armv7-a`) [fuente: página K2]. Los de
+  Raspberry van contra glibc 2.31, la Hi tiene 2.29; los de K1/K2 son musl estático [fuente: README]. Hay que
+  comprobar cuál es compatible [supuesto: `readelf -d`/`file` sobre el binario en el PC, nunca ejecutarlo en
+  la Hi sin aprobación].
+- Riesgos: **240x320 no está soportado** (se declara 480x320 «puede solaparse»; 800x480 es lo bien probado)
+  [fuente: FAQ]; orientación vertical sin soporte confirmado; compite con la UI de stock por el framebuffer
+  (en la K2 su instalador detiene `display-server`) [fuente: FAQ/K2]; su instalador es un `curl | sh`
+  con acceso a flash, que contradice D5; Fluidd/Moonraker de stock deben ir contra Kalico (escalón 3 de D5).
+- Ejemplo: tras `hi_kalico.sh start --ui` (Moonraker de stock contra Kalico, puerto 7125), instalar HelixScreen
+  apuntando a ese Moonraker y comprobar si la vista de inicio cabe en 240x320. [supuesto: el procedimiento
+  exacto de instalación y configuración hay que leerlo en su documentación antes de probar nada]
+
+### Opción C — Guppyscreen (LVGL, GPL-3.0)
+
+- Qué es: UI táctil LVGL sin X11/Wayland sobre Moonraker; instalador para K1/Max/CR-10 SE/Ender 3 V3 KE
+  (MIPS). Sin Hi, K2 ni binarios ARMv7 citados; 240x320 no aparece [fuente: <https://github.com/ballaswag/guppyscreen>].
+- Riesgos: igual que B y sin referencias para ARM de Creality; su instalador usa `wget --no-check-certificate`
+  [fuente: README]. Sería compilarlo para ARMv7/glibc 2.29 y portar el tamaño de pantalla a mano.
+  Descartable salvo que B no sirva.
+
+### Opción D — KlipperScreen (GTK3, AGPL-3.0)
+
+- Requiere un servidor gráfico (Xserver, Cage o Weston), Python con PyGObject y resolución mínima oficial
+  **480x320** [fuente: <https://klipperscreen.readthedocs.io/en/latest/Hardware/>, `/Installation/`]. La Hi no
+  tiene X ni GTK [supuesto: `opkg list-installed`/`ls /usr/lib | grep -i gtk`] y su RAM/flash son escasas.
+- **Descartada en este análisis** (inviable en Tina y por debajo del mínimo), salvo ejecutarla en otro equipo
+  que apunte a Moonraker, lo que no usa la pantalla de la Hi.
+
+### Opción E — UI propia mínima (LVGL o Python sobre el framebuffer)
+
+- Qué es: un estado simple de 240x320 (temperaturas, progreso, pausa/cancelar) escrito para la Hi, hablando
+  con Moonraker o con el socket de Kalico. LVGL con `lv_drivers` (fbdev + evdev) compilado para ARMv7/glibc
+  2.29, o un renderizado Python a `/dev/fb0` si hay PIL (¿la Hi lo tiene? [supuesto: `python3 -c "import PIL"`]).
+- Riesgos: es la única que se adapta al panel real, pero hay que mantener código propio; el calibrado
+  del táctil (480x800 frente a 240x320) y la retroiluminación son nuestros.
+- Ejemplo (tamaño de la tarea): 3 pantallas (inicio, impresión, ajustes de temperatura) ≈ 600-900 líneas C++
+  con LVGL [supuesto: estimación, sin base medida].
+
+### Variante F — HelixScreen o LVGL con tema/ diseño de 240x320 propio
+
+Si B funciona salvo el tamaño, se puede contribuir un layout vertical 240x320 (o el modo «tiny»). Depende de
+que el equipo aguas arriba lo acepte; se decide tras ver B en el panel.
+
+## 3. Resumen comparativo
+
+| Opción | Esfuerzo | Riesgo en la Hi | Encaja 240x320 | Convive con la UI de stock |
+| - | - | - | - | - |
+| 0 Solo Fluidd | nulo | nulo | — | sí (stock parado) |
+| A1 Stock sobre Kalico | bajo | alto (órdenes sin respuesta) | sí | sí |
+| A2 Pasarela UDS | alto | alto | sí | sí |
+| B HelixScreen | medio | medio (framebuffer, glibc, instalador) | **no declarado** | no (excluyente) |
+| C Guppyscreen | alto | alto | no declarado | no |
+| D KlipperScreen | inviable | — | no (mín. 480x320) | no |
+| E UI propia | alto | medio | sí | no |
+
+## 4. Comprobaciones de solo lectura (desde tu PC, por SSH)
+
+Ninguna escribe en `/dev/fb0`, cambia parámetros ni toca los motores. Sube la salida a `data/captures/`.
+
+```sh
+# panel y framebuffer
+cat /proc/cmdline
+ls -l /dev/fb* /dev/input/ 2>&1
+for f in virtual_size bits_per_pixel stride name; do echo $f; cat /sys/class/graphics/fb0/$f; done
+ls /sys/class/backlight /sys/class/pwm 2>&1
+# táctil: modelo, rango real y módulo cargado
+cat /proc/bus/input/devices
+lsmod | grep -i -E 'gt9|tlsc|disp|sunxi'
+# quién usa el framebuffer y el socket (pid de display-server)
+ps | grep -i -E 'display|app-server|master|lvgl|web-server' | grep -v grep
+P=$(pidof display-server); cat /proc/$P/cmdline | tr '\0' ' '; echo
+ls -l /proc/$P/fd; grep -E 'fb|input|lvgl|\.so' /proc/$P/maps | awk '{print $6}' | sort -u
+# recursos
+free -m; df -h; python3 -c "import PIL; print(PIL.__version__)" 2>&1
+```
+
+## 5. Tareas propuestas (para `docs/backlog.md`, formato del backlog de las fases)
+
+El `backlog.md` de las fases está en otra rama y no existe aún en `dev`; por eso las tareas quedan aquí para
+copiarlas al unir ramas. Siguientes ids tras B39: B40-B44. Todas U (sin analizar) salvo indicación.
+
+### B40 — Pantalla: captura de solo lectura de hardware y procesos de la UI · S
+
+- **Objetivo:** ejecutar los comandos del §4 y guardar la salida en `data/captures/<fecha>_hi-screen/`.
+- **Hecho cuando:** quedan fijados (con [P]) la resolución y bpp del `fb0`, el modelo y rango del táctil,
+  los ficheros y sockets que abre `display-server`, RAM libre y si hay PIL.
+- **Riesgos:** ninguno; no pasar de lectura.
+
+### B41 — Pantalla: protocolo UDS de la UI de stock · M
+
+- **Objetivo:** documentar las peticiones que `display-server`/`master-server` envían a `/tmp/klippy_uds`
+  (nombres de métodos y campos) para valorar A2.
+- **Hecho cuando:** `docs/protocols/uds.md` con la lista de métodos y cuáles tienen equivalente en Kalico.
+- **Riesgos:** capturarlo con un proxy sobre el socket **no es solo lectura**; empezar con `strings` sobre los
+  binarios extraídos (PC) y pedir aprobación antes de cualquier proxy en la impresora.
+
+### B42 — Pantalla: comprobar compatibilidad de binarios de HelixScreen con la Hi · S
+
+- **Objetivo:** en el PC, con `file`/`readelf` (sin ejecutar) sobre el binario `armv7-a` que publiquen,
+  ver libc enlazada y símbolos GLIBC requeridos frente a 2.29.
+- **Hecho cuando:** conclusión escrita: usable tal cual / hay que recompilar / inviable.
+- **Riesgos:** los binarios descargados son datos no fiables: carpeta aparte, `python -I`.
+
+### B43 — Pantalla: prueba de dibujo en el framebuffer · M
+
+- **Objetivo:** con la salida de B40 y con tu aprobación, escribir un fotograma de prueba en `/dev/fb0` en una
+  sesión con la UI de stock parada.
+- **Hecho cuando:** se ve el patrón en el panel y se documenta la forma de volver al estado normal.
+- **Riesgos:** **escribe en un dispositivo**; requiere aprobación expresa. Sin efecto persistente (reinicio la
+  deja como estaba) [supuesto: confirmar al probarlo].
+
+### B44 — Pantalla: decisión de la opción · U
+
+- **Objetivo:** elegir entre 0, A2, B/F o E con los datos de B40-B42 y anotar la decisión (D18, número por
+  confirmar) en `docs/decisions.md`.
+- **Hecho cuando:** decisión aprobada por ti.
