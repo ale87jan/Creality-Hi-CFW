@@ -46,6 +46,12 @@ Análisis ligero hecho el 2026-11-10: [phase3-plan.md](phase3-plan.md). Tareas B
 es compatible con la Hi sin tocar código y carga en batch con los diccionarios reales. Sin código ni config
 todavía: espera las decisiones del §7.
 
+## Fase 4 (módulos de la Hi)
+
+Análisis hecho el 2026-11-10: [phase4-plan.md](phase4-plan.md). Tareas B25 a B30. Solo `z_align` es necesario:
+forma parte del `G28 Z` de stock. Ni el módulo de la K2 (pide `safeDist` y `z_align_force_stop`) ni el de la Hi
+(depende de cuatro parches de Creality) valen tal cual. Sin código todavía: espera las decisiones del §10.
+
 ## Dónde está el trabajo
 
 - Rama `claude/project-thread-fnrqje` en los dos repos, creada desde `dev` y subida a GitHub el 2026-11-10, con

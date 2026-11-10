@@ -259,3 +259,49 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
   `docs/hardware.md`.
 - **Riesgos:** choque con la cama; seguir el orden y las condiciones del plan.
 
+### B25 — Fase 4: decisiones de diseño · U
+
+- **Objetivo:** cerrar las tres decisiones de [phase4-plan.md §10](phase4-plan.md) y anotarlas en
+  [decisions.md](decisions.md).
+- **Hecho cuando:** están en `decisions.md`.
+- **Riesgos:** B26 depende de la decisión 1; la decisión 3 espera a B27.
+
+### B26 — Fase 4: `z_align_hi.py` con tests · M
+
+- **Objetivo:** módulo de alineación de los dos Z para la MCU de la Hi (`query_z_align` sin `safeDist`, sin
+  `z_align_force_stop`), según la decisión 1, sin los parches de Creality de
+  [phase4-plan.md §3](phase4-plan.md).
+- **Ficheros:** Creality-Hi-Kalico `klippy/extras/z_align_hi.py`, `config/hi/phase4.cfg`,
+  `test/test_hi_z_align.py`.
+- **Hecho cuando:** en batch emite `config_z_align(_add)` y `config_z_align_up(_add)` con `PB15`/`PB14` y los
+  pines de Z y Z1, y `ZDOWN` envía `query_z_align` con los ticks de los valores de stock; un test con MCU
+  simulada cubre reintentos y `timeout`.
+- **Riesgos:** polaridades `zd_up`/`zes_untrig`; no existe sustituto de `ADJUST_STEPPERS`.
+
+### B27 — Fase 4: leer `nozzle_cleanup.py` de la K2 · M
+
+- **Objetivo:** saber si el módulo de la K2 se puede configurar para la zona de limpieza de la Hi
+  (`start_pos: 98, 266`) o hay que reescribir `nozzle_clear.py`.
+- **Ficheros:** Creality-Hi-Kalico `klippy/extras/nozzle_cleanup.py`; `docs/phase4-plan.md` §4.
+- **Hecho cuando:** el plan tiene la comparación y una recomendación para la decisión 3.
+- **Riesgos:** ninguno; solo lectura.
+
+### B28 — Fase 4: limpieza de boquilla · M
+
+- **Objetivo:** `NOZZLE_CLEAN` real según la decisión 3, con la secuencia de stock
+  (`nozzle_clear.py:84-167`) como especificación.
+- **Hecho cuando:** carga en batch y genera los movimientos esperados dentro de la zona de limpieza.
+- **Riesgos:** depende de la fase 3 probada en la Hi; calienta la boquilla y toca la cama.
+
+### B29 — Fase 4: pruebas en la impresora · U, después M
+
+- **Objetivo:** pasos 4.1 a 4.5 de [phase4-plan.md §9](phase4-plan.md).
+- **Hecho cuando:** `G28` completo con alineación, con `deltaError1` y `zmax` comparables a los de stock;
+  resultados [P] en `docs/hardware.md`.
+- **Riesgos:** la MCU no se puede parar durante `ZDOWN`; empezar con la cama cerca del fondo.
+
+### B30 — `bl24c16f` y `tmc_line_check` · M, sin fecha
+
+- **Objetivo:** portarlos solo si hacen falta (recuperación tras corte de luz; diagnóstico de cables de Z).
+  `timer_read` no se porta. Pendiente de la decisión 2 de la fase 4.
+- **Riesgos:** los comandos `EEPROM_WRITE_*` escriben en una memoria que también usa el stock.

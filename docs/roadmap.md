@@ -59,8 +59,12 @@ Plan y análisis: [phase3-plan.md](phase3-plan.md).
 
 ## Fase 4 — Módulos legibles de la Hi
 
-- [ ] `z_align.py` (el de la K2 no es compatible), `io_remap.py`, `bl24c16f.py`, `nozzle_clear.py`,
-      `tmc_line_check.py`, `timer_read.py`.
+Plan y análisis: [phase4-plan.md](phase4-plan.md).
+
+- [x] `io_remap.py` (hecho en la fase 2).
+- [ ] `z_align.py` (el de la K2 no es compatible; el de la Hi depende de parches de Creality).
+- [ ] `nozzle_clear.py` (reescritura sobre el `prtouch.py` del fork).
+- [ ] `bl24c16f.py` y `tmc_line_check.py`: sin fecha. `timer_read.py`: no se porta (propuesta).
 
 ## Fase 5 — CFS
 
