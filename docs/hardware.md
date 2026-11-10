@@ -59,8 +59,8 @@ Solo X e Y son de lazo cerrado. Z, Z1 y el extrusor usan TMC2208 por UART [F].
 | - | - | - |
 | Sonda de presión (`prtouch_v3`) | CS1237 en la boquilla. `step_swap_pin: !PC7`, `pres_swap_pin: nozzle_mcu:PA15`, `pres_cs0_pin: nozzle_mcu:PB13, nozzle_mcu:PB14` | [F] |
 | Cinemática | Cartesiana de cama móvil: la cama se mueve en Y; Z mueve el puente de X con dos husillos (Z y Z1). Sensores ópticos de Z arriba del todo: `PB15` es el izquierdo (`stepper_z`) y `PB14` el derecho (`stepper_z1`), activos al taparlos [P, 2026-11-10 con Kalico]; `ZDOWN` sube el puente hasta ellos | [usuario]; pines [F] |
-| Final de carrera X | Sensor físico [usuario]. `stepper_x` `endstop_pin: !PC7`; llega desde `nozzle_mcu:PB0` reenviado a `nozzle_mcu:PA15` por `[io_remap]`, activo solo durante el homing de X. Línea compartida con la sonda | [F]; cableado [I] |
-| Final de carrera Y | Sensor físico [usuario]. `stepper_y` `endstop_pin: ^PB13` en la MCU principal | [F] |
+| Final de carrera X | Sensor físico [usuario]. `stepper_x` `endstop_pin: !PC7`; llega desde `nozzle_mcu:PB0` reenviado a `nozzle_mcu:PA15` por `[io_remap]`, activo solo durante el homing de X. Línea compartida con la sonda. Con el reenvío apagado, `QUERY_ENDSTOPS` da `x: open` aunque esté pulsado; con `SET_IOREMAP S=1` y X pulsado da `x: TRIGGERED` y `z: TRIGGERED` (misma línea) y vuelve a `open` con `S=0` (stock, 2026-11-10) | [P] reenvío y línea compartida; [I] que el origen sea `PB0` |
+| Final de carrera Y | Sensor físico [usuario]. `stepper_y` `endstop_pin: ^PB13` en la MCU principal. `QUERY_ENDSTOPS` da `y: TRIGGERED` al pulsarlo y `open` al soltarlo, sin reenvío (stock, 2026-11-10) | [P] |
 | Pines de stall X / Y | `PA8` / `PA6`: vigilancia de fallos, no se usan como final de carrera | [F] |
 | Acelerómetros | `lis2dw` por SPI software en la boquilla y en la cama | [F] |
 | EEPROM | `bl24c16f` (24C16) por I2C del host (`[mcu rpi]`, `i2c.1`) | [F] |
