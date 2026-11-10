@@ -65,6 +65,13 @@ Solo X e Y son de lazo cerrado. Z, Z1 y el extrusor usan TMC2208 por UART [F].
 | Acelerómetros | `lis2dw` por SPI software en la boquilla y en la cama | [F] |
 | EEPROM | `bl24c16f` (24C16) por I2C del host (`[mcu rpi]`, `i2c.1`) | [F] |
 
+## Referenciado en stock (2026-11-10)
+
+- `G28 X Y` de stock con nada referenciado: `UP_SAFE_Z` y alineado de Z primero, después X e Y; termina con
+  `homed_axes` = xyz, X=-9,0, Y=4,0, Z=10,1 [P]. `PROTECTION` de los dos motores (0x81 y 0x82) a cero antes y
+  después [P]. El efecto del modo de stall 1 no se observó: solo dura el homing [P]. `MOTOR_GET DATA=12` de stock
+  no equivale a `param_stall_mode` [P].
+
 ## CFS
 
 - Corte de filamento hacia +X (derecha); papelera a la izquierda, fuera de la cama (purga en X=-18,5, Y=130);

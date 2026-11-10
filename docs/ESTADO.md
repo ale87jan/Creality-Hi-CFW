@@ -42,7 +42,7 @@ tests de la Hi pasan. El usuario decidió el 2026-11-10 no tocarlo por ahora.
 
 Análisis hecho sin impresora el 2026-11-10: [phase2-plan.md](phase2-plan.md). Tareas B15 a B20. Código hecho en el fork (B16 a B19): `motor_control_hi.py` (copia aparte, D8), `motor_map_hi.json`,
 `io_remap.py`, `config/hi/phase2.cfg` y 41 tests. Decisiones cerradas (D8, D9, D10). Falta todo lo de la impresora
-(B20 y §8 del plan). **Paso 2.1 hecho el 2026-11-10** en stock, solo lectura: Y se lee directo; X solo con `SET_IOREMAP S=1` y comparte línea con Z ([hardware.md](hardware.md)); falta 2.2. Hallazgo principal: la Hi no usa los pines de stall como final
+(B20 y §8 del plan). **Paso 2.1 hecho el 2026-11-10** en stock, solo lectura: Y se lee directo; X solo con `SET_IOREMAP S=1` y comparte línea con Z ([hardware.md](hardware.md)); 2.2 cerrado sin observar el efecto del modo de stall 1 (B20 hecho). Siguiente: 2.3, Kalico con `startup_writes: none` (necesita parar Klipper de stock; aprobación expresa). Hallazgo principal: la Hi no usa los pines de stall como final
 de carrera de X/Y y hay que portar `io_remap.py` en esta fase.
 
 ## Fase 3 (sonda)
