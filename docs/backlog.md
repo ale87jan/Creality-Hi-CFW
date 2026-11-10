@@ -188,6 +188,8 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
 
 ### B18 — Fase 2: portar `io_remap.py` · M
 
+- **Estado:** hecho el 2026-11-10 en el fork (`klippy/extras/io_remap.py`, `test/test_hi_io_remap.py`); falta
+  probarlo en la impresora (paso 2.4).
 - **Objetivo:** módulo `[io_remap]` de la Hi en Kalico ([phase2-plan.md §4](phase2-plan.md)).
 - **Ficheros:** Creality-Hi-Kalico `klippy/extras/io_remap.py`; origen `klippy/extras/io_remap.py` de la OTA
   V1.1.0.60 (GPL).
