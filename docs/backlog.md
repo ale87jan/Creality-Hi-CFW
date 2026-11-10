@@ -163,10 +163,14 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
 - **Objetivo:** cerrar las cuatro decisiones de [phase2-plan.md §9](phase2-plan.md) y anotarlas en
   [decisions.md](decisions.md).
 - **Hecho cuando:** las decisiones están en `decisions.md` y el plan deja de decir "pendiente".
-- **Estado:** decisión 1 cerrada (D8, copia aparte). Faltan la 2, la 3 y el dato de los finales de carrera.
+- **Estado:** decisión 1 cerrada (D8, copia aparte) y dato de los finales de carrera recibido. Faltan la 2 y
+  la 3.
 - **Riesgos:** B16 a B20 dependen de la decisión 2.
 
 ### B16 — Fase 2: `motor_control_hi.py` · M
+
+- **Estado:** hecho el 2026-11-10 (fork, commit `feat(motor): add closed-loop X/Y module for the Hi`), con el
+  nivel por defecto `none`. Sin probar en la impresora.
 
 - **Objetivo:** copia recortada de `motor_control.py` para la Hi (D8, [phase2-plan.md §6](phase2-plan.md)):
   solo X/Y, sin motor E ni túnel, pines de stall y `startup_writes` por config, direcciones de stock.
@@ -178,6 +182,9 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
 - **Riesgos:** los arreglos de upstream no llegan solos; anotar en la cabecera el commit de origen de la copia.
 
 ### B17 — Fase 2: bus RS-485 simulado para tests · M
+
+- **Estado:** hecho el 2026-11-10 como `FakeMotorBus` dentro de `test/test_hi_motor_control.py`; prueba las
+  clases sin el reactor. Falta un test del arranque completo con temporizadores.
 
 - **Objetivo:** un `serial_485` de prueba que responda `READ_ADDR`, `PROTECTION 0B`, `GET` y `SYS_PARAM 02` con
   los valores de `data/captures/2026-11-09_hi-v1.1.0.60/motors.json` y registre todas las tramas enviadas.
@@ -199,6 +206,9 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
 - **Riesgos:** no se sabe si hace falta `SET_IOREMAP` para activar el reenvío (paso 2.1).
 
 ### B19 — Fase 2: config de la Hi con X/Y · M
+
+- **Estado:** hecho el 2026-11-10 como `config/hi/phase2.cfg`. En batch no hay bus, así que solo se comprueba
+  que carga y que rechaza `G28`, `G28 Z` y los movimientos sin homing; el homing real queda para el paso 2.6.
 
 - **Objetivo:** `config/hi/` con `[serial_485]`, `[motor_control]` sin claves de parámetros, `[io_remap]`,
   endstops de stock y `[homing_override]` que solo deja pasar X e Y.

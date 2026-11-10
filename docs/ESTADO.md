@@ -35,7 +35,9 @@ tests de la Hi pasan. El usuario decidió el 2026-11-10 no tocarlo por ahora.
 
 ## Fase 2 (motores X/Y)
 
-Análisis hecho sin impresora el 2026-11-10: [phase2-plan.md](phase2-plan.md). Tareas B15 a B20. Código hecho: `io_remap.py` con test en batch (B18). El resto espera las decisiones del §9 del plan. Hallazgo principal: la Hi no usa los pines de stall como final
+Análisis hecho sin impresora el 2026-11-10: [phase2-plan.md](phase2-plan.md). Tareas B15 a B20. Código hecho en el fork (B16 a B19): `motor_control_hi.py` (copia aparte, D8), `motor_map_hi.json`,
+`io_remap.py`, `config/hi/phase2.cfg` y 41 tests. Faltan las decisiones 2 y 3 del §9 y todo lo de la impresora
+(B20 y §8 del plan). Hallazgo principal: la Hi no usa los pines de stall como final
 de carrera de X/Y y hay que portar `io_remap.py` en esta fase.
 
 ## Dónde está el trabajo

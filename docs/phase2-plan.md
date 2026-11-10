@@ -82,10 +82,10 @@ Lo que sí sirve sin cambios: `serial_485.py` (trama idéntica, `/dev/ttyS5` a 2
 - `[io_remap]` configura en la **MCU de la boquilla** que `PB0` (entrada) se copie en `PA15` (salida)
   [verificado: stock:klippy/extras/io_remap.py:20-38; captura:printer.cfg:108-114]. `nozzle_mcu:PA15` es
   `pres_swap_pin` de la sonda [verificado: docs/hardware.md:59].
-- Lectura más probable: el final de carrera de X es un sensor en el cabezal (`nozzle_mcu:PB0`) que la boquilla
-  reenvía por la línea `PA15` → `PC7`, compartida con la sonda. El de Y es un sensor en `PB13` de la placa
-  [supuesto: comprobar en la impresora con `QUERY_ENDSTOPS` en stock moviendo el cabezal a mano con los motores
-  desactivados; y confirmar con el usuario si la Hi tiene sensores físicos en X e Y].
+- La Hi tiene sensores físicos de final de carrera en X y en Y [usuario, 2026-11-10]. Lectura más probable del
+  cableado: el de X está en el cabezal (`nozzle_mcu:PB0`) y la boquilla lo reenvía por la línea `PA15` → `PC7`,
+  compartida con la sonda; el de Y está en `PB13` de la placa [supuesto: paso 2.1, `QUERY_ENDSTOPS` en stock
+  moviendo el cabezal a mano con los motores desactivados].
 - `MOTOR_STALL_MODE DATA=1` antes del homing y `DATA=2` después siguen en el `homing_override` de stock
   [verificado: stock:config/F018_CR4NU200360C20/sensorless.cfg:154,203]. Qué cambia en el driver con el modo 1 no
   está documentado [supuesto: leer `param_stall_mode` y el pin de stall antes y después, solo lectura].
@@ -103,8 +103,12 @@ Consecuencias:
 
 - `G28 X Y` ordena Y y después X, entra en modo de stall 1, hace el homing con los endstops del raíl y vuelve
   al modo 2 [verificado: fork:klippy/extras/homing.py:975-989, 901-935, 1166-1206]. El stock hace X y después Y
-  [verificado: stock:config/F018_CR4NU200360C20/sensorless.cfg:77,97]. El orden importa si el cabezal puede
-  chocar [supuesto: preguntar al usuario; el orden se puede forzar con `G28 X` y `G28 Y` por separado].
+  [verificado: stock:config/F018_CR4NU200360C20/sensorless.cfg:77,97]. El orden no es obligatorio
+  [usuario, 2026-11-10].
+- Antes de mover X/Y hay que levantar Z un poco para no arañar la cama [usuario, 2026-11-10]; el stock lo hace
+  con `_IF_HOME_Z` dentro de `_IF_MOVE_XY` [verificado: captura:sensorless.cfg:114-125]. En la fase 2 Z no tiene
+  homing: se levanta con `SET_KINEMATIC_POSITION Z=0 SET_HOMED=z` y `G1 Z5 F300`, como en la fase 1, antes de
+  `G28 X` o `G28 Y`.
 - Antes del primer homing tras reiniciar hace un movimiento de "cebado" del eje
   [verificado: fork:klippy/extras/homing.py:995-1024] [supuesto: revisar distancias con la geometría de la Hi
   antes de mover].
@@ -142,6 +146,13 @@ Niveles de `startup_writes`:
 Además: `klippy/extras/io_remap.py` (port del de stock) y `config/hi/motor_control.cfg` sin claves de
 parámetros. `MOTOR_FLASH_PARAM` y `MOTOR_CALIBRATE` quedan sin registrar en la Hi mientras no se aprueben.
 
+Hecho en el fork el 2026-11-10: `klippy/extras/motor_control_hi.py`, `klippy/extras/motor_map_hi.json` (ids de
+la K2, valores leídos en la Hi, solo de referencia), `klippy/extras/io_remap.py`, `config/hi/phase2.cfg` y
+`test/test_hi_motor_control.py` (40 tests: puerta de escritura, pasos de arranque por nivel, bus simulado y
+config en batch). La puerta de escritura clasifica cada trama antes de enviarla: una trama desconocida, de flash
+o de calibración no sale nunca, sea cual sea el nivel [verificado: fork:klippy/extras/motor_control_hi.py,
+`frame_write_level`; fork:test/test_hi_motor_control.py, `test_frames_never_sent`].
+
 ## 7. Qué se puede hacer sin impresora
 
 | Trabajo | Depende de resultados de la Hi |
@@ -151,7 +162,7 @@ parámetros. `MOTOR_FLASH_PARAM` y `MOTOR_CALIBRATE` quedan sin registrar en la 
 | Simulador del bus RS-485 para tests (responde `READ_ADDR`, `PROTECTION`, `GET`, `SYS_PARAM 02`) | No |
 | `config/hi/` de la fase 2 validada en batch | No (los valores salen de la captura) |
 | Script de solo lectura para el paso 2.1 (ampliar `tools/hi_probe.py`) | No |
-| Orden de homing, distancias de cebado, uso de `SET_IOREMAP` | **Sí** [supuesto] |
+| Distancias de cebado, uso de `SET_IOREMAP`, homing real con el bus | **Sí** [supuesto] |
 
 ## 8. Plan en la impresora (después de la fase 1)
 
@@ -164,7 +175,7 @@ Todo empieza en solo lectura. Ninguna escritura de parámetros sin aprobación e
 | 2.3 | Kalico con `startup_writes: none`: `MOTOR_STATUS` | Solo direcciones | 0x81 y 0x82 responden, sin fallos |
 | 2.4 | `QUERY_ENDSTOPS` en Kalico con `io_remap` | No | Igual que 2.1 |
 | 2.5 | `startup_writes: stall`; mover X/Y unos mm con `FORCE_MOVE` a baja velocidad | Modo de stall | Movimiento suave, sin fallos |
-| 2.6 | `G28 Y`, `G28 X` con la mano en el interruptor | Modo de stall | Homing correcto y repetible |
+| 2.6 | Levantar Z 5 mm; `G28 Y`, `G28 X` con la mano en el interruptor | Modo de stall | Homing correcto y repetible |
 | 2.7 | Comparar parámetros leídos con la captura (solo informe) | No | 51/51 por eje |
 
 ## 9. Decisiones que necesito
@@ -174,8 +185,8 @@ Todo empieza en solo lectura. Ninguna escritura de parámetros sin aprobación e
 2. **Escrituras en el arranque**: niveles `none` → `stall` → `params` (recomendada, §6) o el arranque de la K2
    sin claves de parámetros.
 3. **Homing en la fase 2**: solo X/Y con Z bloqueado (recomendada, §5) o adelantar el homing de Z.
-4. **Dato tuyo**: si la Hi tiene sensores físicos de final de carrera en X (en el cabezal) y en Y, y en qué
-   orden hace el homing de stock sin riesgo de choque.
+4. **Dato tuyo**: respondido el 2026-11-10. Hay sensores físicos en X e Y; el orden no es obligatorio; hay que
+   levantar Z antes (§4 y §5).
 
 ## 10. Riesgos
 
