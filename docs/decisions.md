@@ -293,3 +293,14 @@ Comandos `CFS_*`; los alias `BOX_*` de stock se dejan para la fase 6.
 - El módulo no se ha ejercitado en hardware según su propio `NOTICES.md`: las pruebas en la Hi empiezan por
   lectura (pasos 5.2 y 5.3) y `auto_init` queda apagado.
 - No se usa `box.py` ni `box_protocol.py` de la K2 en la Hi.
+
+## D17 — `G28 Z` no repite la alineación del pórtico (2026-11-10)
+
+**Contexto.** En stock cada `G28 Z` hace `ZDOWN` y la preparación de una impresión lo llama dos veces.
+`nachorepara/creality-hi-klipper-tweaks` (parche 01) mide 57-61 s frente a 17-23 s sin la segunda alineación.
+
+**Decisión.** En `phase4.cfg`, `ZDOWN` solo si Z no está referenciado al empezar el `G28`. `G28 ALIGN=1` la
+fuerza. `ZDOWN_SWITCH ENABLE=0` sigue desactivándola siempre.
+
+**Consecuencias.** La corrección de `Z_TILT_ADJUST` se conserva entre `G28 Z` de la misma sesión (reduce B26b
+a un ahorro tras el primer `G28`). Tras `M84`, un error o un reinicio se vuelve a alinear.
