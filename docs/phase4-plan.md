@@ -142,10 +142,36 @@ El fork trae otras dos limpiezas, ninguna pensada para la Hi:
 | `PRTOUCH_SCRUB` | `fork:prtouch.py:148-168, 253` | `[prtouch] scrub_x_start: 173`, `scrub_x_end: 223`, `scrub_y_min: 353`, `scrub_y_max: 356` | Los valores por defecto caen fuera de la cama (Y máx. 274) y busca la lengüeta flexible trasera de la K2. No he comprobado si sirve cambiando solo las coordenadas |
 | `NOZZLE_CLEANUP` | `fork:nozzle_cleanup.py` (178 líneas, genérico de Kalico) | Sección propia: `pattern_x: 10`, `pattern_y: 4`, `pattern_stepover`, `samples: 3` | Toques con la sonda en un patrón sobre la cama. Solo he leído el esquema (líneas 29-57, 103-173) |
 
-Portarlo es reescribirlo sobre la API del `prtouch.py` del fork, después de la fase 3. La secuencia de
-movimientos y temperaturas de stock (líneas 84-167) sirve de especificación. Sin él, la sonda toca la cama con
-los restos que tenga la boquilla, y eso afecta a la repetibilidad de Z=0 [supuesto: medirlo en el paso 3.5 con
-la boquilla limpia a mano y sin limpiar].
+### Lectura de `PRTOUCH_SCRUB` (2026-11-10)
+
+[verificado: fork:klippy/extras/prtouch.py:940-1087]
+
+- Es un frotado **en frío y mecánico**: toca tres veces en el centro del tramo con dos umbrales para detectar
+  la lengüeta, toca en los dos extremos y arrastra la boquilla ida y vuelta entre ellos a `scrub_speed`,
+  hundida `scrub_tab_depth` (0,15 mm) o `scrub_no_tab_depth` (0,05 mm) por debajo de la altura de contacto.
+  Repite hasta tres veces, hasta que la boquilla "acorta" menos de 0,01 mm. No calienta ni retrae.
+- Dependencias: el objeto `extended_zone_transform` para todos los movimientos (línea 940-942) y la macro
+  `HOME_IF_NEEDED AXIS=XYZ` (línea 1003). La Hi no tiene zona extendida; habría que cargar ese módulo solo para
+  esto [supuesto: no he comprobado si admite una zona vacía].
+- En la Hi, con coordenadas dentro de la cama, arrastraría la boquilla fría y hundida 0,05 mm sobre la
+  superficie que haya en ese punto. Es un comportamiento distinto del de stock, que funde y sella.
+
+### La limpieza del usuario
+
+`nozzle_cleaning_macros.cfg` del usuario redefine `NOZ_CLEAR` con dos macros, `NOZZLE_WIPE` y
+`NOZZLE_QUICK_WIPE`, que reproducen la secuencia de stock **solo con G-code**: `M104`/`M109`, `G28 Z`, `PROBE`
+con `PROBE_SPEED` y `SAMPLE_RETRACT_DIST`, `G0`, `SET_KINEMATIC_POSITION Z=0` y `M106`
+[verificado: captura:printer-config/nozzle_cleaning_macros.cfg]. No tocan `tri_hold` (está comentado) ni usan
+`ZHOME`. Solo dependen del stock para leer valores: `printer.configfile.settings['nozzle_clear']`, `['box']` y
+la macro `PRINTER_PARAM`.
+
+Es la vía más corta: pasar esos valores a variables de una macro y dejar el resto igual. Funciona con el
+`prtouch.py` de la K2 sin cambios, porque solo usa `PROBE`
+[supuesto: comprobar en batch que `PROBE PROBE_SPEED=... SAMPLE_RETRACT_DIST=...` se acepta].
+
+Criterio del usuario (2026-11-10): si `PRTOUCH_SCRUB` funciona en la Hi, se mantiene el de la K2; si no, una
+limpieza propia de la Hi con `NOZZLE_CLEANUP` o con sus macros. Con lo leído, `PRTOUCH_SCRUB` no es
+equivalente y no se puede dar por bueno sin impresora; la opción con menos riesgo son sus macros.
 
 ## 5. `bl24c16f`
 
