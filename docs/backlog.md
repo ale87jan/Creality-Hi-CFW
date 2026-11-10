@@ -319,6 +319,18 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
   tiene test sin impresora.
 - **Riesgos:** ninguno; solo lectura.
 
+### B31b — Fase 5: contrastar con `gitstonelabs/creality-cfs-klipper` · M
+
+- **Objetivo:** leer ese repositorio (protocolo del CFS documentado sobre una Hi) y compararlo con
+  `box_protocol.py` del fork: tramas, respuestas de la app 113, secuencias de carga, corte y purga. Pedido por
+  el usuario el 2026-11-10.
+- **Ficheros:** `external/creality-cfs-klipper` (clonado, solo lectura); `docs/protocols/rs485.md`,
+  `docs/phase5-plan.md`.
+- **Hecho cuando:** el plan tiene una tabla de diferencias con referencias a fichero y línea de las dos fuentes,
+  y dice qué se reutiliza de cada una. Revisar su licencia antes de copiar código.
+- **Riesgos:** ninguno; solo lectura. Necesita acceso al repositorio (en la nube, añadirlo a la sesión o
+  clonarlo en el PC).
+
 ### B32 — Fase 5: leer la lógica de `box.py` y `box_change.py` · M
 
 - **Objetivo:** secuencias de carga, descarga, corte, purga y cambio; qué parte es geometría de la K2 y qué

@@ -26,6 +26,14 @@ y extruye: es la última pieza.
    [verificado: docs/hardware.md, sección CFS]. `box_protocol.py` no comprueba versión y su decodificador es
    estricto: si una respuesta cambia, falla sin actuar [verificado: docs/analysis/k2-port-feasibility.md:67].
 
+### Referencia externa: `gitstonelabs/creality-cfs-klipper`
+
+El usuario la señala (2026-11-10) como referencia para implementar el CFS. Documenta el protocolo del CFS a
+partir de capturas del bus y `strings`, y **la Hi es su hardware de referencia** [verificado: RESEARCH.md:14-15].
+Eso la hace la mejor fuente para dos huecos de este análisis: las respuestas de la app `cfs0_000_113` de la Hi
+(conclusión 5) y la secuencia real de carga, corte y purga de esta máquina (§4, opción C). No la he leído en
+este análisis: es la tarea B31b. Es código de terceros: se clona en `external/` y se lee, no se ejecuta.
+
 ## 2. Config de stock de la Hi
 
 [verificado: stock:config/F018_CR4NU200360C20/box.cfg y printer.cfg en las líneas citadas]
@@ -96,7 +104,7 @@ Con lo visto me inclino por **A para el pin y el sentido del corte** y decidir l
 
 ## 6. Decisiones que necesito
 
-1. **Cómo adaptar `box.py`** (§4): A, B o C. Se decide después de B32.
+1. **Cómo adaptar `box.py`** (§4): A, B o C. Se decide después de B32 y B31b.
 2. **Purga en la Hi**: repetir la de stock (purga en X=-18,5 y limpieza en teflón) o usar solo torre de purga.
    Recomendada: la de stock, con sus valores.
 3. **Rack externo (`filament_rack`)**: dejarlo fuera de la primera versión (recomendada) o incluirlo.
