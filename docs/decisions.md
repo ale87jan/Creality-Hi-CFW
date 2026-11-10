@@ -353,6 +353,8 @@ atribuciones, preguntar antes de escribir en los motores) y las reglas de datos 
 con otro trabaja en un `git worktree` propio. Los hooks no se han probado dentro de Claude Code (no hay CLI en esta
 máquina): solo con los tests offline [I].
 
+El plugin llegó a `main` el 2026-11-10 con un PR de copia selectiva de sus ficheros desde `dev` [usuario], sin promover el resto de `dev`: así el marketplace instala desde la rama por defecto. Mientras los ficheros del plugin sean idénticos en las dos ramas, el siguiente PR `dev` → `main` no da conflicto. El guard, el brief de arranque y la carga de skills y agentes se verificaron en Desktop [P].
+
 ## D21 — Apartar X del tope antes del homing y aparcarla en X0 después (2026-11-10)
 
 **Contexto.** En la prueba de la fase 2, `G28 X Y` con X ya en el tope solo movió Y [P]: el stock se aparta 10 mm
