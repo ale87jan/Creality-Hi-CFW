@@ -56,6 +56,18 @@ Mejoras que Kalico ofrece y stock no, sin sustituir nada: control MPC (`control_
 `axis_twist_compensation`, `z_thermal_adjust`, `firmware_retraction`, `save_variables`
 [verificado: existen en el listado del subagente; sin evaluar para la Hi].
 
+## 2c. Mejoras de `nachorepara/creality-hi-klipper-tweaks` (2026-11-10)
+
+Repositorio indicado por el usuario (MIT, commit `0de2ff9`, probado por su autor en la OTA 1.1.0.74). Son cuatro
+parches de config para stock; ninguno se aplica sin que el usuario lo apruebe, uno a uno.
+
+| Parche | Qué hace en stock | Cómo quedaría en Kalico | Estado |
+| - | - | - | - |
+| 01 | El segundo `G28 Z` de la preparación se salta `ZDOWN` con `ZDOWN_SWITCH ENABLE=0` y una bandera de sesión; el autor mide 57-61 s frente a 17-23 s [verificado: ref:patches/01] | En el `[homing_override]` de `phase4.cfg`: saltar `ZDOWN` si Z ya está referenciado (los motores no se han soltado desde la alineación) | Pendiente de decisión |
+| 02 | `touch_cnt: 3` a `1` y `closure_temp: 160` en `[nozzle_clear]`; el autor mide 168 s frente a 102 s [verificado: ref:patches/02] | Variables `touch_cnt` (hoy 4, valor del usuario) y `seal_temp` (hoy 120) de `clean.cfg` | Pendiente de decisión |
+| 03 | `M109`/`M190` no esperan si no hay ningún eje referenciado [verificado: ref:patches/03] | Mismas macros. Riesgo propio: `creality_cfs` usa `M109` como guarda de fusión antes de extruir; con el parche no esperaría si nada está referenciado | Pendiente de decisión |
+| 04 | `probe_count` de `9,9` a `5,5` (opcional) [verificado: ref:patches/04] | Valor de `[bed_mesh]` | Pendiente de decisión |
+
 ## 3. Comandos del núcleo de Creality
 
 | Comando | Candidato en Kalico | Estado |
