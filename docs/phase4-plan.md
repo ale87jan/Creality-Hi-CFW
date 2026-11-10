@@ -230,7 +230,9 @@ la macro `_HI_CLEAN`. `phase4.cfg` lo incluye. Nada probado en la impresora.
   misma semilla, el G-code de movimiento, temperatura y sonda es idéntico línea a línea (140 líneas la completa,
   153 con limpieza fina, 62 la rápida) [verificado: comparación fuera del repo, 2026-11-10].
 - Valores: los del `toolhead.cfg` capturado en la impresora (`start_pos: 98, 268`, `clear_start: 148, 268`,
-  `touch_cnt: 4`), no los de fábrica (Y=266, `touch_cnt: 3`)
+  `touch_cnt: 4`), no los de fábrica (Y=266, `touch_cnt: 3`). Cambiado después por el usuario
+  (2026-11-10): `touch_cnt: 2` y sellado a 160 °C con parámetro `SEAL_TEMP=`; el contraste de arriba se hizo
+  con los valores anteriores
   [verificado: captura:printer-config/toolhead.cfg:87-105, factory_printer.cfg:349-358].
 - `PROBE PROBE_SPEED=... SAMPLE_RETRACT_DIST=...` se acepta [verificado: fork:klippy/extras/probe.py:664, 693].
   En batch la sonda no responde, así que los tests sustituyen `PROBE` por un contador: cubren la lógica y las
