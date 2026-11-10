@@ -11,7 +11,7 @@ Generado por `claude-plugin/hi-dev/scripts/docs-index.py`; no editar a mano. Lee
 | [Viabilidad: portar el CFW de la K2 Plus a la Creality Hi](analysis/k2-port-feasibility.md) | 132 | Análisis del 2026-11-09: estático, más pruebas de solo lectura en la impresora (sección siguiente). |
 | [Arranque automático de Kalico: diseño (B13)](autostart-plan.md) | 88 | Estado: **diseño en papel** (2026-11-10, pedido por el usuario). Opción A elegida (D18). Nada de esto está escrito en scripts ni se ha ejecutado en la impresora. Hoy Kalico solo se arranca a mano con… |
 | [Backlog](backlog.md) | 433 | Tareas pequeñas y autocontenidas, pensadas para ejecutarse sin el contexto de la conversación que las creó. Antes de empezar una: leer ESTADO.md y la sección citada de phase1-plan.md. Al terminar: ma… |
-| [Decisiones](decisions.md) | 367 | Registro de decisiones de diseño. Cada entrada: contexto, decisión y consecuencias. |
+| [Decisiones](decisions.md) | 369 | Registro de decisiones de diseño. Cada entrada: contexto, decisión y consecuencias. |
 | [Hardware de la Creality Hi (F018)](hardware.md) | 83 | Nivel de confianza: **[P]** verificado en la impresora, **[F]** leído en el firmware o la config de stock, **[I]** inferido. Ver RESEARCH.md. |
 | [Fase 1 — Kalico arrancando en la Hi: análisis y plan](phase1-plan.md) | 399 | Fecha: 2026-11-09. Alcance: las tres MCU, steppers Z/Z1/E, temperaturas y ventiladores, sobre el Tina de stock V1.1.0.60. Fuera: motores X/Y, sonda, CFS, bus RS-485. |
 | [Fase 2 — Motores X/Y de lazo cerrado](phase2-plan.md) | 199 | Análisis del 2026-11-10, hecho sin impresora. Alcance: que Kalico hable con los drivers X/Y por RS-485, mueva X/Y y haga homing de X e Y. Fuera: homing de Z y sonda (fase 3), `z_align` (fase 4), CFS… |
