@@ -87,3 +87,231 @@ módulos (`extras/` + `manifest.json`) y la web de documentación (MkDocs + GitH
 
 **Motivos.** Los pull request dejan historial revisable, lanzan el CI de Kalico y encajan con los hilos del
 proyecto de claude.ai. `main` espejo en el fork hace que actualizar desde Jacob sea un avance directo.
+
+## D5 — Fase 1 escalonada, sin escribir en flash (2026-11-10)
+
+**Contexto.** El rootfs es SquashFS de solo lectura y el overlay (`rootfs_data`) es un único volumen para los
+slots A y B, así que el slot libre no aísla cambios de ficheros ([phase1-plan.md](phase1-plan.md) §5.2).
+Opciones: instalación escalonada sin flash, slot A/B libre desde el principio, o servicio persistente en el
+overlay.
+
+**Decisión.** Escalonada: Kalico vive en `/mnt/UDISK/kalico-hi` y se lanza a mano parando el Klipper de stock.
+
+**Motivos.**
+
+- Nada persistente fuera de `/mnt/UDISK/kalico-hi`: un reinicio devuelve a stock y la impresora no puede quedar
+  sin arrancar.
+- No se conoce todavía si U-Boot vuelve solo al otro slot cuando uno no arranca.
+
+**Consecuencias.**
+
+- En fase 1 no se tocan flash, overlay ni variables de U-Boot. Scripts: `scripts/hi_install.sh`,
+  `hi_kalico.sh`, `hi_restore.sh`.
+- Kalico no arranca solo al encender; el servicio persistente (backlog B13) y el slot A/B (B14, objetivo final
+  del proyecto) se diseñan cuando la fase 1 funcione.
+
+## D6 — `c_helper.so` como artefacto del paquete de instalación (2026-11-10)
+
+**Contexto.** El `c_helper.so` que trae el fork (compilado por Jacob10383 para la K2) pide `GLIBC_2.34` y no
+carga con la glibc 2.29 de la Hi ([phase1-plan.md](phase1-plan.md) §4). Opciones: compilarlo al crear el paquete
+de instalación, o sustituir el binario en la rama `dev` del fork.
+
+**Decisión.** Artefacto del paquete: `scripts/build_chelper.sh` lo compila y `scripts/make_bundle.sh` lo mete en
+el `.tar.gz` con su SHA-256. El fork conserva el binario de Jacob sin tocar.
+
+**Motivos.**
+
+- Sin conflicto binario al sincronizar con upstream.
+- Un binario en git queda desfasado sin avisar cuando cambian los fuentes C; el paquete lo recompila siempre y
+  registra el commit del que sale.
+
+**Consecuencias.**
+
+- Un clon del fork no funciona en la Hi por sí solo: hay que instalar el paquete.
+- `make_bundle.sh` rechaza un `.so` compilado de otro commit.
+
+## D7 — Interfaz en fase 1: consola SSH y después Fluidd (2026-11-10)
+
+**Contexto.** `master-server`, `display-server` y `app-server` de Creality hablan con Klipper directamente por
+`/tmp/klippy_uds` ([phase1-plan.md](phase1-plan.md) §5.3). Opciones: consola SSH y después Fluidd, solo consola,
+o dejar todos los servicios de stock encendidos contra Kalico.
+
+**Decisión.** Primer arranque con socket propio (`/tmp/kalico_uds`) y consola por SSH (`hi_kalico.sh gcode`);
+cuando el arranque básico esté comprobado, el Moonraker de stock apuntando a Kalico (`hi_kalico.sh start --ui`).
+Los servicios de Creality (pantalla, nube) se paran durante la sesión.
+
+**Motivos.** Con socket propio los servicios de Creality no envían a Kalico peticiones propietarias, y Fluidd se
+añade cuando ya se sabe que el núcleo funciona.
+
+**Consecuencias.**
+
+- La pantalla queda sin servicio mientras dura una sesión de Kalico.
+- Falta comprobar que el Moonraker de stock funciona contra Kalico (backlog B10).
+
+## D8 — `motor_control` de la Hi como copia aparte (2026-11-10)
+
+**Contexto.** `motor_control.py` del fork no arranca en la Hi ([phase2-plan.md](phase2-plan.md) §3). Opciones:
+opciones nuevas en el módulo compartido (la recomendada por el modelo), un módulo de la Hi que herede del de la
+K2, o una copia aparte recortada.
+
+**Decisión.** Copia aparte: `klippy/extras/motor_control_hi.py` en el fork, recortada para la Hi (solo X/Y, sin
+motor E, sin túnel `transparent`, sin calibración de corte). `motor_control.py` de la K2 no se toca.
+
+**Motivos.** Elección del usuario. Cero conflictos al sincronizar con upstream y un módulo más pequeño y
+auditable para un hardware donde no se pueden probar los caminos de la K2.
+
+**Consecuencias.**
+
+- Los arreglos de upstream en `motor_control.py` no llegan solos a la Hi: revisar el diff en cada sincronización.
+- `homing.py` busca el objeto `motor_control` e importa constantes de `.motor_control`: el módulo de la Hi se
+  registra también con ese nombre para no tocar `homing.py`.
+- Sustituye a la regla del `CLAUDE.md` del fork ("preferir opciones nuevas") solo para este módulo.
+
+## D9 — Escrituras a los drivers X/Y por niveles (2026-11-10)
+
+**Contexto.** El arranque de `motor_control` de la K2 escribe en los drivers: modo de stall, borrado de fallos
+y, si la config trae parámetros, `SYS_PARAM` ([phase2-plan.md](phase2-plan.md) §2). Opciones: niveles empezando
+en lectura, el arranque de la K2 sin claves de parámetros, o solo lectura siempre.
+
+**Decisión.** Opción `startup_writes` en `[motor_control_hi]` con tres niveles: `none` (asigna direcciones y solo
+lee; valor por defecto), `stall` (añade el modo de stall y el borrado de fallos; necesario para el homing) y
+`params` (añade `SYS_PARAM` en RAM; solo con aprobación expresa del usuario). Las tramas de flash y de
+calibración no se envían en ningún nivel.
+
+**Motivos.** Cumple la regla de empezar en solo lectura y deja un camino hasta el homing sin tocar código.
+
+**Consecuencias.**
+
+- Con `none` no hay homing de X/Y: `G28 X` responde con un error que pide `startup_writes: stall`.
+- Asignar direcciones (broadcast `READ_ADDR 01`) ocurre en todos los niveles; se asume que el stock hace lo
+  mismo en cada arranque (por confirmar en el paso 2.1).
+- Subir a `params` es una decisión aparte, con los ids ya verificados para `mot2_002_071`.
+
+## D10 — Homing de la fase 2: solo X e Y (2026-11-10)
+
+**Contexto.** El `homing.py` del fork exige el escáner de la K2 para `G28 Z` ([phase2-plan.md](phase2-plan.md)
+§5). Opciones: solo X/Y con Z bloqueado, o adelantar el homing de Z (sonda y `z_align`) a la fase 2.
+
+**Decisión.** Solo X e Y. `G28` y `G28 Z` dan error en `config/hi/phase2.cfg`; Z se levanta con
+`SET_KINEMATIC_POSITION`, como en la fase 1. El homing de Z llega con la sonda en la fase 3.
+
+**Motivos.** No juntar en las mismas pruebas el riesgo de los motores con el de choque contra la cama.
+
+**Consecuencias.** En la fase 2 no hay posición de Z real: antes de mover X/Y hay que levantar Z a mano.
+
+## D11 — Sonda: `prtouch.py` de la K2 tal cual (2026-11-10)
+
+**Contexto.** El `prtouch.py` del fork habla con las MCU de la Hi sin cambios ([phase3-plan.md](phase3-plan.md)
+§2). Opciones: usarlo tal cual, solo con config, o una copia aparte recortada como en D8.
+
+**Decisión.** Tal cual. La Hi solo aporta `config/hi/phase3.cfg`.
+
+**Motivos.** A diferencia de `motor_control`, el módulo ya funciona con la Hi y no escribe nada persistente; los
+arreglos de upstream llegan al sincronizar.
+
+**Consecuencias.**
+
+- `PRTOUCH_SCRUB`, `PRTOUCH_SCAN_CALIBRATE` y `PRTOUCH_AXIS_TWIST_COMPENSATION` quedan registrados pero no se
+  usan; `PRTOUCH_SCRUB` necesita `extended_zone_transform`, que la Hi no carga.
+- La limpieza de boquilla es aparte ([phase4-plan.md](phase4-plan.md) §4). Criterio del usuario: `PRTOUCH_SCRUB`
+  si funciona en la Hi; si no, `NOZZLE_CLEANUP` o sus macros de `nozzle_cleaning_macros.cfg`.
+
+## D12 — Alineación de Z antes que la sonda (2026-11-10)
+
+**Contexto.** El roadmap ponía la sonda (fase 3) antes que `z_align` (fase 4). El stock siempre alinea los dos
+husillos contra los sensores de arriba antes de sondear ([phase4-plan.md](phase4-plan.md) §2).
+
+**Decisión.** En la impresora se prueba primero la alineación (`ZDOWN`) y después la sonda.
+
+**Motivos.** `ZDOWN` mueve el puente hacia arriba, lejos de la cama: es la prueba de Z con menos riesgo, y deja
+el primer contacto de la boquilla con la cama con el puente ya nivelado y Z en una posición conocida (`zmax`).
+
+**Consecuencias.**
+
+- `z_align_hi.py` (B26) pasa a ser la siguiente pieza de código, antes de probar `config/hi/phase3.cfg`.
+- Los números de fase del roadmap no cambian; cambia el orden de las pruebas: 1, 2, 4 (solo `z_align`), 3.
+
+## D13 — `z_align` portado del módulo de la Hi (2026-11-10)
+
+**Contexto.** Ni el `z_align.py` de la K2 (pide `safeDist` y `z_align_force_stop`) ni el de la Hi (depende de
+parches de Creality) valen tal cual ([phase4-plan.md](phase4-plan.md) §3). Opciones: portar el de la Hi con sus
+comandos y una macro de `G28`, o derivar el de la K2 integrado en el `homing.py` del fork.
+
+**Decisión.** Portar el de la Hi: `z_align_hi.py` con `ZDOWN`, `UP_SAFE_Z`, `CHECK_ZLIMIT` y `ZDOWN_SWITCH`.
+
+**Motivos.** Es la secuencia que la MCU de la Hi ya ejecuta en stock, el módulo es corto y no depende de
+protecciones de MCU que la Hi no tiene.
+
+**Consecuencias.**
+
+- El objeto se llama `z_align_hi`, así que el `homing.py` del fork no lo integra; la secuencia vive en la macro
+  `[homing_override]` de `config/hi/phase4.cfg`, en serie como el stock.
+- No hay forma de parar la MCU a mitad de una alineación: ante un `timeout` se apagan los motores.
+- Se pierde la corrección de `Z_TILT_ADJUST` en cada `ZDOWN` hasta portar un sustituto de `ADJUST_STEPPERS`.
+
+## D14 — Limpieza de boquilla: macros del usuario con guarda y reset (2026-11-10)
+
+**Contexto.** Ninguna limpieza del fork (`PRTOUCH_SCRUB`, `NOZZLE_CLEANUP`) reproduce la de stock; las macros
+del usuario sí, solo con G-code ([phase4-plan.md](phase4-plan.md) §4). Su guarda de reentrada se queda puesta
+si la limpieza falla a medias.
+
+**Decisión.** `config/hi/clean.cfg` con sus macros portadas. Se mantiene la guarda (`busy`) y se añade
+`NOZZLE_CLEAN_RESET` para liberarla a mano.
+
+**Consecuencias.**
+
+- Tras un error de limpieza hay que lanzar `NOZZLE_CLEAN_RESET` (o reiniciar); si no, las siguientes limpiezas
+  no hacen nada y no avisan.
+- La limpieza no se engancha al `G28 Z`: es siempre una orden explícita.
+
+## D15 — Módulos de la Hi que se portan en la fase 4 (2026-11-10)
+
+**Contexto.** La Hi trae cinco módulos legibles propios: `z_align`, `nozzle_clear`, `tmc_line_check`,
+`bl24c16f` y `timer_read` ([phase4-plan.md](phase4-plan.md)).
+
+**Decisión.** Se portan `z_align` (D13), la limpieza de boquilla (D14) y `tmc_line_check`. `bl24c16f` queda sin
+fecha y `timer_read` no se porta.
+
+**Consecuencias.**
+
+- `CHECK_ZMOTOR_LINE` permite comprobar los cables de Z y Z1 antes del primer `ZDOWN` (paso 4.2b).
+- Sin `bl24c16f` no hay recuperación de impresión tras un corte de luz.
+
+## D16 — CFS: `creality_cfs.py` de gitstonelabs sobre `serial_485` (2026-11-10)
+
+**Contexto.** El `box.py` de la K2 tiene fijos el pin del sensor de corte, el sentido del corte y la geometría
+trasera, y su capa de órdenes no coincide con lo capturado en una Hi (`0x0A`, `0x0D`, `0x0F`, `0x11`;
+[phase5-plan.md](phase5-plan.md) §1). `gitstonelabs/creality-cfs-klipper` (GPLv3) tiene la Hi como hardware de
+referencia, pero abre el puerto serie por su cuenta, y en la Hi ese puerto es el bus de los drivers de X/Y.
+
+**Decisión.** Usar `creality_cfs.py` con una opción `serial` añadida que lo hace hablar por `serial_485`.
+Comandos `CFS_*`; los alias `BOX_*` de stock se dejan para la fase 6.
+
+**Consecuencias.**
+
+- El cambio sobre el fichero original es aditivo, para proponerlo a su autor desde un fork (B34b).
+- El módulo no se ha ejercitado en hardware según su propio `NOTICES.md`: las pruebas en la Hi empiezan por
+  lectura (pasos 5.2 y 5.3) y `auto_init` queda apagado.
+- No se usa `box.py` ni `box_protocol.py` de la K2 en la Hi.
+
+## D17 — `G28 Z` no repite la alineación del pórtico (2026-11-10)
+
+**Contexto.** En stock cada `G28 Z` hace `ZDOWN` y la preparación de una impresión lo llama dos veces.
+`nachorepara/creality-hi-klipper-tweaks` (parche 01) mide 57-61 s frente a 17-23 s sin la segunda alineación.
+
+**Decisión.** En `phase4.cfg`, `ZDOWN` solo si Z no está referenciado al empezar el `G28`. `G28 ALIGN=1` la
+fuerza. `ZDOWN_SWITCH ENABLE=0` sigue desactivándola siempre.
+
+**Consecuencias.** La corrección de `Z_TILT_ADJUST` se conserva entre `G28 Z` de la misma sesión (reduce B26b
+a un ahorro tras el primer `G28`). Tras `M84`, un error o un reinicio se vuelve a alinear.
+
+## D18 — Arranque automático con un servicio propio que conmuta (2026-11-10)
+
+**Contexto.** [autostart-plan.md](autostart-plan.md) compara tres formas de arrancar Kalico sin intervención:
+servicio propio al final del arranque (A), línea en `/etc/rc.local` (B) y deshabilitar los servicios de stock (C).
+
+**Decisión.** Opción A, "por ahora" [usuario]: `/etc/init.d/kalico_hi` repite la conmutación manual de la fase 1,
+gobernado por ficheros bandera en `/mnt/UDISK/kalico-hi`. No se modifica ningún fichero de stock.
+
+**Consecuencias.** Los scripts se escriben cuando la conmutación manual esté probada en la Hi (fase 1), que es
+requisito del diseño. Instalarlo es la primera escritura en el overlay y necesita aprobación expresa.

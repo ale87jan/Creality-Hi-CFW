@@ -1,0 +1,61 @@
+## antes
+stepper_enable: {"steppers": {"extruder": false, "stepper_x": false, "stepper_y": false, "stepper_z": false, "stepper_z1": false}}
+toolhead: {"axis_maximum": [285.0, 274.0, 310.0, 0.0], "axis_minimum": [-19.0, -6.0, -5.0, 0.0], "estimated_print_time": 15910.298081241666, "extruder": "extruder", "homed_axes": "", "max_accel": 12000.0, "max_velocity": 300.0, "minimum_cruise_ratio": 0.5, "position": [0.0, 0.0, 0.0, 0.0], "print_time": 15545.193370508334, "square_corner_velocity": 8.0, "stalls": 0}
+## 1 SET_KINEMATIC_POSITION
+rc=0
+state: ready
+## 2 G91
+rc=0
+## 3 G1 Z2 F300
+rc=0
+## despues
+toolhead: {"axis_maximum": [285.0, 274.0, 310.0, 0.0], "axis_minimum": [-19.0, -6.0, -5.0, 0.0], "estimated_print_time": 15934.121933275, "extruder": "extruder", "homed_axes": "z", "max_accel": 12000.0, "max_velocity": 300.0, "minimum_cruise_ratio": 0.5, "position": [0.0, 0.0, 52.0, 0.0], "print_time": 15930.903167483333, "square_corner_velocity": 8.0, "stalls": 0}
+stepper_enable: {"steppers": {"extruder": false, "stepper_x": false, "stepper_y": false, "stepper_z": true, "stepper_z1": true}}
+state: ready
+TMC 'stepper_z' reports GSTAT:      00000001 reset=1(Reset)
+TMC 'stepper_z1' reports GSTAT:      00000001 reset=1(Reset)
+TMC 'stepper_z' reports GSTAT:      00000000
+Pausing toolhead to calculate stepper_z phase offset
+TMC 'stepper_z1' reports GSTAT:      00000000
+Pausing toolhead to calculate stepper_z1 phase offset
+bytes_retransmit=63 bytes_invalid=0 bytes_retransmit=9 bytes_invalid=0 bytes_retransmit=0 bytes_invalid=0 ## FORCE_MOVE stepper_z1 -2 (derecho = z1 por prueba de endstops)
+rc=0
+toolhead: {"axis_maximum": [285.0, 274.0, 310.0, 0.0], "axis_minimum": [-19.0, -6.0, -5.0, 0.0], "estimated_print_time": 15999.663873808333, "extruder": "extruder", "homed_axes": "z", "max_accel": 12000.0, "max_velocity": 300.0, "minimum_cruise_ratio": 0.5, "position": [0.0, 0.0, 52.0, 0.0], "print_time": 15997.118322508333, "square_corner_velocity": 8.0, "stalls": 0}
+state: ready
+Pausing toolhead to calculate stepper_z phase offset
+TMC 'stepper_z1' reports GSTAT:      00000000
+Pausing toolhead to calculate stepper_z1 phase offset
+FORCE_MOVE stepper_z1 distance=-2.000 velocity=5.000 accel=50.000
+## M84
+rc=0
+stepper_enable: {"steppers": {"extruder": false, "stepper_x": false, "stepper_y": false, "stepper_z": false, "stepper_z1": false}}
+state: ready
+## +5mm ambos (orden directa de Alejandro)
+homed_axes": ""
+position": [0.0, 0.0, 52.0, 0.0]
+rc1=0
+rc2=0
+rc3=0
+homed_axes": "z"
+position": [0.0, 0.0, 55.0, 0.0]
+stalls": 0
+stepper_enable: {"steppers": {"extruder": false, "stepper_x": false, "stepper_y": false, "stepper_z": true, "stepper_z1": true}}
+state: ready
+TMC 'stepper_z1' reports GSTAT:      00000000
+Pausing toolhead to calculate stepper_z1 phase offset
+FORCE_MOVE stepper_z1 distance=-2.000 velocity=5.000 accel=50.000
+SET_KINEMATIC_POSITION pos=0.000,0.000,50.000 set_homed=z clear_homed=
+## -5mm ambos
+absolute_coordinates": false
+"position": [0.0, 0.0, 55.0, 0.0]
+homed_axes": "z"
+"position": [0.0, 0.0, 55.0, 0.0]
+rc=0
+homed_axes": "z"
+position": [0.0, 0.0, 50.0, 0.0]
+stalls": 0
+state: ready
+## M84 (2)
+rc=0
+stepper_enable: {"steppers": {"extruder": false, "stepper_x": false, "stepper_y": false, "stepper_z": false, "stepper_z1": false}}
+state: ready

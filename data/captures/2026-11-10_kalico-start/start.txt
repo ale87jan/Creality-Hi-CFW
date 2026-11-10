@@ -1,0 +1,8 @@
+[hi_kalico] stock print state: standby
+[hi_kalico] + /etc/init.d/app stop
+[hi_kalico] + /etc/init.d/klipper stop
+[hi_kalico] starting Kalico
+state: ready
+message: Printer is ready
+software_version: v2026.11.00-57-g61602f77
+[hi_kalico] done. Back to stock: '/mnt/UDISK/kalico-hi/current/tools/hi_kalico.sh stop' or reboot.

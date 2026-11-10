@@ -1,0 +1,50 @@
+Loaded MCU: 6
+Loaded MCU 'mcu' 117 commands ( cf1eac2d-dirty-20250210_192534-ubuntu / gcc: (15:9-2019-q4-0ubuntu1) 9.2.1 20191025 (rel
+Loaded MCU 'nozzle_mcu' 113 commands ( 23f337b2 / gcc: (15:9-2019-q4-0ubuntu1) 9.2.1 20191025 (release) [ARM/arm-9-branc
+Loaded MCU 'bed_mcu' 94 commands ( 54872883-dirty-20240605_163644-longer-virtual-machine / gcc: (15:9-2019-q4-0ubuntu1) 
+Loaded MCU 'mcu' 117 commands ( cf1eac2d-dirty-20250210_192534-ubuntu / gcc: (15:9-2019-q4-0ubuntu1) 9.2.1 20191025 (rel
+Loaded MCU 'nozzle_mcu' 113 commands ( 23f337b2 / gcc: (15:9-2019-q4-0ubuntu1) 9.2.1 20191025 (release) [ARM/arm-9-branc
+Loaded MCU 'bed_mcu' 94 commands ( 54872883-dirty-20240605_163644-longer-virtual-machine / gcc: (15:9-2019-q4-0ubuntu1) 
+Traceback: 2
+17
+---tail
+Configured MCU 'bed_mcu' (1614 moves)
+Enabling TMC virtual enable for 'stepper_z'
+Enabling TMC virtual enable for 'stepper_z1'
+Starting heater checks for extruder
+Starting heater checks for heater_bed
+[JINJA_CACHE] summary: 30 hit, 0 miss, 0 stale, 0 written, 0 error  (30 total)
+Welcome to Kalico
+
+Kalico is starting an opt-in analytics campaign, collecting anonymous data about our users
+Submitted data will contain an anonymized copy of your current configuration, enabled Kalico modules and plugins, and some basic information about the host machine.
+
+`ENABLE_TELEMETRY` will opt-in to the campaign
+`DISABLE_TELEMETRY` will permanently opt-out
+
+`TELEMETRY_EXAMPLE` will save a full example of what would be submitted as 'telemetry.json' in your configuration folder
+
+For more information, visit https://kalico.gg/telemetry
+Stats 4441.8: gcodein=0 mcu: mcu_awake=0.000 mcu_task_avg=0.000000 mcu_task_stddev=0.000000 bytes_write=1554 bytes_read=4984 bytes_retransmit=63 bytes_invalid=0 send_seq=164 receive_seq=164 retransmit
+Stats 4442.8: gcodein=0 mcu: mcu_awake=0.000 mcu_task_avg=0.000000 mcu_task_stddev=0.000000 bytes_write=1560 bytes_read=5030 bytes_retransmit=63 bytes_invalid=0 send_seq=165 receive_seq=165 retransmit
+webhooks client 51551728: New connection
+webhooks client 51551728: Disconnected
+webhooks client 51420456: New connection
+webhooks client 51420456: Disconnected
+Stats 4443.8: gcodein=0 mcu: mcu_awake=0.003 mcu_task_avg=0.000014 mcu_task_stddev=0.000051 bytes_write=1566 bytes_read=5166 bytes_retransmit=63 bytes_invalid=0 send_seq=166 receive_seq=166 retransmit
+Stats 4444.8: gcodein=0 mcu: mcu_awake=0.003 mcu_task_avg=0.000014 mcu_task_stddev=0.000051 bytes_write=1572 bytes_read=5287 bytes_retransmit=63 bytes_invalid=0 send_seq=167 receive_seq=167 retransmit
+Stats 4445.8: gcodein=0 mcu: mcu_awake=0.003 mcu_task_avg=0.000014 mcu_task_stddev=0.000051 bytes_write=1578 bytes_read=5393 bytes_retransmit=63 bytes_invalid=0 send_seq=168 receive_seq=168 retransmit
+Stats 4446.8: gcodein=0 mcu: mcu_awake=0.003 mcu_task_avg=0.000014 mcu_task_stddev=0.000051 bytes_write=1584 bytes_read=5514 bytes_retransmit=63 bytes_invalid=0 send_seq=169 receive_seq=169 retransmit
+Stats 4447.8: gcodein=0 mcu: mcu_awake=0.003 mcu_task_avg=0.000014 mcu_task_stddev=0.000051 bytes_write=1590 bytes_read=5635 bytes_retransmit=63 bytes_invalid=0 send_seq=170 receive_seq=170 retransmit
+Stats 4448.8: gcodein=0 mcu: mcu_awake=0.001 mcu_task_avg=0.000006 mcu_task_stddev=0.000004 bytes_write=1596 bytes_read=5754 bytes_retransmit=63 bytes_invalid=0 send_seq=171 receive_seq=171 retransmit
+Stats 4449.8: gcodein=0 mcu: mcu_awake=0.001 mcu_task_avg=0.000006 mcu_task_stddev=0.000004 bytes_write=1602 bytes_read=5875 bytes_retransmit=63 bytes_invalid=0 send_seq=172 receive_seq=172 retransmit
+Stats 4450.8: gcodein=0 mcu: mcu_awake=0.001 mcu_task_avg=0.000006 mcu_task_stddev=0.000004 bytes_write=1608 bytes_read=5996 bytes_retransmit=63 bytes_invalid=0 send_seq=173 receive_seq=173 retransmit
+Stats 4451.8: gcodein=0 mcu: mcu_awake=0.001 mcu_task_avg=0.000006 mcu_task_stddev=0.000004 bytes_write=1614 bytes_read=6102 bytes_retransmit=63 bytes_invalid=0 send_seq=174 receive_seq=174 retransmit
+webhooks client 47541616: New connection
+webhooks client 47541616: Disconnected
+Stats 4452.8: gcodein=0 mcu: mcu_awake=0.001 mcu_task_avg=0.000006 mcu_task_stddev=0.000004 bytes_write=1620 bytes_read=6223 bytes_retransmit=63 bytes_invalid=0 send_seq=175 receive_seq=175 retransmit
+webhooks client 47508864: New connection
+webhooks client 47508864: Disconnected
+webhooks client 47157032: New connection
+webhooks client 47157032: Disconnected
+Stats 4453.8: gcodein=0 mcu: mcu_awake=0.001 mcu_task_avg=0.000006 mcu_task_stddev=0.000004 bytes_write=1626 bytes_read=6357 bytes_retransmit=63 bytes_invalid=0 send_seq=176 receive_seq=176 retransmit

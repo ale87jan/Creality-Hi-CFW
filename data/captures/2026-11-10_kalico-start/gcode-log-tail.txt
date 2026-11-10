@@ -1,0 +1,44 @@
+DRV_STATUS: c00e0000 cs_actual=14 stealth=1 stst=1
+PWMCONF:    c80d0e24 pwm_ofs=36 pwm_grad=14 pwm_freq=1 pwm_autoscale=1 pwm_autograd=1 pwm_reg=8 pwm_lim=12
+PWM_SCALE:  00000010 pwm_scale_sum=16
+PWM_AUTO:   000e0024 pwm_ofs_auto=36 pwm_grad_auto=14
+DUMP_TMC stepper_z1
+========== Write-only registers ==========
+IHOLD_IRUN: 00080e0e ihold=14 irun=14 iholddelay=8
+TPWMTHRS:   00000000
+TPOWERDOWN: 00000014 tpowerdown=20
+========== Queried registers ==========
+GCONF:      000001c0 pdn_disable=1 mstep_reg_select=1 multistep_filt=1
+GSTAT:      00000001 reset=1(Reset)
+IFCNT:      0000000c ifcnt=12
+OTP_READ:   00000019 otp_fclktrim=25
+IOIN@TMC220x: 2000014d enn=1 ms1=1 ms2=1 pdn_uart=1 sel_a=1(TMC220x) version=0x20
+FACTORY_CONF: 00000019 fclktrim=25
+TSTEP:      000fffff tstep=1048575
+MSCNT:      00000004 mscnt=4
+MSCURACT:   00f70006 cur_a=6 cur_b=247
+CHOPCONF:   23030050 hstrt=5 tbl=2 vsense=1 mres=3(32usteps) dedge=1
+DRV_STATUS: c00e0000 cs_actual=14 stealth=1 stst=1
+PWMCONF:    c80d0e24 pwm_ofs=36 pwm_grad=14 pwm_freq=1 pwm_autoscale=1 pwm_autograd=1 pwm_reg=8 pwm_lim=12
+PWM_SCALE:  00000010 pwm_scale_sum=16
+PWM_AUTO:   000e0024 pwm_ofs_auto=36 pwm_grad_auto=14
+DUMP_TMC extruder
+========== Write-only registers ==========
+IHOLD_IRUN: 00081d1d ihold=29 irun=29 iholddelay=8
+TPWMTHRS:   000fffff tpwmthrs=1048575
+TPOWERDOWN: 00000014 tpowerdown=20
+========== Queried registers ==========
+GCONF:      000001c0 pdn_disable=1 mstep_reg_select=1 multistep_filt=1
+GSTAT:      00000001 reset=1(Reset)
+IFCNT:      0000000b ifcnt=11
+OTP_READ:   00000019 otp_fclktrim=25
+IOIN@TMC220x: 2000014d enn=1 ms1=1 ms2=1 pdn_uart=1 sel_a=1(TMC220x) version=0x20
+FACTORY_CONF: 00000019 fclktrim=25
+TSTEP:      000fffff tstep=1048575
+MSCNT:      00000008 mscnt=8
+MSCURACT:   00f7000c cur_a=12 cur_b=247
+CHOPCONF:   24030053 toff=3 hstrt=5 tbl=2 vsense=1 mres=4(16usteps) dedge=1
+DRV_STATUS: c01d0000 cs_actual=29 stealth=1 stst=1
+PWMCONF:    c80d0e24 pwm_ofs=36 pwm_grad=14 pwm_freq=1 pwm_autoscale=1 pwm_autograd=1 pwm_reg=8 pwm_lim=12
+PWM_SCALE:  00000021 pwm_scale_sum=33
+PWM_AUTO:   000e0024 pwm_ofs_auto=36 pwm_grad_auto=14

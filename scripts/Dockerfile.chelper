@@ -1,0 +1,47 @@
+# syntax=docker/dockerfile:1
+# Reproducible cross-build of Kalico's klippy/chelper/c_helper.so for the
+# Creality Hi (ARMv7 hard-float, glibc 2.29). Driven by build_chelper.sh.
+# Build context: the klippy/chelper directory of a Creality-Hi-Kalico checkout.
+#
+# Ubuntu 18.04 is used because its cross toolchain links against glibc 2.27,
+# older than the 2.29 of the printer, so no newer symbol version can leak in.
+
+ARG BASE=ubuntu:18.04@sha256:152dc042452c496007f07ca9127571cb9c29697f42acbfad72324b2bb2e43c98
+
+FROM ${BASE} AS toolchain
+# Only for networks that need HTTPS or a proxy: APT_MIRROR plus the optional
+# BuildKit secrets apt_conf (an apt.conf snippet) and apt_ca (a CA bundle,
+# mounted at /run/secrets/apt_ca). A normal network needs none of them.
+ARG APT_MIRROR=http://archive.ubuntu.com/ubuntu
+RUN --mount=type=secret,id=apt_conf,target=/etc/apt/apt.conf.d/99build \
+    --mount=type=secret,id=apt_ca,mode=0444 \
+    sed -i "s|http://archive.ubuntu.com/ubuntu|${APT_MIRROR}|g; s|http://security.ubuntu.com/ubuntu|${APT_MIRROR}|g" /etc/apt/sources.list \
+ && apt-get -o Acquire::Retries=5 update -q \
+ && apt-get -o Acquire::Retries=5 install -y -q --no-install-recommends \
+      gcc-7-arm-linux-gnueabihf=7.5.0-3ubuntu1~18.04cross1 \
+      gcc-arm-linux-gnueabihf \
+      libc6-dev-armhf-cross=2.27-3ubuntu1cross1.1 \
+      binutils-arm-linux-gnueabihf \
+      python3-minimal \
+ && rm -rf /var/lib/apt/lists/*
+
+FROM toolchain AS build
+ARG SOURCE_REV=unknown
+WORKDIR /src
+COPY . /src/
+COPY --from=scripts chelper_build.py /chelper_build.py
+RUN python3 /chelper_build.py /src /out "${SOURCE_REV}"
+
+# Optional: load the library on emulated ARMv7 with glibc 2.28 and Python 3.9
+# (needs binfmt/qemu, which Docker Desktop provides).
+FROM --platform=linux/arm/v7 python:3.9-slim-buster AS loadtest
+COPY --from=build /out/c_helper.so /c_helper.so
+COPY --from=scripts chelper_load.py /chelper_load.py
+RUN python3 /chelper_load.py /c_helper.so > /loadtest.txt && cat /loadtest.txt
+
+FROM scratch AS export
+COPY --from=build /out/ /
+
+FROM scratch AS export-tested
+COPY --from=build /out/ /
+COPY --from=loadtest /loadtest.txt /

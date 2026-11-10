@@ -1,0 +1,358 @@
+
+=== 01 identity
+model=F018
+board=CR4NU200360C21
+fw_version=1.1.0.60
+DISTRIB_TARGET='t113_i-CR4NU200360C20/generic'
+DISTRIB_ARCH='arm_cortex-a7_neon'
+DISTRIB_INFO='tina.116680.20251126.110448'
+TINA_VERSION='5.0'
+Linux Creality Hi-<masked> 5.4.61 #1 SMP PREEMPT Thu Nov 6 11:57:10 CST 2025 armv7l GNU/Linux
+
+=== 02 boot slot (U-Boot environment, read with fw_printenv)
+boot_partition=bootB
+root_partition=rootfsB
+swu_mode=
+swu_next=
+swu_software=stable
+swu_version=
+parts_clean=
+bootdelay=0
+--- variable names
+earlyprintk initcall_debug user_debug console nand_root mmc_root mtd_name rootfstype init rdinit loglevel cma mac wifi_mac bt_mac specialstr keybox_list dsp0_partition setargs_nand setargs_nand_ubi setargs_mmc boot_dsp0 boot_normal boot_recovery boot_fastboot bootdelay bootcmd board swu_software swu_param boot_partition root_partition version 
+--- boot logic variables
+nand_root=/dev/ubiblock0_5
+mmc_root=/dev/mmcblk0p5
+setargs_nand=setenv bootargs ubi.mtd=${mtd_name} earlyprintk=${earlyprintk} clk_ignore_unused initcall_debug=${initcall_debug} user_debug=${user_debug} console=${console} loglevel=${loglevel} root=${nand_root} rootfstype=${rootfstype} init=${init} rdinit=${rdinit}  partitions=${partitions} cma=${cma} snum=${snum} mac_addr=${mac} wifi_mac=<masked> bt_mac=<masked> specialstr=${specialstr} gpt=1
+setargs_mmc=setenv  bootargs earlyprintk=${earlyprintk} clk_ignore_unused initcall_debug=${initcall_debug} user_debug=${user_debug} console=${console} loglevel=${loglevel} root=${mmc_root} init=${init} rdinit=${rdinit} partitions=${partitions} cma=${cma} snum=${snum} mac_addr=${mac} wifi_mac=<masked> bt_mac=<masked> specialstr=${specialstr} gpt=1
+boot_normal=sunxi_flash read 43000000 ${boot_partition};bootm 43000000
+boot_recovery=sunxi_flash read 43000000 recovery;bootm 43000000
+boot_fastboot=fastboot
+bootcmd=run setargs_nand boot_normal
+boot_partition=bootB
+root_partition=rootfsB
+--- /proc/cmdline
+earlyprintk=sunxi-uart,0x02500000 clk_ignore_unused initcall_debug=0 user_debug=0x00 console=ttyS0,115200 loglevel=8 root=/dev/mmcblk0p7 init=/init rdinit=/rdinit partitions=boot-resource@mmcblk0p1:env@mmcblk0p2:env-redund@mmcblk0p3:bootA@mmcblk0p4:bootB@mmcblk0p5:rootfsA@mmcblk0p6:rootfsB@mmcblk0p7:dsp0@mmcblk0p8:private@mmcblk0p9:rootfs_data@mmcblk0p10:UDISK@mmcblk0p11 cma=16M snum= mac_addr= wifi_mac=<masked> bt_mac=<masked> specialstr= gpt=1 androidboot.mode=normal androidboot.hardware=sun8iw20p1 boot_type=2 androidboot.boot_type=2 gpt=1 uboot_message=2018.07(08/06/2025-13:05:19) mbr_offset=1032192 disp_reserve=307200,0x5c921000 lcm_id=gc9307_9bit_spi_tjc_240_320 androidboot.dramsize=512 
+
+=== 03 partitions
+  
+UDISK -> /dev/mmcblk0p11
+boot-resource -> /dev/mmcblk0p1
+bootA -> /dev/mmcblk0p4
+bootB -> /dev/mmcblk0p5
+dsp0 -> /dev/mmcblk0p8
+env -> /dev/mmcblk0p2
+env-redund -> /dev/mmcblk0p3
+private -> /dev/mmcblk0p9
+rootfsA -> /dev/mmcblk0p6
+rootfsB -> /dev/mmcblk0p7
+rootfs_data -> /dev/mmcblk0p10
+--- /proc/mtd
+dev:    size   erasesize  name
+--- ubi volumes
+--- /proc/partitions
+major minor  #blocks  name
+
+ 179        0    7636800 mmcblk0
+ 179        1       8192 mmcblk0p1
+ 179        2       1024 mmcblk0p2
+ 179        3       1024 mmcblk0p3
+ 179        4      16384 mmcblk0p4
+ 179        5      16384 mmcblk0p5
+ 179        6     307200 mmcblk0p6
+ 179        7     307200 mmcblk0p7
+ 259        0       1024 mmcblk0p8
+ 259        1      16384 mmcblk0p9
+ 259        2     262144 mmcblk0p10
+ 259        3    6662959 mmcblk0p11
+
+=== 04 mounts and space
+/dev/root on /rom type squashfs (ro,relatime)
+devtmpfs on /rom/dev type devtmpfs (rw,relatime,size=241132k,nr_inodes=60283,mode=755)
+proc on /proc type proc (rw,nosuid,nodev,noexec,noatime)
+sysfs on /sys type sysfs (rw,nosuid,nodev,noexec,noatime)
+tmpfs on /tmp type tmpfs (rw,nosuid,nodev,noatime)
+/dev/mmcblk0p10 on /overlay type ext4 (rw,noatime)
+overlayfs:/overlay on / type overlay (rw,noatime,lowerdir=/,upperdir=/overlay/upper,workdir=/overlay/work)
+tmpfs on /dev type tmpfs (rw,nosuid,relatime,size=512k,mode=755)
+devpts on /dev/pts type devpts (rw,nosuid,noexec,relatime,mode=600,ptmxmode=000)
+debugfs on /sys/kernel/debug type debugfs (rw,noatime)
+none on /sys/kernel/config type configfs (rw,relatime)
+/dev/by-name/UDISK on /mnt/UDISK type ext4 (rw,sync,relatime)
+--- df
+Filesystem                Size      Used Available Use% Mounted on
+/dev/root               114.3M    114.3M         0 100% /rom
+devtmpfs                235.5M         0    235.5M   0% /rom/dev
+tmpfs                   244.1M      4.4M    239.8M   2% /tmp
+/dev/mmcblk0p10         239.9M      2.8M    233.1M   1% /overlay
+overlayfs:/overlay      239.9M      2.8M    233.1M   1% /
+tmpfs                   512.0K         0    512.0K   0% /dev
+/dev/by-name/UDISK        6.2G      2.0G      4.2G  33% /mnt/UDISK
+--- df -k /mnt/UDISK
+/dev/by-name/UDISK     6492696   2117136   4359176  33% /mnt/UDISK
+--- memory
+              total        used        free      shared  buff/cache   available
+Mem:         499976      111796      184100        4480      204080      374380
+Swap:             0           0           0
+
+=== 05 overlay (changes made on top of the read-only rootfs)
+total 19
+drwxr-xr-x    6 root     root          1024 Jan  1  2020 .
+drwxr-xr-x    1 root     root          1024 Jan 23  2026 ..
+lrwxrwxrwx    1 root     root             1 Jan  1  2020 .fs_state -> 2
+drwxr-xr-x    2 root     root          1024 Jan  1  2020 etc
+drwx------    2 root     root         12288 Jan  1  2020 lost+found
+drwxr-xr-x    6 root     root          1024 Jan 23  2026 upper
+drwxr-xr-x    3 root     root          1024 Jan  1  2020 work
+--- /overlay/upper (depth 3, first 80)
+/overlay/upper
+/overlay/upper/root
+/overlay/upper/root/.ash_history
+/overlay/upper/usr
+/overlay/upper/usr/share
+/overlay/upper/usr/share/klipper
+/overlay/upper/usr/share/moonraker
+/overlay/upper/usr/share/frontend
+/overlay/upper/usr/share/klippy-env
+/overlay/upper/usr/share/moonraker-env
+/overlay/upper/usr/uwsgi_temp
+/overlay/upper/usr/scgi_temp
+/overlay/upper/etc
+/overlay/upper/etc/board.json
+/overlay/upper/etc/hostname
+/overlay/upper/etc/localtime
+/overlay/upper/etc/config
+/overlay/upper/etc/config/network
+/overlay/upper/etc/config/nginx
+/overlay/upper/etc/config/system
+/overlay/upper/etc/config/fstab
+/overlay/upper/etc/config/smartlinkd
+/overlay/upper/etc/uci-defaults
+/overlay/upper/etc/uci-defaults/12_network-generate-ula
+/overlay/upper/etc/uci-defaults/14_migrate-dhcp-release
+/overlay/upper/etc/uci-defaults/13_fix-group-user
+/overlay/upper/etc/uci-defaults/10-fstab
+/overlay/upper/home_probedata
+/overlay/upper/home_probedata/140C_XY_Z_2026-01-23_15-31-23probedata.csv
+--- stock service scripts changed in the overlay
+(no MODIFIED line = stock scripts)
+
+=== 06 cpu
+CPU architecture: 7
+CPU implementer	: 0x41
+CPU part	: 0xc07
+CPU revision	: 5
+CPU variant	: 0x0
+Features	: half thumb fastmult vfp edsp neon vfpv3 tls vfpv4 idiva idivt vfpd32 lpae 
+Hardware	: Generic DT based system
+model name	: ARMv7 Processor rev 5 (v7l)
+cores=2
+0.23 0.52 0.53 1/163 26817
+
+=== 07 libc
+lrwxrwxrwx    1 root     root            10 Jun 19  2025 /lib/ld-linux-armhf.so.3 -> ld-2.29.so
+lrwxrwxrwx    1 root     root            12 Jun 19  2025 /lib/libc.so.6 -> libc-2.29.so
+lrwxrwxrwx    1 root     root            12 Jun 19  2025 /lib/libm.so.6 -> libm-2.29.so
+lrwxrwxrwx    1 root     root            18 Jun 19  2025 /lib/libpthread.so.0 -> libpthread-2.29.so
+lrwxrwxrwx    1 root     root            15 Jun 19  2025 /usr/lib/libffi.so.7 -> libffi.so.7.1.0
+-rwxr-xr-x    1 root     root         26032 Jun 19  2025 /usr/lib/libffi.so.7.1.0
+
+=== 08 python
+--- /usr/bin/python3
+lrwxrwxrwx    1 root     root             9 Jun 19  2025 /usr/bin/python3 -> python3.9
+python 3.9.12 (main, Jun 19 2025, 09:26:56)  [GCC 8.3.0]
+machine armv7l libc ('glibc', '2.29')
+prefix /usr base_prefix /usr
+ok   zlib 1.0
+ok   ctypes 1.1.0
+ok   ssl 
+ok   sqlite3 
+ok   multiprocessing 
+ok   termios 
+ok   fcntl 
+ok   select 
+ok   json 2.0.9
+ok   queue 
+ok   importlib.metadata 
+ok   cffi 1.14.6
+ok   greenlet 1.0.0
+ok   jinja2 3.0.3
+ok   markupsafe 2.1.0
+ok   serial 3.4
+ok   numpy 1.20.1
+FAIL can ModuleNotFoundError No module named 'can'
+ok   tornado 
+select.poll True epoll True
+os.sched_setaffinity True
+--- /usr/share/klippy-env/bin/python
+lrwxrwxrwx    1 root     root             7 Jun 19  2025 /usr/share/klippy-env/bin/python -> python3
+python 3.9.12 (main, Jun 19 2025, 09:26:56)  [GCC 8.3.0]
+machine armv7l libc ('glibc', '2.29')
+prefix /usr/share/klippy-env base_prefix /usr/share/klippy-env
+ok   zlib 1.0
+ok   ctypes 1.1.0
+ok   ssl 
+ok   sqlite3 
+ok   multiprocessing 
+ok   termios 
+ok   fcntl 
+ok   select 
+ok   json 2.0.9
+ok   queue 
+ok   importlib.metadata 
+ok   cffi 1.14.6
+ok   greenlet 1.0.0
+ok   jinja2 3.0.3
+ok   markupsafe 2.1.0
+ok   serial 3.4
+ok   numpy 1.20.1
+FAIL can ModuleNotFoundError No module named 'can'
+ok   tornado 
+select.poll True epoll True
+os.sched_setaffinity True
+
+=== 09 tools
+git                -
+gcc                -
+tar                /bin/tar
+gzip               /bin/gzip
+gunzip             /bin/gunzip
+sha256sum          /usr/bin/sha256sum
+md5sum             /usr/bin/md5sum
+wget               -
+curl               -
+nohup              -
+setsid             -
+start-stop-daemon  /sbin/start-stop-daemon
+stty               /bin/stty
+flock              /usr/bin/flock
+rsync              /usr/bin/rsync
+timeout            -
+unsquashfs         -
+mksquashfs         -
+ubiupdatevol       -
+ubinfo             -
+fw_printenv        /usr/sbin/fw_printenv
+fw_setenv          /usr/sbin/fw_setenv
+swupdate           /sbin/swupdate
+strace             /usr/bin/strace
+scp                /usr/bin/scp
+mcu_util           /usr/bin/mcu_util
+--- busybox tar
+BusyBox v1.33.2 (2025-06-19 09:26:56 UTC) multi-call binary.
+
+Usage: tar c|x|t [-zahvokO] [-f TARFILE] [-C DIR] [-T FILE] [-X FILE] [OPTION]... [FILE]...
+
+Create, extract, or list files from a tar file
+
+	c	Create
+	x	Extract
+	t	List
+	-f FILE	Name of TARFILE ('-' for stdin/out)
+	-C DIR	Change to DIR before operation
+	-v	Verbose
+
+=== 10 services
+K01app K10gpio_switch K50dropbear K89log K90device_manager K90mcu_update K90mdns K90network K90sysfixtime K90umount K95board_init K97webrtc K98boot K98play K99adbd S00sysfixtime S01play S10boot S10hostname S10system S11sysctl S12log S13fstab S13mcu_update S15device_manager S16refresh_device_status S19dropbear S20board_init S20network S50cron S50tee-supplicant S54klipper_mcu S55klipper S56moonraker S60dbus S80adbd S80nginx S94gpio_switch S95done S96led S96wipe_data S97webrtc S98sysntpd S99app S99mdns S99swupdate_autorun 
+--- processes
+    master process /usr/sbin/nginx -c /etc/nginx/nginx.conf -g daemon off;
+    worker process
+    <masked-id> 2
+    -i /dev/v4l/by-id/main-video0 -t 0 -w 1280 -h 720 -f 15 -c
+   
+   
+   
+   
+   
+   
+   
+   
+   
+    /usr/share/moonraker/moonraker.py -c /usr/share/moonraker/moonraker.conf -l /mnt/UDISK/printer_data/logs/moonraker.log
+    -r
+    /usr/share/klipper/klippy/klippy.py /mnt/UDISK//printer_data/config/printer.cfg -l /mnt/UDISK//printer_data/logs/klippy.log -a /tmp/klippy_uds
+
+=== 11 mcu
+crw-rw---- root dialout 246, 0 /dev/ttyS0
+crw-rw---- root dialout 246, 2 /dev/ttyS2
+crw-rw---- root dialout 246, 3 /dev/ttyS3
+crw-rw---- root dialout 246, 4 /dev/ttyS4
+crw-rw---- root dialout 246, 5 /dev/ttyS5
+--- /tmp/.mcu_version
+{ "mcu0": { "serial": "\/dev\/ttyS2", "version": "mcu0_110_G32-mcu0_020_000" }, "bed0": { "serial": "\/dev\/ttyS4", "version": "bed0_110_G21-bed0_017_000" }, "noz0": { "serial": "\/dev\/ttyS3", "version": "noz0_110_G30-noz0_019_000" }, "extruder": { "serial": "\/dev\/ttyS3", "version": "unknown" } }
+
+--- /tmp/mcu_update.log (last 25)
+[2020-01-01 01:00:31.437672] set slave address [01] success!
+[2020-01-01 01:00:31.591065] slave [85], fw.cur_ver: mot2_033_C30-mot2_002_071
+[2020-01-01 01:00:31.744919] slave [86], fw.cur_ver: mot2_023_C30-mot2_002_071
+[2020-01-01 01:00:31.779666] slave [11], fw.cur_ver: rfd0_010_G21-rfd0_000_009
+[2020-01-01 01:00:31.874263] slave [01], fw.cur_ver: cfs0_050_G32-cfs0_000_113
+[2020-01-01 01:00:31.899004] state: erase_flash, get ACK
+[2020-01-01 01:00:31.900565] slave [85], force: 0, update: none
+[2020-01-01 01:00:31.900748] slave [86], force: 0, update: none
+[2020-01-01 01:00:31.900840] Fail to Open /usr/share/klipper/fw/F018/rfid!
+[2020-01-01 01:00:31.900875] slave [11], force: 0, update: none
+[2020-01-01 01:00:31.914299] slave [01], force: 0, update: none
+[2020-01-01 01:00:32.052134] addr [85] dev [motor], update: done
+[2020-01-01 01:00:32.190225] addr [86] dev [motor], update: done
+[2020-01-01 01:00:32.223525] addr [11] dev [rfid], update: done
+[2020-01-01 01:00:32.317741] addr [01] dev [cfs], update: done
+[2020-01-01 01:00:32] get_version mcu0_110_G32-mcu0_020_000
+[2020-01-01 01:00:32] mcu0_version: mcu0_110_G32-mcu0_020_000
+[2020-01-01 01:00:32] startup app success
+[2020-01-01 01:00:32] get_version bed0_110_G21-bed0_017_000
+[2020-01-01 01:00:32] bed0_version: bed0_110_G21-bed0_017_000
+[2020-01-01 01:00:32] we should keep only one firmware file for bed0_110_G21 board!
+[2020-01-01 01:00:32] startup app success
+[2020-01-01 01:00:33] get_version noz0_110_G30-noz0_019_000
+[2020-01-01 01:00:33] noz0_version: noz0_110_G30-noz0_019_000
+[2020-01-01 01:00:33] startup app success
+
+=== 12 stock klippy baseline
+3719900 Nov 10 05:55 /mnt/UDISK/printer_data/logs/klippy.log
+Args: ['/usr/share/klipper/klippy/klippy.py', '/mnt/UDISK//printer_data/config/printer.cfg', '-l', '/mnt/UDISK//printer_data/logs/klippy.log', '-a', '/tmp/klippy_uds']
+Git version: '09faed31-dirty'
+CPU: 2 core ARMv7 Processor rev 5 (v7l)
+Python: '3.9.12 (main, Jun 19 2025, 09:26:56) \n[GCC 8.3.0]'
+--- last Stats line (load and serial error counters)
+--- config files
+ 
+7681 box.cfg
+1643 cfs_materials.cfg
+7870 config_macros.cfg
+3263 custom_mesh.cfg
+2873 debug.cfg
+9065 factory_printer.cfg
+30299 gcode_macro.cfg
+5532 miscellaneous.cfg
+5559 motor_control.cfg
+7081 multimaterial.cfg
+10015 nozzle_cleaning_macros.cfg
+24871 print_macros.cfg
+6252 print_modes.cfg
+18339 printer-20261108_183203.cfg
+18339 printer-20261108_184247.cfg
+18339 printer-20261108_185224.cfg
+18339 printer-20261108_185423.cfg
+18339 printer-20261108_185716.cfg
+18339 printer-20261108_185934.cfg
+18339 printer-20261108_194054.cfg
+18339 printer-20261109_171512.cfg
+18339 printer-20261109_172033.cfg
+18339 printer.cfg
+18311 printer.cfg.bak-cfs-20261108-183106
+18339 printer.cfg.bak-cfs-20261108-185139
+18339 printer.cfg.bak-cfs-20261108-185355
+18339 printer.cfg.bak-cfs-20261108-185649
+18339 printer.cfg.bak-cfs-20261108-193951
+2143 printer_params.cfg
+8037 sensorless.cfg
+3240 toolhead.cfg
+--- existing kalico-hi install
+ls: /mnt/UDISK/kalico-hi: No such file or directory
+
+=== 13 c_helper.so load test
+80db43303b1fac7dd5070fcff846bca81488a233b0532668b2d6ea26017a9ad0  /tmp/c_helper.so
+OK: c_helper.so loads on armv7l, python 3.9.12, libc glibc-2.29
+
+=== end

@@ -1,0 +1,36 @@
+# extruder 200C segunda vez (mismo script, apagado automatico a los 120 s de llegar)
+start temp=140.63
+t=4s temp=140.79 power=1.0 hotend_fan=1.0
+t=9s temp=154.34 power=1.0 hotend_fan=1.0
+t=14s temp=169.98 power=1.0 hotend_fan=1.0
+t=19s temp=186.15 power=0.7715723347186938 hotend_fan=1.0
+t=23s temp=199.63 power=0.09410921601927325 hotend_fan=1.0
+-- reached >=198 at 23s (t0 of the 120s hold)
+t=28s temp=201.47 power=0.4246261244494561 hotend_fan=1.0
+t=33s temp=201.99 power=0.16856006252641037 hotend_fan=1.0
+t=38s temp=202.15 power=0.23625228689380423 hotend_fan=1.0
+t=42s temp=200.34 power=0.3449769681823181 hotend_fan=1.0
+t=47s temp=200.75 power=0.14321748634456782 hotend_fan=1.0
+t=52s temp=200.22 power=0.28615710505668357 hotend_fan=1.0
+t=57s temp=199.64 power=0.2980642575945829 hotend_fan=1.0
+t=61s temp=200.36 power=0.1841539755063888 hotend_fan=1.0
+t=66s temp=199.83 power=0.3042855014342373 hotend_fan=1.0
+t=71s temp=199.9 power=0.2463816432702018 hotend_fan=1.0
+t=76s temp=200.29 power=0.20293539044197317 hotend_fan=1.0
+t=80s temp=199.77 power=0.28800956473610984 hotend_fan=1.0
+t=85s temp=200.06 power=0.2368873471373619 hotend_fan=1.0
+t=90s temp=200.19 power=0.20263206275905776 hotend_fan=1.0
+t=95s temp=199.59 power=0.32495955477760924 hotend_fan=1.0
+t=100s temp=200.25 power=0.2024408806827841 hotend_fan=1.0
+t=104s temp=200.15 power=0.2736575195385492 hotend_fan=1.0
+t=109s temp=199.58 power=0.30053068224127777 hotend_fan=1.0
+t=114s temp=200.32 power=0.17785081614416703 hotend_fan=1.0
+t=119s temp=199.91 power=0.2913427006277452 hotend_fan=1.0
+t=123s temp=199.83 power=0.22630296865099359 hotend_fan=1.0
+t=128s temp=200.49 power=0.17793120086304598 hotend_fan=1.0
+t=133s temp=199.65 power=0.3291079383739031 hotend_fan=1.0
+t=138s temp=200.04 power=0.22404977107191926 hotend_fan=1.0
+t=143s temp=200.33 power=0.24011012986201447 hotend_fan=1.0
+TURN_OFF_HEATERS at t=143s
+reached_at=23s peak=202.15 min_after_reach=199.58 band_30s_to_120s=[199.58,200.49]
+extruder: {"can_extrude": true, "motion_queue": null, "nozzle_diameter": 0.4, "pid_profile": "default", "power": 0.0, "pressure_advance": 0.0, "smooth_time": 0.04, "target": 0.0, "temperature": 199.7}

@@ -1,0 +1,43 @@
+11:00:53 temp=108.32
+11:01:13 temp=99.06
+11:01:34 temp=90.89
+11:01:55 temp=83.76
+11:02:16 temp=77.31
+11:02:36 temp=71.69
+11:02:57 temp=66.71
+11:03:18 temp=62.31
+11:03:39 temp=58.41
+11:04:00 temp=54.95
+## (vigilante cancelado) hi_kalico.sh stop 11:04:16 local
+[hi_kalico] turning heaters, fans and motors off
+[hi_kalico] + kill 30607
+[hi_kalico] + /etc/init.d/klipper start
+no need to update custom config files
+old_version: 1073
+new_version: 1073
+[hi_kalico] + /etc/init.d/moonraker restart
+[hi_kalico] + /etc/init.d/app start
+[hi_kalico] stock klippy running (pid 4205)
+rc=0
+stop duro 10 s
+## despues (solo lectura)
+stock klippy : 4205
+kalico       : not running
+moonraker    : stock
+bundle       : kalico_rev: 61602f77b6d0
+--- ps
+ 4205 root      0:13 /usr/share/klippy-env/bin/python /usr/share/klipper/klippy/klippy.py /mnt/UDISK//printer_data/config/printer.cfg -l /mnt/UDISK//printer_data/logs/kli
+ 4340 root      0:05 /usr/share/moonraker-env/bin/python /usr/share/moonraker/moonraker.py -c /usr/share/moonraker/moonraker.conf -l /mnt/UDISK/printer_data/logs/moonrake
+ 4348 root      0:00 /usr/bin/app-server
+ 4352 root      0:00 /usr/bin/Monitor
+--- moonraker API (ready?)
++1s state=urllib.error.HTTPError: HTTP Error 404: Not Found
++10s state=urllib.error.HTTPError: HTTP Error 404: Not Found
++16s state=urllib.error.HTTPError: HTTP Error 404: Not Found
++22s state=urllib.error.HTTPError: HTTP Error 404: Not Found
++29s state=urllib.error.HTTPError: HTTP Error 503: Klippy Host not connected
++37s state=startup
++43s state=startup
++51s state=ready
+"temperature": 45.88 "target": 0.0 "temperature": 28.07 "target": 0.0 
+ 11:05:29 up  6:13,  load average: 1.99, 0.67, 0.28

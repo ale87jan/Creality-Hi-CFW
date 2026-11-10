@@ -1,0 +1,40 @@
+# extruder 200C, apagado automatico a los 120 s de llegar
+start temp=85.45
+t=4s temp=87.3 power=1.0 hotend_fan=1.0
+t=9s temp=102.46 power=1.0 hotend_fan=1.0
+t=14s temp=121.08 power=1.0 hotend_fan=1.0
+t=19s temp=139.25 power=1.0 hotend_fan=1.0
+t=24s temp=155.34 power=1.0 hotend_fan=1.0
+t=28s temp=171.54 power=1.0 hotend_fan=1.0
+t=33s temp=186.95 power=0.7442650398992107 hotend_fan=1.0
+t=38s temp=199.33 power=0.11959251086182776 hotend_fan=1.0
+-- reached >=198 at 38s (t0 of the 120s hold)
+t=43s temp=200.84 power=0.44486936549593187 hotend_fan=1.0
+t=47s temp=201.9 power=0.11655783584336821 hotend_fan=1.0
+t=52s temp=201.89 power=0.24229959937648773 hotend_fan=1.0
+t=57s temp=200.39 power=0.32840401193998603 hotend_fan=1.0
+t=62s temp=200.75 power=0.15778036693299397 hotend_fan=1.0
+t=66s temp=200.14 power=0.32709906595199384 hotend_fan=1.0
+t=71s temp=199.9 power=0.24093805964132867 hotend_fan=1.0
+t=76s temp=200.32 power=0.24132348074562213 hotend_fan=1.0
+t=81s temp=199.73 power=0.3022287083417756 hotend_fan=1.0
+t=85s temp=200.17 power=0.20221430316135333 hotend_fan=1.0
+t=90s temp=200.1 power=0.25567935749020004 hotend_fan=1.0
+t=95s temp=199.69 power=0.2969173587062845 hotend_fan=1.0
+t=100s temp=200.2 power=0.1972214631013306 hotend_fan=1.0
+t=105s temp=200.09 power=0.25963074117408735 hotend_fan=1.0
+t=109s temp=199.78 power=0.28723453129583937 hotend_fan=1.0
+t=114s temp=200.25 power=0.1926356682273915 hotend_fan=1.0
+t=119s temp=199.98 power=0.30579224987260556 hotend_fan=1.0
+t=124s temp=199.75 power=0.2264646461842425 hotend_fan=1.0
+t=128s temp=200.36 power=0.19065804707918316 hotend_fan=1.0
+t=133s temp=199.75 power=0.29723108448782604 hotend_fan=1.0
+t=138s temp=199.96 power=0.20221446694949874 hotend_fan=1.0
+t=143s temp=200.32 power=0.23542795231395866 hotend_fan=1.0
+t=148s temp=199.69 power=0.30044587102116993 hotend_fan=1.0
+t=152s temp=200.05 power=0.19562751368547254 hotend_fan=1.0
+t=157s temp=200.2 power=0.2420586000311349 hotend_fan=1.0
+t=162s temp=199.72 power=0.2914568788865558 hotend_fan=1.0
+TURN_OFF_HEATERS at t=162s
+reached_at=38s peak=201.9 min_after_reach=199.33 band_30s_to_120s=[199.69,200.36]
+extruder: {"can_extrude": true, "motion_queue": null, "nozzle_diameter": 0.4, "pid_profile": "default", "power": 0.0, "pressure_advance": 0.0, "smooth_time": 0.04, "target": 0.0, "temperature": 199.91}

@@ -1,0 +1,86 @@
+mcu 'mcu':  got {'oid': 22, 'next_clock': 2888389888, 'value': 14009, '#name': 'analog_in_state', '#sent_time': 4421.367393815666, '#receive_time': 4422.298576399333}
+mcu 'mcu':  got {'oid': 23, 'next_clock': 2889589888, 'value': 31243, '#name': 'analog_in_state', '#sent_time': 4421.367393815666, '#receive_time': 4422.308586233333}
+Loaded MCU 'bed_mcu' 94 commands ( 54872883-dirty-20240605_163644-longer-virtual-machine / gcc: (15:9-2019-q4-0ubuntu1) 9.2.1 20191025 (release) [ARM/arm-9-branch revision 277599] binutils: (2.34-4ubu
+MCU 'bed_mcu' config: ADC_MAX=4095 CLOCK_FREQ=72000000 MCU=gd32e230x8 RECEIVE_WINDOW=192 RESERVE_PINS_serial=PA9,PA10 SERIAL_BAUD=230400 STATS_SUMSQ_BASE=256 STEPPER_BOTH_EDGE=1 build_machine_uid=Jun 
+mcu_temperature 'mcu' nominal base=378.658537 slope=-804.878049
+Attempting automated MCU 'mcu' restart: CRC mismatch
+Attempting MCU 'mcu' reset command
+Attempting MCU 'nozzle_mcu' reset command
+Attempting MCU 'bed_mcu' reset command
+Restarting printer
+Start printer at Tue Nov 10 06:05:39 2026 (1794287139.3 4423.6)
+===== Config file =====
+[mcu]
+serial = /dev/ttyS2
+baud = 230400
+restart_method = command
+
+webhooks client 46563736: New connection
+webhooks client 46563736: Disconnected
+webhooks client 45580736: New connection
+webhooks client 45580736: Disconnected
+webhooks client 48797200: New connection
+webhooks client 48797200: Disconnected
+mcu 'mcu': Timeout on connect
+mcu 'mcu': Wait for identify_response
+Traceback (most recent call last):
+  File "/mnt/UDISK/kalico-hi/current/kalico/klippy/serialhdl.py", line 91, in _get_identify_data
+    params = self.send_with_response(msg, "identify_response")
+  File "/mnt/UDISK/kalico-hi/current/kalico/klippy/serialhdl.py", line 440, in send_with_response
+    return src.get_response([cmd], self.default_cmd_queue)
+  File "/mnt/UDISK/kalico-hi/current/kalico/klippy/serialhdl.py", line 527, in get_response
+    self.serial.raw_send_wait_ack(
+  File "/mnt/UDISK/kalico-hi/current/kalico/klippy/serialhdl.py", line 430, in raw_send_wait_ack
+    self._error("No communication with MCU")
+  File "/mnt/UDISK/kalico-hi/current/kalico/klippy/serialhdl.py", line 83, in _error
+    raise error(self.warn_prefix + (msg % params))
+klippy.serialhdl.error: mcu 'mcu': No communication with MCU
+webhooks client 50854080: New connection
+webhooks client 50854080: Disconnected
+webhooks client 47042440: New connection
+webhooks client 47042440: Disconnected
+mcu 'mcu': Timeout on connect
+mcu 'mcu': Wait for identify_response
+Traceback (most recent call last):
+  File "/mnt/UDISK/kalico-hi/current/kalico/klippy/serialhdl.py", line 91, in _get_identify_data
+    params = self.send_with_response(msg, "identify_response")
+  File "/mnt/UDISK/kalico-hi/current/kalico/klippy/serialhdl.py", line 440, in send_with_response
+    return src.get_response([cmd], self.default_cmd_queue)
+  File "/mnt/UDISK/kalico-hi/current/kalico/klippy/serialhdl.py", line 527, in get_response
+    self.serial.raw_send_wait_ack(
+  File "/mnt/UDISK/kalico-hi/current/kalico/klippy/serialhdl.py", line 430, in raw_send_wait_ack
+    self._error("No communication with MCU")
+  File "/mnt/UDISK/kalico-hi/current/kalico/klippy/serialhdl.py", line 83, in _error
+    raise error(self.warn_prefix + (msg % params))
+klippy.serialhdl.error: mcu 'mcu': No communication with MCU
+webhooks client 52081904: New connection
+webhooks client 52081904: Disconnected
+webhooks client 49155032: New connection
+webhooks client 49155032: Disconnected
+Loaded MCU 'mcu' 117 commands ( cf1eac2d-dirty-20250210_192534-ubuntu / gcc: (15:9-2019-q4-0ubuntu1) 9.2.1 20191025 (release) [ARM/arm-9-branch revision 277599] binutils: (2.34-4ubuntu1+13ubuntu1) 2.3
+MCU 'mcu' config: ADC_MAX=4095 CLOCK_FREQ=120000000 MCU=gd32f303xe RECEIVE_WINDOW=192 RESERVE_PINS_serial=PA2,PA3 SERIAL_BAUD=230400 STATS_SUMSQ_BASE=256 STEPPER_BOTH_EDGE=1 build_machine_uid=Feb 10 2
+mcu 'nozzle_mcu': Starting serial connect
+Loaded MCU 'nozzle_mcu' 113 commands ( 23f337b2 / gcc: (15:9-2019-q4-0ubuntu1) 9.2.1 20191025 (release) [ARM/arm-9-branch revision 277599] binutils: (2.34-4ubuntu1+13ubuntu1) 2.34)
+MCU 'nozzle_mcu' config: ADC_MAX=4095 CLOCK_FREQ=120000000 MCU=gd32f303xb RECEIVE_WINDOW=192 RESERVE_PINS_serial=PA2,PA3 SERIAL_BAUD=230400 STATS_SUMSQ_BASE=256 STEPPER_BOTH_EDGE=1 build_machine_uid=S
+mcu 'bed_mcu': Starting serial connect
+webhooks client 50519744: New connection
+webhooks client 50519744: Disconnected
+Loaded MCU 'bed_mcu' 94 commands ( 54872883-dirty-20240605_163644-longer-virtual-machine / gcc: (15:9-2019-q4-0ubuntu1) 9.2.1 20191025 (release) [ARM/arm-9-branch revision 277599] binutils: (2.34-4ubu
+MCU 'bed_mcu' config: ADC_MAX=4095 CLOCK_FREQ=72000000 MCU=gd32e230x8 RECEIVE_WINDOW=192 RESERVE_PINS_serial=PA9,PA10 SERIAL_BAUD=230400 STATS_SUMSQ_BASE=256 STEPPER_BOTH_EDGE=1 build_machine_uid=Jun 
+mcu_temperature 'mcu' nominal base=378.658537 slope=-804.878049
+Sending MCU 'mcu' printer configuration...
+mcu 'mcu': #output: allocMax=3426 usedMax=0
+Configured MCU 'mcu' (3416 moves)
+Sending MCU 'nozzle_mcu' printer configuration...
+mcu 'nozzle_mcu': #output: allocMax=1413 usedMax=0
+Configured MCU 'nozzle_mcu' (1403 moves)
+Sending MCU 'bed_mcu' printer configuration...
+mcu 'bed_mcu': #output: allocMax=1624 usedMax=0
+Configured MCU 'bed_mcu' (1614 moves)
+Enabling TMC virtual enable for 'stepper_z'
+Enabling TMC virtual enable for 'stepper_z1'
+Starting heater checks for extruder
+Starting heater checks for heater_bed
+[JINJA_CACHE] summary: 30 hit, 0 miss, 0 stale, 0 written, 0 error  (30 total)
+Welcome to Kalico
+

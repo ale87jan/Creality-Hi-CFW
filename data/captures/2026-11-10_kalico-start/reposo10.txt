@@ -1,0 +1,7 @@
+## t=0 min (10:59:10 host)
+Stats 22034.5 mcu_task_avg=0.000006 bytes_retransmit=63 bytes_invalid=0 send_seq=20258 receive_seq=20258 mcu_task_avg=0.000006 bytes_retransmit=9 bytes_invalid=0 send_seq=18540 receive_seq=18540 mcu_task_avg=0.000012 bytes_retransmit=0 bytes_invalid=0 send_seq=17956 receive_seq=17956 sysload=0.07 cputime=257.820 memavail=405624 
+0.07 0.12 0.09 1/110 3824
+## ULTIMA lectura (10:59:56 host) - script cancelado por indicacion de Alejandro
+Stats 22080.6 bytes_retransmit=63 bytes_invalid=0 send_seq=20305 receive_seq=20305 bytes_retransmit=9 bytes_invalid=0 send_seq=18679 receive_seq=18679 bytes_retransmit=0 bytes_invalid=0 send_seq=18003 receive_seq=18003 sysload=0.03 cputime=258.915 memavail=405952 
+0.03 0.10 0.08 1/110 3841
+CANCELADO

@@ -1,0 +1,25 @@
+38401
+3:Args: ['/mnt/UDISK/kalico-hi/current/kalico/klippy/klippy.py', '/mnt/UDISK/kalico-hi/config/printer.cfg', '-l', '/mnt/UDISK/kalico-hi/logs/klippy.log', '-a', 
+5:Git version: 'v2026.11.00-57-g61602f77'
+11:Start printer at Tue Nov 10 06:05:28 2026 (1794287128.5 4412.8)
+306:Start printer at Tue Nov 10 06:05:39 2026 (1794287139.3 4423.6)
+570:Traceback (most recent call last):
+588:Traceback (most recent call last):
+---
+230:shutdown_speed = 0
+237:shutdown_speed = 0
+249:shutdown_speed = 0
+263:	{action_raise_error("Homing is disabled in the phase 1 config")}
+525:shutdown_speed = 0
+532:shutdown_speed = 0
+544:shutdown_speed = 0
+558:	{action_raise_error("Homing is disabled in the phase 1 config")}
+578:    self._error("No communication with MCU")
+579:  File "/mnt/UDISK/kalico-hi/current/kalico/klippy/serialhdl.py", line 83, in _error
+580:    raise error(self.warn_prefix + (msg % params))
+581:klippy.serialhdl.error: mcu 'mcu': No communication with MCU
+596:    self._error("No communication with MCU")
+597:  File "/mnt/UDISK/kalico-hi/current/kalico/klippy/serialhdl.py", line 83, in _error
+598:    raise error(self.warn_prefix + (msg % params))
+599:klippy.serialhdl.error: mcu 'mcu': No communication with MCU
+628:[JINJA_CACHE] summary: 30 hit, 0 miss, 0 stale, 0 written, 0 error  (30 total)

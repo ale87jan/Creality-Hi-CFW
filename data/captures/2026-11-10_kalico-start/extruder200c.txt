@@ -1,0 +1,26 @@
+# extruder 200C MANTENIDO (target se deja en 200)
+start temp=59.57
+t=3s temp=60.12 power=1.0 hotend_fan=1.0
+t=7s temp=68.98 power=1.0 hotend_fan=1.0
+t=10s temp=83.88 power=1.0 hotend_fan=1.0
+t=14s temp=98.55 power=1.0 hotend_fan=1.0
+t=18s temp=113.99 power=1.0 hotend_fan=1.0
+t=22s temp=128.82 power=1.0 hotend_fan=1.0
+t=25s temp=141.92 power=1.0 hotend_fan=1.0
+t=29s temp=155.59 power=1.0 hotend_fan=1.0
+t=33s temp=167.7 power=1.0 hotend_fan=1.0
+t=37s temp=180.34 power=1.0 hotend_fan=1.0
+t=40s temp=191.76 power=0.43348402896789273 hotend_fan=1.0
+t=44s temp=200.59 power=0.10960454253544771 hotend_fan=1.0
+t=48s temp=201.61 power=0.45603066342850307 hotend_fan=1.0
+t=52s temp=201.51 power=0.24900511925424268 hotend_fan=1.0
+t=55s temp=202.58 power=0.06934054572530664 hotend_fan=1.0
+t=59s temp=201.4 power=0.3306877815673752 hotend_fan=1.0
+t=63s temp=200.22 power=0.32709739825178263 hotend_fan=1.0
+t=67s temp=200.88 power=0.13569623475802958 hotend_fan=1.0
+t=70s temp=200.55 power=0.2572591022019919 hotend_fan=1.0
+t=74s temp=199.59 power=0.33414545998862955 hotend_fan=1.0
+t=78s temp=199.98 power=0.2157218805635577 hotend_fan=1.0
+t=82s temp=200.45 power=0.18479834604210413 hotend_fan=1.0
+STABLE 20s in 200+-2 (since 59s); target left at 200; peak=202.58
+extruder: {"can_extrude": true, "motion_queue": null, "nozzle_diameter": 0.4, "pid_profile": "default", "power": 0.23940461515868697, "pressure_advance": 0.0, "smooth_time": 0.04, "target": 200.0, "temperature": 200.38}

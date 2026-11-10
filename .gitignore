@@ -33,3 +33,6 @@ __pycache__/
 *.swp
 .DS_Store
 Thumbs.db
+
+# Build outputs of scripts/ (c_helper.so, bundles)
+build/

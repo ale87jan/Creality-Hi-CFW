@@ -1,0 +1,81 @@
+from line 707
+DUMP_TMC stepper_z
+========== Write-only registers ==========
+IHOLD_IRUN: 00080e0e ihold=14 irun=14 iholddelay=8
+TPWMTHRS:   00000000
+TPOWERDOWN: 00000014 tpowerdown=20
+========== Queried registers ==========
+GCONF:      000001c0 pdn_disable=1 mstep_reg_select=1 multistep_filt=1
+GSTAT:      00000001 reset=1(Reset)
+IFCNT:      0000000c ifcnt=12
+OTP_READ:   00000018 otp_fclktrim=24
+IOIN@TMC220x: 2000014d enn=1 ms1=1 ms2=1 pdn_uart=1 sel_a=1(TMC220x) version=0x20
+FACTORY_CONF: 00000018 fclktrim=24
+TSTEP:      000fffff tstep=1048575
+MSCNT:      00000024 mscnt=36
+MSCURACT:   00f10036 cur_a=54 cur_b=241
+CHOPCONF:   23030050 hstrt=5 tbl=2 vsense=1 mres=3(32usteps) dedge=1
+DRV_STATUS: c00e0000 cs_actual=14 stealth=1 stst=1
+PWMCONF:    c80d0e24 pwm_ofs=36 pwm_grad=14 pwm_freq=1 pwm_autoscale=1 pwm_autograd=1 pwm_reg=8 pwm_lim=12
+PWM_SCALE:  00000010 pwm_scale_sum=16
+PWM_AUTO:   000e0024 pwm_ofs_auto=36 pwm_grad_auto=14
+Stats 4497.8: gcodein=0 mcu: mcu_awake=0.001 mcu_task_avg=0.000006 mcu_task_stddev=0.000004 bytes_write=2092 bytes_read=11895 bytes_retransmit=63 bytes_invalid=0 send_seq=235 receive_seq=235 retransmit_seq=2 srtt=0.001 rttvar=0.00
+DUMP_TMC stepper_z1
+========== Write-only registers ==========
+IHOLD_IRUN: 00080e0e ihold=14 irun=14 iholddelay=8
+TPWMTHRS:   00000000
+TPOWERDOWN: 00000014 tpowerdown=20
+========== Queried registers ==========
+GCONF:      000001c0 pdn_disable=1 mstep_reg_select=1 multistep_filt=1
+GSTAT:      00000001 reset=1(Reset)
+IFCNT:      0000000c ifcnt=12
+OTP_READ:   00000019 otp_fclktrim=25
+IOIN@TMC220x: 2000014d enn=1 ms1=1 ms2=1 pdn_uart=1 sel_a=1(TMC220x) version=0x20
+FACTORY_CONF: 00000019 fclktrim=25
+TSTEP:      000fffff tstep=1048575
+MSCNT:      00000004 mscnt=4
+MSCURACT:   00f70006 cur_a=6 cur_b=247
+CHOPCONF:   23030050 hstrt=5 tbl=2 vsense=1 mres=3(32usteps) dedge=1
+DRV_STATUS: c00e0000 cs_actual=14 stealth=1 stst=1
+PWMCONF:    c80d0e24 pwm_ofs=36 pwm_grad=14 pwm_freq=1 pwm_autoscale=1 pwm_autograd=1 pwm_reg=8 pwm_lim=12
+PWM_SCALE:  00000010 pwm_scale_sum=16
+PWM_AUTO:   000e0024 pwm_ofs_auto=36 pwm_grad_auto=14
+Stats 4498.8: gcodein=0 mcu: mcu_awake=0.001 mcu_task_avg=0.000006 mcu_task_stddev=0.000004 bytes_write=2294 bytes_read=12323 bytes_retransmit=63 bytes_invalid=0 send_seq=250 receive_seq=250 retransmit_seq=2 srtt=0.001 rttvar=0.00
+DUMP_TMC extruder
+========== Write-only registers ==========
+IHOLD_IRUN: 00081d1d ihold=29 irun=29 iholddelay=8
+TPWMTHRS:   000fffff tpwmthrs=1048575
+TPOWERDOWN: 00000014 tpowerdown=20
+========== Queried registers ==========
+GCONF:      000001c0 pdn_disable=1 mstep_reg_select=1 multistep_filt=1
+GSTAT:      00000001 reset=1(Reset)
+IFCNT:      0000000b ifcnt=11
+OTP_READ:   00000019 otp_fclktrim=25
+IOIN@TMC220x: 2000014d enn=1 ms1=1 ms2=1 pdn_uart=1 sel_a=1(TMC220x) version=0x20
+FACTORY_CONF: 00000019 fclktrim=25
+TSTEP:      000fffff tstep=1048575
+MSCNT:      00000008 mscnt=8
+MSCURACT:   00f7000c cur_a=12 cur_b=247
+CHOPCONF:   24030053 toff=3 hstrt=5 tbl=2 vsense=1 mres=4(16usteps) dedge=1
+DRV_STATUS: c01d0000 cs_actual=29 stealth=1 stst=1
+PWMCONF:    c80d0e24 pwm_ofs=36 pwm_grad=14 pwm_freq=1 pwm_autoscale=1 pwm_autograd=1 pwm_reg=8 pwm_lim=12
+PWM_SCALE:  00000021 pwm_scale_sum=33
+PWM_AUTO:   000e0024 pwm_ofs_auto=36 pwm_grad_auto=14
+Stats 4499.8: gcodein=0 mcu: mcu_awake=0.001 mcu_task_avg=0.000008 mcu_task_stddev=0.000004 bytes_write=2300 bytes_read=12443 bytes_retransmit=63 bytes_invalid=0 send_seq=251 receive_seq=251 retransmit_seq=2 srtt=0.001 rttvar=0.00
+Stats 4500.8: gcodein=0 mcu: mcu_awake=0.001 mcu_task_avg=0.000008 mcu_task_stddev=0.000004 bytes_write=2334 bytes_read=12639 bytes_retransmit=63 bytes_invalid=0 send_seq=256 receive_seq=256 retransmit_seq=2 srtt=0.001 rttvar=0.00
+Stats 4501.8: gcodein=0 mcu: mcu_awake=0.001 mcu_task_avg=0.000008 mcu_task_stddev=0.000004 bytes_write=2340 bytes_read=12745 bytes_retransmit=63 bytes_invalid=0 send_seq=257 receive_seq=257 retransmit_seq=2 srtt=0.001 rttvar=0.00
+Stats 4502.8: gcodein=0 mcu: mcu_awake=0.001 mcu_task_avg=0.000008 mcu_task_stddev=0.000004 bytes_write=2346 bytes_read=12851 bytes_retransmit=63 bytes_invalid=0 send_seq=258 receive_seq=258 retransmit_seq=2 srtt=0.001 rttvar=0.00
+Stats 4503.8: gcodein=0 mcu: mcu_awake=0.001 mcu_task_avg=0.000008 mcu_task_stddev=0.000004 bytes_write=2352 bytes_read=12987 bytes_retransmit=63 bytes_invalid=0 send_seq=259 receive_seq=259 retransmit_seq=2 srtt=0.001 rttvar=0.00
+Stats 4504.8: gcodein=0 mcu: mcu_awake=0.001 mcu_task_avg=0.000006 mcu_task_stddev=0.000004 bytes_write=2358 bytes_read=13106 bytes_retransmit=63 bytes_invalid=0 send_seq=260 receive_seq=260 retransmit_seq=2 srtt=0.001 rttvar=0.00
+Stats 4505.8: gcodein=0 mcu: mcu_awake=0.001 mcu_task_avg=0.000006 mcu_task_stddev=0.000004 bytes_write=2364 bytes_read=13212 bytes_retransmit=63 bytes_invalid=0 send_seq=261 receive_seq=261 retransmit_seq=2 srtt=0.001 rttvar=0.00
+Stats 4506.8: gcodein=0 mcu: mcu_awake=0.001 mcu_task_avg=0.000006 mcu_task_stddev=0.000004 bytes_write=2370 bytes_read=13348 bytes_retransmit=63 bytes_invalid=0 send_seq=262 receive_seq=262 retransmit_seq=2 srtt=0.001 rttvar=0.00
+Stats 4507.8: gcodein=0 mcu: mcu_awake=0.001 mcu_task_avg=0.000006 mcu_task_stddev=0.000004 bytes_write=2376 bytes_read=13454 bytes_retransmit=63 bytes_invalid=0 send_seq=263 receive_seq=263 retransmit_seq=2 srtt=0.001 rttvar=0.00
+Stats 4508.8: gcodein=0 mcu: mcu_awake=0.001 mcu_task_avg=0.000006 mcu_task_stddev=0.000004 bytes_write=2382 bytes_read=13560 bytes_retransmit=63 bytes_invalid=0 send_seq=264 receive_seq=264 retransmit_seq=2 srtt=0.001 rttvar=0.00
+Stats 4509.8: gcodein=0 mcu: mcu_awake=0.001 mcu_task_avg=0.000006 mcu_task_stddev=0.000004 bytes_write=2388 bytes_read=13703 bytes_retransmit=63 bytes_invalid=0 send_seq=265 receive_seq=265 retransmit_seq=2 srtt=0.001 rttvar=0.00
+Stats 4510.8: gcodein=0 mcu: mcu_awake=0.001 mcu_task_avg=0.000006 mcu_task_stddev=0.000004 bytes_write=2394 bytes_read=13802 bytes_retransmit=63 bytes_invalid=0 send_seq=266 receive_seq=266 retransmit_seq=2 srtt=0.001 rttvar=0.00
+Stats 4511.8: gcodein=0 mcu: mcu_awake=0.001 mcu_task_avg=0.000006 mcu_task_stddev=0.000004 bytes_write=2400 bytes_read=13903 bytes_retransmit=63 bytes_invalid=0 send_seq=267 receive_seq=267 retransmit_seq=2 srtt=0.001 rttvar=0.00
+---Q
+---ST
+Stats 4441.8 bytes_retransmit=63 bytes_invalid=0 bytes_retransmit=9 bytes_invalid=0 bytes_retransmit=0 bytes_invalid=0 Stats 4511.8 bytes_retransmit=63 bytes_invalid=0 bytes_retransmit=9 bytes_invalid=0 bytes_retransmit=0 bytes_invalid=0 
+71
+6

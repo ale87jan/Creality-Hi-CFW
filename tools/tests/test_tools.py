@@ -1,4 +1,4 @@
-# Offline tests for tools/hi_probe.py and tools/fwextract.py.
+# Offline tests for tools/hi_probe.py, tools/fwextract.py and tools/cfg_commands.py.
 # Run from the repo root: python -m unittest discover -s tools/tests -v
 #
 # hi_probe needs pyserial to import; the serial port itself is faked.
@@ -171,6 +171,31 @@ class FwExtractTest(unittest.TestCase):
                              40, 17, 16, 0, len(strings), len(struct_blk))
         _ver, nodes = fwextract.fdt_parse(header + struct_blk + strings)
         self.assertEqual(fwextract.fdt_value(nodes["/"]["model"]), "hi")
+
+
+class CfgCommandsTest(unittest.TestCase):
+    def test_reports_missing_commands_and_sections(self):
+        import cfg_commands
+
+        with tempfile.TemporaryDirectory() as tmp:
+            cfg = os.path.join(tmp, "printer.cfg")
+            with open(cfg, "w") as stream:
+                stream.write(
+                    "[stepper_x]\n[timer_read]\n[probe]\n"
+                    "[gcode_macro PAUSE]\nrename_existing: _PAUSE_BASE\n"
+                    "gcode:\n  _PAUSE_BASE\n  FORCE_MOVE_E S=1\n"
+                    "  # CXSAVE_CONFIG\n  {% if x %}\n  QUERY_PROBE\n"
+                    "  MY_MACRO\n[gcode_macro my_macro]\ngcode:\n  G28\n"
+                )
+            extras = os.path.join(tmp, "klippy", "extras")
+            os.makedirs(extras)
+            with open(os.path.join(extras, "probe.py"), "w") as stream:
+                stream.write('register("QUERY_PROBE", f)\nregister("G28", g)\n')
+            commands, sections = cfg_commands.missing(
+                [cfg], os.path.join(tmp, "klippy")
+            )
+        self.assertEqual(commands, [("FORCE_MOVE_E", 1, "printer.cfg")])
+        self.assertEqual(sections, ["timer_read"])
 
 
 if __name__ == "__main__":

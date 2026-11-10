@@ -1,0 +1,37 @@
+[hi_install] checks
+[hi_install] ok: model F018
+[hi_install] ok: firmware 1.1.0.60
+[hi_install] ok: active slot: boot_partition=bootB root_partition=rootfsB (not changed by this script)
+[hi_install] ok: bundle sha256 2d8ca01e0c3893a79804c8281a06cdd01402267dd931c2a20cc7a0239282d183
+[hi_install] ok: bundle layout (312 entries)
+[hi_install] ok: space: 4358504 kB free, 25922 kB needed
+[hi_install] ok: python 3.9 with cffi, greenlet, jinja2, markupsafe, serial, numpy, zlib
+[hi_install] ok: Kalico is not running
+[hi_install] install into /mnt/UDISK/kalico-hi
+[hi_install] + mkdir -p /mnt/UDISK/kalico-hi/logs /mnt/UDISK/kalico-hi/config
+[hi_install] + rm -rf /mnt/UDISK/kalico-hi/new
+[hi_install] + mkdir -p /mnt/UDISK/kalico-hi/new
+[hi_install] + tar -xzf /tmp/kalico-hi-61602f77b6d0.tar.gz -C /mnt/UDISK/kalico-hi/new
+[hi_install] ok: 299 files match SHA256SUMS
+OK: c_helper.so loads on armv7l, python 3.9.12, libc glibc-2.29
+OK: cffi binding, monotonic=4259.941
+[hi_install] + mv /mnt/UDISK/kalico-hi/new/kalico-hi /mnt/UDISK/kalico-hi/current
+[hi_install] + rm -rf /mnt/UDISK/kalico-hi/new
+[hi_install] + cp /mnt/UDISK/kalico-hi/current/config/align.cfg /mnt/UDISK/kalico-hi/config/align.cfg
+[hi_install] + cp /mnt/UDISK/kalico-hi/current/config/base.cfg /mnt/UDISK/kalico-hi/config/base.cfg
+[hi_install] + cp /mnt/UDISK/kalico-hi/current/config/cfs.cfg /mnt/UDISK/kalico-hi/config/cfs.cfg
+[hi_install] + cp /mnt/UDISK/kalico-hi/current/config/clean.cfg /mnt/UDISK/kalico-hi/config/clean.cfg
+[hi_install] + cp /mnt/UDISK/kalico-hi/current/config/heat.cfg /mnt/UDISK/kalico-hi/config/heat.cfg
+[hi_install] + cp /mnt/UDISK/kalico-hi/current/config/mesh.cfg /mnt/UDISK/kalico-hi/config/mesh.cfg
+[hi_install] + cp /mnt/UDISK/kalico-hi/current/config/modes.cfg /mnt/UDISK/kalico-hi/config/modes.cfg
+[hi_install] + cp /mnt/UDISK/kalico-hi/current/config/motors.cfg /mnt/UDISK/kalico-hi/config/motors.cfg
+[hi_install] + cp /mnt/UDISK/kalico-hi/current/config/phase2.cfg /mnt/UDISK/kalico-hi/config/phase2.cfg
+[hi_install] + cp /mnt/UDISK/kalico-hi/current/config/phase3.cfg /mnt/UDISK/kalico-hi/config/phase3.cfg
+[hi_install] + cp /mnt/UDISK/kalico-hi/current/config/phase4.cfg /mnt/UDISK/kalico-hi/config/phase4.cfg
+[hi_install] + cp /mnt/UDISK/kalico-hi/current/config/phase5.cfg /mnt/UDISK/kalico-hi/config/phase5.cfg
+[hi_install] + cp /mnt/UDISK/kalico-hi/current/config/phase6.cfg /mnt/UDISK/kalico-hi/config/phase6.cfg
+[hi_install] + cp /mnt/UDISK/kalico-hi/current/config/print.cfg /mnt/UDISK/kalico-hi/config/print.cfg
+[hi_install] + cp /mnt/UDISK/kalico-hi/current/config/printer.cfg /mnt/UDISK/kalico-hi/config/printer.cfg
+[hi_install] + cp /mnt/UDISK/kalico-hi/current/config/zalign.cfg /mnt/UDISK/kalico-hi/config/zalign.cfg
+[hi_install] + chmod +x /mnt/UDISK/kalico-hi/current/tools/hi_kalico.sh /mnt/UDISK/kalico-hi/current/tools/hi_restore.sh
+[hi_install] installed. Next: /mnt/UDISK/kalico-hi/current/tools/hi_kalico.sh start --dry-run
