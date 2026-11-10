@@ -342,7 +342,8 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
 ### B33 — Fase 5: decisiones de diseño · U · EN CURSO
 
 - **Hecho:** decisión 1 cerrada (D16: `creality_cfs.py` sobre `serial_485`).
-- **Falta:** decisiones 2 (purga) y 3 (rack externo) de [phase5-plan.md §6](phase5-plan.md).
+- **Hecho:** decisión 2 cerrada (purga en la papelera, sin teflón en el cambio de filamento).
+- **Falta:** decisión 3 (rack externo) de [phase5-plan.md §6](phase5-plan.md).
 
 ### B34 — Fase 5: CFS para la Hi con tests · M · EN CURSO
 

@@ -212,8 +212,10 @@ Límites y pendientes:
 ## 6. Decisiones que necesito
 
 1. **Cómo adaptar el CFS** (§4): cerrada el 2026-11-10, opción D (D16).
-2. **Purga en la Hi**: repetir la de stock (purga en la papelera de X=-18,5 y limpieza en el teflón trasero) o usar solo torre de purga.
-   Recomendada: la de stock, con sus valores.
+2. **Purga en la Hi**: cerrada el 2026-11-10. Como stock, en la papelera de X=-18,5 con la pasada corta
+   (`CFS_PURGE`), pero **sin ir al teflón trasero en un cambio de filamento**: el teflón está a la altura de la
+   cama y habría que bajar el pórtico, que durante una impresión está por encima de la pieza [usuario,
+   2026-11-10]. El teflón queda solo para la limpieza previa a la impresión (`NOZZLE_CLEAN`).
 3. **Rack externo (`filament_rack`)**: dejarlo fuera de la primera versión (recomendada) o incluirlo.
 
 ## 7. Riesgos
