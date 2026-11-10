@@ -216,3 +216,18 @@ arreglos de upstream llegan al sincronizar.
 - La limpieza de boquilla es aparte ([phase4-plan.md](phase4-plan.md) §4). Criterio del usuario: `PRTOUCH_SCRUB`
   si funciona en la Hi; si no, `NOZZLE_CLEANUP` o sus macros de `nozzle_cleaning_macros.cfg`.
 
+## D12 — Alineación de Z antes que la sonda (2026-11-10)
+
+**Contexto.** El roadmap ponía la sonda (fase 3) antes que `z_align` (fase 4). El stock siempre alinea los dos
+husillos contra los sensores de arriba antes de sondear ([phase4-plan.md](phase4-plan.md) §2).
+
+**Decisión.** En la impresora se prueba primero la alineación (`ZDOWN`) y después la sonda.
+
+**Motivos.** `ZDOWN` mueve el puente hacia arriba, lejos de la cama: es la prueba de Z con menos riesgo, y deja
+el primer contacto de la boquilla con la cama con el puente ya nivelado y Z en una posición conocida (`zmax`).
+
+**Consecuencias.**
+
+- `z_align_hi.py` (B26) pasa a ser la siguiente pieza de código, antes de probar `config/hi/phase3.cfg`.
+- Los números de fase del roadmap no cambian; cambia el orden de las pruebas: 1, 2, 4 (solo `z_align`), 3.
+

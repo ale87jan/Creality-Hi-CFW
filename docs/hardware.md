@@ -57,6 +57,7 @@ Solo X e Y son de lazo cerrado. Z, Z1 y el extrusor usan TMC2208 por UART [F].
 | Elemento | Detalle | Fuente |
 | - | - | - |
 | Sonda de presión (`prtouch_v3`) | CS1237 en la boquilla. `step_swap_pin: !PC7`, `pres_swap_pin: nozzle_mcu:PA15`, `pres_cs0_pin: nozzle_mcu:PB13, nozzle_mcu:PB14` | [F] |
+| Cinemática | Cartesiana de cama móvil: la cama se mueve en Y; Z mueve el puente de X con dos husillos (Z y Z1). Sensores ópticos de Z (`PB15`, `PB14`) arriba del todo; `ZDOWN` sube el puente hasta ellos | [usuario]; pines [F] |
 | Final de carrera X | Sensor físico [usuario]. `stepper_x` `endstop_pin: !PC7`; llega desde `nozzle_mcu:PB0` reenviado a `nozzle_mcu:PA15` por `[io_remap]`, activo solo durante el homing de X. Línea compartida con la sonda | [F]; cableado [I] |
 | Final de carrera Y | Sensor físico [usuario]. `stepper_y` `endstop_pin: ^PB13` en la MCU principal | [F] |
 | Pines de stall X / Y | `PA8` / `PA6`: vigilancia de fallos, no se usan como final de carrera | [F] |

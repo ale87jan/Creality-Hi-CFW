@@ -101,7 +101,7 @@ y `PB14` [verificado: fork:test/test_hi_prtouch.py]. Con `startup_writes: none`,
 
 1. **Módulo de la sonda**: usar el `prtouch.py` de la K2 tal cual, solo con config (recomendada: no hace falta
    tocar código y los arreglos de upstream llegan solos), o una copia aparte como en D8. **Cerrada: D11, tal cual** (2026-11-10).
-2. **Orden de las fases 3 y 4**: sonda antes que `z_align` (como está en el roadmap; el homing de Z funciona sin
+2. **Cerrada: D12, `z_align` antes que la sonda** (2026-11-10). Orden de las fases 3 y 4: sonda antes que `z_align` (como está en el roadmap; el homing de Z funciona sin
    alinear) o `z_align` antes, para que el primer contacto con la cama sea con el puente ya alineado.
 3. **`NOZZLE_CLEAN` en la fase 3**: macro vacía (recomendada) o portar antes `nozzle_clear`.
 

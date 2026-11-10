@@ -45,7 +45,7 @@ de carrera de X/Y y hay que portar `io_remap.py` en esta fase.
 Análisis ligero hecho el 2026-11-10: [phase3-plan.md](phase3-plan.md). Tareas B21 a B24. El `prtouch.py` de la K2
 es compatible con la Hi sin tocar código y carga en batch con los diccionarios reales. Config y tests hechos
 (B22): `config/hi/phase3.cfg`, con `config/hi/` repartido en `base.cfg` y `motors.cfg`; el paquete lleva ahora
-todos los `.cfg` y `HI_CONFIG` elige cuál arranca. Decisión 1 del §7 cerrada (D11: módulo de la K2 tal cual); quedan la 2 y la 3. Limpieza de boquilla: ver [phase4-plan.md §4](phase4-plan.md).
+todos los `.cfg` y `HI_CONFIG` elige cuál arranca. Decisión 1 del §7 cerrada (D11: módulo de la K2 tal cual) y la 2 también (D12: `z_align` se prueba antes que la sonda); queda la 3. Limpieza de boquilla: ver [phase4-plan.md §4](phase4-plan.md).
 
 ## Fase 4 (módulos de la Hi)
 

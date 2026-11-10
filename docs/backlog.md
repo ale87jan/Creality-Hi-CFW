@@ -300,7 +300,7 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
 - **Objetivo:** pasos 4.1 a 4.5 de [phase4-plan.md §9](phase4-plan.md).
 - **Hecho cuando:** `G28` completo con alineación, con `deltaError1` y `zmax` comparables a los de stock;
   resultados [P] en `docs/hardware.md`.
-- **Riesgos:** la MCU no se puede parar durante `ZDOWN`; empezar con la cama cerca del fondo.
+- **Riesgos:** la MCU no se puede parar durante `ZDOWN`; empezar con el puente cerca del tope superior.
 
 ### B30 — `bl24c16f` y `tmc_line_check` · M, sin fecha
 

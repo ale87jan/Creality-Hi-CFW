@@ -51,6 +51,8 @@ Plan y análisis: [phase2-plan.md](phase2-plan.md). Portar `motor_control.py` de
 
 ## Fase 3 — Sonda
 
+Orden de pruebas (D12): antes de esta fase se prueba `z_align` de la fase 4.
+
 Plan y análisis: [phase3-plan.md](phase3-plan.md).
 
 - [ ] Portar `prtouch.py` de la K2: cinemática cartesiana con z + z1 (la K2 es corexy).

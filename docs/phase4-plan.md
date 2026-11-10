@@ -33,10 +33,15 @@ Secuencia de stock cuando existe `[z_align]` [verificado: stock:klippy/extras/ho
 | 1 | `BED_MESH_CLEAR` | stock:homing.py:420 |
 | 2 | Va al centro de la cama a 50 mm/s | stock:homing.py:445 |
 | 3 | Lee los dos sensores ópticos de Z; si los dos están activos, error `key357` | stock:homing.py:450-458 |
-| 4 | `ZDOWN`: la MCU baja la cama con los dos motores hasta los sensores ópticos y los iguala | stock:z_align.py:194-256 |
+| 4 | `ZDOWN`: la MCU sube el puente de X con los dos motores hasta los sensores ópticos de arriba y los iguala | stock:z_align.py:194-256 |
 | 5 | Fija Z al `zmax` real guardado, sube 10 mm y llama a `ADJUST_STEPPERS` | stock:z_align.py:258-273 |
-| 6 | Homing normal de Z con la sonda (la cama sube hasta tocar la boquilla) | stock:homing.py:423 |
+| 6 | Homing normal de Z con la sonda (el puente baja hasta que la boquilla toca la cama) | stock:homing.py:423 |
 | 7 | Guarda el `zmax` real medido (`z_move + out_z_all`) en un fichero JSON | stock:homing.py:426, 436-442 |
+
+Mecánica [usuario, 2026-11-10]: la Hi es cartesiana de cama móvil. La cama solo se mueve en Y; Z mueve el
+puente del eje X con dos husillos. Los sensores ópticos de Z están **arriba del todo**. `ZDOWN` hereda el nombre
+de la K2 (CoreXY, donde la cama baja): en la Hi **sube el puente** hasta esos sensores, lejos de la cama. Por eso
+el stock fija después Z al `zmax` real, y el homing con la sonda baja desde ahí.
 
 Datos de la Hi:
 
@@ -54,8 +59,8 @@ Datos de la Hi:
   `safe_rising_dist` antes del homing; lo llama la macro `_IF_HOME_Z` [verificado: stock:z_align.py:141-192;
   stock:sensorless.cfg:36, 45].
 
-Sin `z_align`, el `G28 Z` del fork sube la cama con la sonda desde donde esté
-[verificado: fork:klippy/extras/homing.py:1183-1190]. Funciona, pero los dos husillos no se igualan en el fondo
+Sin `z_align`, el `G28 Z` del fork baja el puente con la sonda desde donde esté
+[verificado: fork:klippy/extras/homing.py:1183-1190]. Funciona, pero los dos husillos no se igualan arriba
 y no hay medida del `zmax` real.
 
 ## 3. `z_align`: tres piezas que no encajan
@@ -75,7 +80,7 @@ y no hay medida del `zmax` real.
 
 Consecuencia: en la Hi no hay forma de parar la MCU a mitad de una alineación. Si el host agota el `timeout`,
 los motores siguen hasta que la MCU termine por su cuenta [supuesto: no se conoce el firmware; comprobarlo en
-el paso 4.3 con la cama cerca del fondo].
+el paso 4.3 con el puente cerca del tope superior].
 
 ### Parches de Creality de los que depende el módulo de la Hi
 
@@ -223,13 +228,15 @@ Todo ello depende de que la fase 3 funcione en la Hi; se marca como no probado.
 
 | Paso | Qué | Escribe o mueve |
 | - | - | - |
-| 4.1 | Con stock: `QUERY_FILAMENT_SENSOR SENSOR=filament_sensor_4` y `_5` con la cama arriba y abajo. Confirma polaridad y qué sensor es cada husillo | No |
+| 4.1 | Con stock: `QUERY_FILAMENT_SENSOR SENSOR=filament_sensor_4` y `_5` con el puente arriba del todo y a media altura. Confirma polaridad y qué sensor es cada husillo | No |
 | 4.2 | Con stock: `G28 Z` y copiar del log las líneas `send query_z_align` y `z_align_status`. Da los ticks, los pasos y el `deltaError1` de referencia | Mueve (stock) |
-| 4.3 | Con Kalico: `CHECK_ZLIMIT` y después `ZDOWN` con la cama a menos de 30 mm del fondo, mano en el interruptor | Mueve Z |
+| 4.3 | Con Kalico: `CHECK_ZLIMIT` y después `ZDOWN` con el puente a menos de 30 mm de los sensores de arriba, mano en el interruptor | Mueve Z |
 | 4.4 | `ZDOWN` desde media altura; comparar `deltaError1` con el de 4.2 | Mueve Z |
 | 4.5 | `G28` completo (X/Y, `ZDOWN`, sonda) y comparar Z=0 y `zmax` con stock | Mueve todo |
 
 ## 10. Decisiones que necesito
+
+Orden decidido (D12, 2026-11-10): esta fase se prueba **antes** que la sonda (fase 3).
 
 1. **Cómo portar `z_align`**: B, portar el módulo de la Hi con sus comandos y una macro de `G28`
    (recomendada); o A, derivarlo del módulo de la K2 para integrarlo en el `homing.py` del fork (§3).
@@ -243,8 +250,8 @@ Todo ello depende de que la fase 3 funcione en la Hi; se marca como no probado.
 
 | Id | Riesgo | Mitigación |
 | - | - | - |
-| R1 | La MCU no se puede parar durante `ZDOWN` (no hay `force_stop`) | Paso 4.3 cerca del fondo; `timeout` de stock; mano en el interruptor |
-| R2 | Un sensor óptico roto o tapado hace que un husillo siga bajando | `CHECK_ZLIMIT` antes, como el stock (`key357`) |
-| R3 | Polaridad de `zd_up`/`zes_untrig` mal copiada mueve la cama hacia la boquilla | Valores de stock sin tocar; test en batch que los fija; paso 4.1 |
+| R1 | La MCU no se puede parar durante `ZDOWN` (no hay `force_stop`) | Paso 4.3 cerca del tope superior; `timeout` de stock; mano en el interruptor |
+| R2 | Un sensor óptico roto o tapado hace que un husillo siga subiendo contra el tope superior | `CHECK_ZLIMIT` antes, como el stock (`key357`) |
+| R3 | Polaridad de `zd_up`/`zes_untrig` mal copiada mueve el puente hacia la cama en vez de hacia arriba | Valores de stock sin tocar; test en batch que los fija; paso 4.1 |
 | R4 | Sin `ADJUST_STEPPERS`, la corrección de inclinación se pierde en cada `ZDOWN` | `Z_TILT_ADJUST` después de cada `G28` hasta tener sustituto |
 | R5 | Sin limpieza de boquilla, Z=0 varía con los restos de filamento | Medirlo en 3.5; `NOZZLE_CLEAN` real antes de imprimir |
