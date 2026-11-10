@@ -51,6 +51,13 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
 - **Hecho cuando:** `DUMP_TMC` y `QUERY_ENDSTOPS` devuelven su texto por la salida estándar y `selftest.sh` lo
   comprueba.
 
+### B03c — Arranque de Kalico sin el reinicio por `CRC mismatch` · M, opcional
+
+- **Objetivo:** valorar que `hi_kalico.sh start` reinicie las MCU antes de lanzar Kalico, para evitar el primer
+  intento fallido y las dos trazas `No communication with MCU` de cada conmutación (visto el 2026-11-10).
+- **Hecho cuando:** hay una forma verificada de reiniciar las MCU desde el script, o se descarta por no ganar
+  nada frente a los 5 s actuales.
+
 ### B04 — Registrar las decisiones aprobadas · M
 
 - **Objetivo:** pasar a [decisions.md](decisions.md) las decisiones de [phase1-plan.md §10](phase1-plan.md) según

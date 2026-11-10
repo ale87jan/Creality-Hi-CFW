@@ -316,7 +316,8 @@ en `data/captures/2026-11-10_hi-step0/step0.txt` [P salvo donde se indica].
 | Escalón 2, paso 9 | `SET_KINEMATIC_POSITION Z=50 SET_HOMED=z` y `G1 Z5 F300` en relativo: los dos lados del puente suben a la vez; `G1 Z-5` los baja a la vez. Sentido de `stepper_z` y `stepper_z1` correcto. Incidencia: se ejecutó un `FORCE_MOVE STEPPER=stepper_z1 DISTANCE=-2` suelto por una impresión visual equivocada; el lado derecho queda 2 mm más bajo hasta deshacerlo con `DISTANCE=2` o hasta la próxima alineación de stock |
 | Escalón 2, paso 10 (térmico) | Boquilla sin filamento. 120 °C en 28 s, pico 123,0 °C, después ±0,5 °C. 200 °C: pico 201,9 °C y banda 199,7 a 200,4 °C durante 120 s con potencia 0,16 a 0,33; sin `verify_heater`. El PID de stock vale a temperatura de impresión; el usuario descartó `PID_CALIBRATE`. |
 | Escalón 2, paso 10 (extrusor) | A 200 °C y sin filamento, `M83` y `G1 E5 F120`: sin errores y el extrusor gira [usuario]. El sentido de giro no se comprobó: hay que verlo antes de cargar filamento (fase 5) |
-| Escalón 2, paso 12 | `hi_kalico.sh stop` con la boquilla a unos 55 °C: termina en 10 s con código 0, apaga calentadores, ventiladores y motores, para Kalico y relanza `klipper`, `moonraker` y `app`. Stock vuelve solo y Moonraker está `ready` unos 51 s después. Falta la confirmación visual de pantalla y Fluidd, y un segundo `start` |
+| Escalón 2, paso 12 | `hi_kalico.sh stop` con la boquilla a unos 55 °C: termina en 10 s con código 0, apaga calentadores, ventiladores y motores, para Kalico y relanza `klipper`, `moonraker` y `app`. Stock vuelve solo y Moonraker está `ready` unos 51 s después. La pantalla y Fluidd de stock funcionan tras el `stop` [usuario] |
+| Escalón 2, segundo arranque | `ready` en 31 s desde lanzar `hi_kalico.sh start` (incluye parar `app` y `klipper`). Mismo patrón que el primero: `CRC mismatch`, reinicio de las tres MCU, dos `Timeout on connect` y reconexión 5 s después; `bytes_retransmit` 63/9/0 e `bytes_invalid` 0 |
 
 Sobrepaso de la boquilla: el PID es el de stock (`26.978 / 2.725 / 66.770`) [verificado: K:config/hi/base.cfg
 frente a captura:toolhead.cfg:27-30], ajustado para temperaturas de impresión; con una consigna de 50 °C el
@@ -328,8 +329,8 @@ Primer arranque de Kalico en la Hi [P]: las MCU conservaban la configuración de
 detecta `CRC mismatch`, reinicia las tres con `restart_method = command` y vuelve a empezar 11 s después. En ese
 segundo intento `mcu` tarda en responder y el registro deja dos `Timeout on connect` con su traza (`No
 communication with MCU`) antes de identificarse. Es el riesgo R3 previsto y no un fallo: después
-`bytes_invalid=0`, `bytes_retransmit=63` constante y `send_seq` igual a `receive_seq`. Pasará en cada conmutación
-desde stock [supuesto: confirmarlo con un segundo `start` tras `stop`].
+`bytes_invalid=0`, `bytes_retransmit=63` constante y `send_seq` igual a `receive_seq`. Pasa en cada conmutación
+desde stock [P, segundo arranque]; cuesta unos 5 s y no deja errores de comunicación.
 
 Otros hallazgos:
 
