@@ -225,3 +225,37 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
 - **Ficheros:** `tools/hi_probe.py` (ampliar, solo lectura); salida en `data/captures/`.
 - **Hecho cuando:** las dos preguntas están respondidas con [P] en `docs/hardware.md`.
 - **Riesgos:** ninguna escritura; el homing del paso 2.2 es el de stock.
+
+### B21 — Fase 3: decisiones de diseño · U
+
+- **Objetivo:** cerrar las tres decisiones de [phase3-plan.md §7](phase3-plan.md) y anotarlas en
+  [decisions.md](decisions.md).
+- **Hecho cuando:** están en `decisions.md`.
+- **Riesgos:** B22 depende de la decisión 1; el orden de B22 y la fase 4, de la 2.
+
+### B22 — Fase 3: config y test en batch de la sonda · M
+
+- **Objetivo:** `config/hi/phase3.cfg` con `[prtouch]` (valores de stock, `home_xy: 130, 130`), `stepper_z` con
+  `probe:z_virtual_endstop`, `NOZZLE_CLEAN` vacía y `PC7` en `[duplicate_pin_override]`.
+- **Ficheros:** Creality-Hi-Kalico `config/hi/`, `test/test_hi_prtouch.py`.
+- **Hecho cuando:** carga en batch y emite `config_prtouch_step` con los OID de `stepper_z` y `stepper_z1` y
+  `config_prtouch_pres` con `PA15`, `PB13`, `PB14`; `G28 Z` sin homing de X/Y no genera pasos en Z.
+- **Riesgos:** la config de la fase 1 fija `endstop_pin` en `stepper_z1` y un `include` no puede quitarlo: hay
+  que repartir `config/hi/` en ficheros por subsistema (steppers, calentadores, ventiladores) que cada fase
+  combine.
+
+### B23 — Fase 3: leer entera la lógica de `prtouch.py` · M
+
+- **Objetivo:** revisar armado, disparo, reintentos y limpieza (`_arm`, `_disarm`, `home_start`, `home_wait`,
+  `probing_move`) contra lo que se sabe del protocolo, y documentar qué pasa si la sonda no dispara.
+- **Ficheros:** Creality-Hi-Kalico `klippy/extras/prtouch.py:401-760`; `docs/phase3-plan.md`.
+- **Hecho cuando:** el plan tiene una sección "modos de fallo" con referencias a línea.
+- **Riesgos:** ninguno; solo lectura.
+
+### B24 — Fase 3: pruebas en la impresora · U, después M
+
+- **Objetivo:** pasos 3.1 a 3.5 de [phase3-plan.md §6](phase3-plan.md).
+- **Hecho cuando:** `G28 Z` y `PROBE` repetibles, con Z=0 comparable al de stock; resultados [P] en
+  `docs/hardware.md`.
+- **Riesgos:** choque con la cama; seguir el orden y las condiciones del plan.
+

@@ -51,6 +51,8 @@ Plan y análisis: [phase2-plan.md](phase2-plan.md). Portar `motor_control.py` de
 
 ## Fase 3 — Sonda
 
+Plan y análisis: [phase3-plan.md](phase3-plan.md).
+
 - [ ] Portar `prtouch.py` de la K2: cinemática cartesiana con z + z1 (la K2 es corexy).
 - [ ] Verificar marcadores de ack y formato de trama en la impresora, con la boquilla lejos de la cama.
 - [ ] `register_as_probe: True` (la K2 usa Cartographer).

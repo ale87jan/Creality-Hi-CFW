@@ -40,6 +40,12 @@ Análisis hecho sin impresora el 2026-11-10: [phase2-plan.md](phase2-plan.md). T
 (B20 y §8 del plan). Hallazgo principal: la Hi no usa los pines de stall como final
 de carrera de X/Y y hay que portar `io_remap.py` en esta fase.
 
+## Fase 3 (sonda)
+
+Análisis ligero hecho el 2026-11-10: [phase3-plan.md](phase3-plan.md). Tareas B21 a B24. El `prtouch.py` de la K2
+es compatible con la Hi sin tocar código y carga en batch con los diccionarios reales. Sin código ni config
+todavía: espera las decisiones del §7.
+
 ## Dónde está el trabajo
 
 - Rama `claude/project-thread-fnrqje` en los dos repos, creada desde `dev` y subida a GitHub el 2026-11-10, con
