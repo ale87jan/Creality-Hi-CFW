@@ -175,7 +175,8 @@ Leídos el 2026-11-10 en el `klippy/` de la OTA V1.1.0.60 (extraída del PC del 
 
 1. **Base de las macros** (cerrada el 2026-11-10: la configuración del usuario): tu configuración, sustituyendo los comandos de Creality (recomendada: conserva tu
    comportamiento actual); o las macros de la K2 adaptadas a la Hi.
-2. **Pantalla**: seguir solo con Fluidd hasta imprimir bien (recomendada) o investigar ya un sustituto.
+2. **Pantalla** (fuera de este plan desde el 2026-11-10): el usuario descartó la interfaz de stock; las
+   alternativas se estudian aparte, en `docs/screen-plan.md`.
 3. **Arranque automático de Kalico**: mantener el arranque manual con `hi_kalico.sh` hasta terminar la fase 5
    (recomendada) o diseñar ya el arranque por defecto, que escribe en el sistema.
 
