@@ -25,8 +25,8 @@ config mínima en modo batch ([phase1-plan.md §3.2](phase1-plan.md)).
 ## Siguiente acción
 
 1. **Usuario:** revisar los pull request hacia `dev` (B01).
-2. **Hecho (2026-11-10):** `c_helper.so` compilado y cargado en la Hi; paso 0 ejecutado (B03, B02). Falta subir
-   `step0.txt` saneado.
+2. **Hecho (2026-11-10):** `c_helper.so` compilado y cargado en la Hi; paso 0 ejecutado (B03, B02).
+   Salida en `data/captures/2026-11-10_hi-step0/`. `hi_install.sh --dry-run` correcto.
 3. **Usuario, con el hilo de la guía:** escalones 1 a 3 de [phase1-plan.md §8](phase1-plan.md).
 
 En la impresora solo se ha ejecutado el paso 0 (solo lectura).

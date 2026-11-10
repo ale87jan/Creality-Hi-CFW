@@ -31,8 +31,8 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
 - **Hecho cuando:** `step0.txt` está en el repo y el plan no tiene supuestos de las secciones 02, 04, 06, 08, 09
   y 13 sin resolver.
 - **Riesgos:** ninguno para la impresora (solo lectura). Revisar que el fichero no lleve datos personales.
-- **Estado (2026-11-10):** ejecutado; resultado en [phase1-plan.md §8.1](phase1-plan.md). Falta subir el
-  fichero saneado y aclarar las direcciones `[85][86]` de `mcu_update.log`.
+- **Estado (2026-11-10):** ejecutado; resultado en [phase1-plan.md §8.1](phase1-plan.md). Fichero en
+  `data/captures/2026-11-10_hi-step0/`. Falta aclarar las direcciones `[85][86]` de `mcu_update.log`.
 
 ### B03 — Compilar con prueba de carga en Docker Desktop · U
 

@@ -291,11 +291,12 @@ fichero antes de subirlo.
 
 ### 8.1 Resultado del paso 0 (2026-11-10)
 
-Ejecutado por el usuario en la Hi, solo lectura. Datos comunicados por el hilo que guía la fase 1; el fichero
-saneado está pendiente de subir a `data/captures/` [P salvo donde se indica].
+Ejecutado por el usuario en la Hi, solo lectura. Datos comunicados por el hilo que guía la fase 1; salida saneada
+en `data/captures/2026-11-10_hi-step0/step0.txt` [P salvo donde se indica].
 
 | Sección | Resultado |
 | - | - |
+| — | `hi_install.sh --dry-run` del paquete: correcto (salida 0), 4,3 GB libres frente a 26 MB necesarios, nada escrito salvo 3 ficheros en `/tmp` |
 | 01 | F018, firmware 1.1.0.60. `board=CR4NU200360C21` (la documentación decía `C20`); stock la trata igual: el arranque compara con el prefijo `CR4NU200360C2` [verificado: OTA:etc/init.d/klipper, `copy_config`, caso `F018`] |
 | 02 | Slot activo **B**, libre A. `bootcmd` usa `setargs_nand` (ubiblock), pero la línea de arranque real es `root=/dev/mmcblk0p7`: hay que aclararlo antes de usar §9 |
 | 03 | eMMC `mmcblk0` con los nombres esperados en `/dev/by-name` (no SPI NAND, como decía `hardware.md` [F]) |
