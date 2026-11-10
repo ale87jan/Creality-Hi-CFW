@@ -1,0 +1,11 @@
+{
+  "name": "creality-hi",
+  "owner": { "name": "ale87jan" },
+  "plugins": [
+    {
+      "name": "hi-dev",
+      "source": "./claude-plugin/hi-dev",
+      "description": "Token-saving tooling for the Creality Hi CFW project"
+    }
+  ]
+}

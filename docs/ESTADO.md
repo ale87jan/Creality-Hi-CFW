@@ -8,6 +8,7 @@ Punto de entrada para retomar el trabajo sin contexto previo. Se actualiza en ca
 - **Plan y análisis:** [phase1-plan.md](phase1-plan.md). **Tareas pequeñas pendientes:** [backlog.md](backlog.md).
 - **Última actualización:** 2026-11-10.
 - **Ramas protegidas** con rulesets de GitHub en los dos repos ([decisions.md](decisions.md), D19).
+- **Ahorro de tokens:** plugin `hi-dev` e índice `docs/INDEX.md` ([decisions.md](decisions.md), D20).
 
 ## Hecho
 
