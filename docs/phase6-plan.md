@@ -68,6 +68,24 @@ parches de config para stock; ninguno se aplica sin que el usuario lo apruebe, u
 | 03 | `M109`/`M190` no esperan si no hay ningún eje referenciado [verificado: ref:patches/03] | Mismas macros. Riesgo propio: `creality_cfs` usa `M109` como guarda de fusión antes de extruir; con el parche no esperaría si nada está referenciado | No se incorpora (2026-11-10) [usuario]: su `START_PRINT` ya fija la boquilla con `M104` sin esperar y sus `M140`/`M190` propios (calentamiento de cama con sobreimpulso y frenado) ocupan esas órdenes [verificado: captura:print_macros.cfg:139, 160; captura:config_macros.cfg:19-104]. Esas macros solo usan órdenes estándar y se portan tal cual |
 | 04 | `probe_count` de `9,9` a `5,5` (opcional) [verificado: ref:patches/04] | Valor de `[bed_mesh]` | No se incorpora (2026-11-10) [usuario]: se mantiene `9, 9` |
 
+## 2d. Notas para portar las macros del usuario (2026-11-10)
+
+Base decidida: la configuración del usuario (§6, decisión 1). Inventario repetido contra el fork en `fd4b419`:
+46 comandos ausentes y 7 secciones sin módulo [verificado: `tools/cfg_commands.py`, 2026-11-10].
+
+- `print_macros.cfg` usa de lo ausente: `BOX_START_PRINT`, `BOX_END_PRINT`, `BOX_END`, `BOX_TIGHTEN_UP_ENABLE`,
+  `BOX_ERROR_RESUME_PROCESS`, `BOX_SET_CURRENT_BOX_IDLE_MODE`, `RESUME_BOX_ERROR_CLEAR`, `RESUME_FLUSH`,
+  `ENABLE_PRESSURE_ADVANCE`, `NEXT_HOMEZ_NACCU` y `EXCLUDE_OBJECT_RESET` [verificado: salida del inventario].
+- `M140`/`M190` del usuario (cama con sobreimpulso y frenado, `config_macros.cfg`) solo usan órdenes estándar y
+  la macro `PRINTER_PARAM`: se portan tal cual.
+- La malla es por temperatura, no por impresión: `_MESH_IF_NEEDED` carga el perfil `<temp>c` y solo llama a
+  `G29` si no existe [verificado: captura:custom_mesh.cfg:68-85] [usuario]. Se mantiene `9, 9`.
+- `G29` del usuario: el `ZDOWN_SWITCH ENABLE=1` + `G28 Z` tras el reposo térmico pasa a `G28 Z ALIGN=1` (D17).
+  Usa `SET_ADJUSTMENTS_FLAG`, `CXSAVE_CONFIG` y `printer.custom_macro.g28_ext_temp`, sin equivalente comprobado
+  (B36) [verificado: captura:custom_mesh.cfg:12-66].
+- B36 necesita el `klippy/` de stock, que no está en git: hay que traerlo del PC del usuario (carpeta
+  `firmware`), que debe estar encendido.
+
 ## 3. Comandos del núcleo de Creality
 
 | Comando | Candidato en Kalico | Estado |
