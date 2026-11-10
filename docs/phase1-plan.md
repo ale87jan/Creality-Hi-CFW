@@ -309,6 +309,7 @@ en `data/captures/2026-11-10_hi-step0/step0.txt` [P salvo donde se indica].
 | 12 | El `klippy.log` de stock no tiene líneas `Stats`: no hay referencia de `sysload` para el paso 11 del escalón 2. Carga en reposo: `0.23 0.52 0.53` |
 | 13 | Sin paquetes marcados `MODIFIED` |
 | Escalón 2, arranque | `hi_kalico.sh start` con aprobación del usuario, impresora fría y en `standby`: Kalico `v2026.11.00-57-g61602f77` llega a `ready` con las tres MCU configuradas (`mcu` gd32f303xe 117 órdenes, `nozzle_mcu` gd32f303xb 113, `bed_mcu` gd32e230x8 94). Boquilla 29,3 °C, cama 25,6 °C, `mcu_temp` 35,2 °C, ventiladores a 0. Capturas en `data/captures/2026-11-10_kalico-start/` |
+| Escalón 2, pasos 5 y 6 | `DUMP_TMC`: `stepper_z`, `stepper_z1` y `extruder` responden por UART (TMC220x, `IOIN` versión `0x20`), sin avisos de temperatura ni cortos; `GSTAT reset=1` es la marca de encendido. `QUERY_ENDSTOPS` en reposo: todo a 0. Con cartulina: sensor **izquierdo** activa `z` (`PB15`), sensor **derecho** activa `z1` (`PB14`); 1 = tapado, sin cruces |
 
 Primer arranque de Kalico en la Hi [P]: las MCU conservaban la configuración del Klipper de stock, así que Kalico
 detecta `CRC mismatch`, reinicia las tres con `restart_method = command` y vuelve a empezar 11 s después. En ese
