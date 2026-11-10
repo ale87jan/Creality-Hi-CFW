@@ -348,5 +348,6 @@ papelera de purgas, lo que no es bueno [usuario].
 **Decisión.** La macro `_HI_HOME_XY` (fork, `config/hi/motors.cfg`) aparta X 10 mm si está homeada a menos de
 10 del tope y, tras el homing de X, la aparca en X0. Las usan los `homing_override` de `phase2.cfg` y `phase4.cfg`.
 
-**Consecuencias.** El `G28` de la Hi termina con X=0. Sin probar en la Hi hasta fusionar
-[Creality-Hi-Kalico#3](https://github.com/ale87jan/Creality-Hi-Kalico/pull/3).
+**Consecuencias.** El `G28` de la Hi termina con X=0. **Probado en la Hi el 2026-11-10 [P]** (copiando `motors.cfg` y
+`phase2.cfg` de [Creality-Hi-Kalico#3](https://github.com/ale87jan/Creality-Hi-Kalico/pull/3)): desde el centro, `G28 X Y`
+terminó con X=0, Y=4; repetido con X en X0, X se apartó, `G28 Y`, `G28 X` y X0, sin fallos en los drivers.
