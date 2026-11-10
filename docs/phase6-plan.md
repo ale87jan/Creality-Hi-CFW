@@ -177,8 +177,8 @@ Leídos el 2026-11-10 en el `klippy/` de la OTA V1.1.0.60 (extraída del PC del 
    comportamiento actual); o las macros de la K2 adaptadas a la Hi.
 2. **Pantalla** (fuera de este plan desde el 2026-11-10): el usuario descartó la interfaz de stock; las
    alternativas se estudian aparte, en `docs/screen-plan.md`.
-3. **Arranque automático de Kalico**: mantener el arranque manual con `hi_kalico.sh` hasta terminar la fase 5
-   (recomendada) o diseñar ya el arranque por defecto, que escribe en el sistema.
+3. **Arranque automático de Kalico** (cerrada el 2026-11-10: diseñarlo ya, solo en papel): diseño en
+   [autostart-plan.md](autostart-plan.md). Escribirlo y probarlo sigue esperando a la fase 1 en la Hi.
 
 ## 7. Riesgos
 
