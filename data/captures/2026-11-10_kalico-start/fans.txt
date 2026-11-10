@@ -1,0 +1,8 @@
+## M106 S128
+fan: {"power": 0.35058823529411764, "rpm": null, "speed": 0.25098039215686274, "value": 0.5019607843137255}
+## SET_FAN_SPEED FAN=aux_fan SPEED=0.5
+fan_generic aux_fan: {"power": 0.5, "rpm": null, "speed": 0.5, "value": 0.5}
+## off
+fan: {"power": 0.0, "rpm": null, "speed": 0.0, "value": 0.0}
+fan_generic aux_fan: {"power": 0.0, "rpm": null, "speed": 0.0, "value": 0.0}
+heater_fan hotend_fan: {"power": 0.0, "rpm": null, "speed": 0.0, "value": 0.0}

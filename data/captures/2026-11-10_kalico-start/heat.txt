@@ -1,0 +1,33 @@
+# extruder 50C
+start extruder target=50 max=300s limit=60
+t=10s temp=51.71 power=0.0 hotend_fan=1.0
+-- in window at 10s
+t=21s temp=55.97 power=0.0 hotend_fan=1.0
+t=32s temp=54.0 power=0.0 hotend_fan=1.0
+t=42s temp=52.39 power=0.0 hotend_fan=1.0
+extruder: {"can_extrude": false, "motion_queue": null, "nozzle_diameter": 0.4, "pid_profile": "default", "power": 0.0, "pressure_advance": 0.0, "smooth_time": 0.04, "target": 0.0, "temperature": 51.8}
+# heater_bed 40C
+start heater_bed target=40 max=480s limit=60
+t=10s temp=26.7 power=0.38203965684179214 hotend_fan=0.0
+t=21s temp=28.43 power=0.15451920973099498 hotend_fan=0.0
+t=31s temp=29.68 power=0.17465557930382253 hotend_fan=0.0
+t=42s temp=30.9 power=0.201891503835483 hotend_fan=0.0
+t=53s temp=32.24 power=0.0 hotend_fan=0.0
+t=64s temp=33.34 power=0.2061769395926701 hotend_fan=0.0
+t=74s temp=34.31 power=0.0 hotend_fan=0.0
+t=85s temp=35.02 power=0.0 hotend_fan=0.0
+t=96s temp=35.88 power=0.0 hotend_fan=0.0
+t=107s temp=36.61 power=0.1795084577055936 hotend_fan=0.0
+t=117s temp=37.18 power=0.0 hotend_fan=0.0
+t=128s temp=37.45 power=0.3630151763488172 hotend_fan=0.0
+t=139s temp=37.99 power=0.0 hotend_fan=0.0
+t=150s temp=38.52 power=0.0 hotend_fan=0.0
+-- in window at 150s
+t=161s temp=38.92 power=0.0 hotend_fan=0.0
+t=171s temp=39.51 power=0.0 hotend_fan=0.0
+t=182s temp=40.18 power=0.0 hotend_fan=0.0
+heater_bed: {"pid_profile": "default", "power": 0.0, "target": 0.0, "temperature": 40.35}
+extruder: {"can_extrude": false, "motion_queue": null, "nozzle_diameter": 0.4, "pid_profile": "default", "power": 0.0, "pressure_advance": 0.0, "smooth_time": 0.04, "target": 0.0, "temperature": 40.68}
+heater_bed: {"pid_profile": "default", "power": 0.0, "target": 0.0, "temperature": 40.46}
+heater_fan hotend_fan: {"power": 0.0, "rpm": null, "speed": 0.0, "value": 0.0}
+state: ready

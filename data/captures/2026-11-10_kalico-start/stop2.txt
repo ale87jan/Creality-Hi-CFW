@@ -1,0 +1,40 @@
+## stop 2 (11:08:50 local)
+[hi_kalico] turning heaters, fans and motors off
+[hi_kalico] + kill 6088
+[hi_kalico] + /etc/init.d/klipper start
+no need to update custom config files
+old_version: 1073
+new_version: 1073
+[hi_kalico] + /etc/init.d/moonraker restart
+[hi_kalico] + /etc/init.d/app start
+[hi_kalico] stock klippy running (pid 6514)
+rc=0
+stop duro 10 s
++2s urllib.error.URLError: <urlopen error [Errno 111] Connection refused>
++9s urllib.error.HTTPError: HTTP Error 404: Not Found
++19s urllib.error.HTTPError: HTTP Error 404: Not Found
++26s urllib.error.HTTPError: HTTP Error 404: Not Found
++33s urllib.error.HTTPError: HTTP Error 404: Not Found
++43s socket.timeout: timed out
++50s startup
++58s ready
+stock klippy : 7509
+kalico       : not running
+moonraker    : stock
+ 6647 root      0:07 /usr/share/moonraker-env/bin/python /usr/share/moonraker/moonraker.py
+ 6652 root      0:00 /usr/bin/app-server
+ 6656 root      0:00 /usr/bin/Monitor
+ 7509 root      0:16 /usr/share/klippy-env/bin/python /usr/share/klipper/klippy/klippy.py 
+--- moonraker cmdline
+/usr/share/moonraker-env/bin/python /usr/share/moonraker/moonraker.py -c /usr/share/moonraker/moonraker.conf -l /mnt/UDISK/printer_data/logs/moonraker.log 
+
+ash -c echo "--- moonraker cmdline"; for p in $(pgrep -f moonraker.py 2>/dev/null || ps w | awk "/moonraker.py/ && !/awk/ {print \$1}"); do tr "\0" " " < /proc/$p/cmdline | cut -c1-250; echo; done; ls -l /tmp/kalico-hi-moonraker.conf /tmp/kalico-hi-m
+
+ash: can't open /proc/7775/cmdline: no such file
+
+ls: /tmp/kalico-hi-moonraker.conf: No such file or directory
+ls: /tmp/kalico-hi-moonraker.pid: No such file or directory
+--- klippy_uds_address (config stock)
+4:klippy_uds_address: /tmp/klippy_uds
+--- print_stats
+"state": "standby" "temperature": 37.51 "target": 0.0 "temperature": 28.7 "target": 0.0 

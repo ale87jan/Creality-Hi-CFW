@@ -1,0 +1,6 @@
+rc=0
+DRV_STATUS: c01d0000 cs_actual=29 stealth=1 stst=1
+PWMCONF:    c80d0e24 pwm_ofs=36 pwm_grad=14 pwm_freq=1 pwm_autoscale=1 pwm_autograd=1 pwm_reg=8 pwm_lim=12
+PWM_SCALE:  00000021 pwm_scale_sum=33
+PWM_AUTO:   000e0024 pwm_ofs_auto=36 pwm_grad_auto=14
+query_endstops: {"last_query": {"x": 0, "y": 0, "z": 0, "z1": 0}}

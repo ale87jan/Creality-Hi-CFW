@@ -1,0 +1,9 @@
+extruder: {"can_extrude": false, "motion_queue": null, "nozzle_diameter": 0.4, "pid_profile": "default", "power": 0.0, "pressure_advance": 0.0, "smooth_time": 0.04, "target": 0.0, "temperature": 29.31}
+fan: {"power": 0.0, "rpm": null, "speed": 0.0, "value": 0.0}
+fan_generic aux_fan: {"power": 0.0, "rpm": null, "speed": 0.0, "value": 0.0}
+heater_bed: {"pid_profile": "default", "power": 0.0, "target": 0.0, "temperature": 25.64}
+heater_fan hotend_fan: {"power": 0.0, "rpm": null, "speed": 0.0, "value": 0.0}
+temperature_sensor mcu_temp: {"measured_max_temp": 35.5, "measured_min_temp": 34.77, "temperature": 35.18}
+=== objects
+objects/list: {}
+gcode | webhooks | configfile | mcu | mcu nozzle_mcu | mcu bed_mcu | probe_list | stepper_enable | tmc2208 stepper_z | tmc2208 stepper_z1 | tmc2208 extruder | heaters | heater_bed | fan | heater_fan hotend_fan | fan_generic aux_fan | temperature_sensor mcu_temp | idle_timeout | gcode_move | exclude_object | telemetry | motion_report | query_endstops | toolhead | extruder | system_stats | manual_probe

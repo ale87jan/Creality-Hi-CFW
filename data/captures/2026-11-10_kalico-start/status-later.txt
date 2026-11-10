@@ -1,0 +1,34 @@
+=== status
+stock klippy : not running
+kalico       : running (pid 30607)
+moonraker    : stock
+bundle       : kalico_rev: 61602f77b6d0
+bundle       : kalico_version: v2026.11.00-57-g61602f77
+bundle       : tools_rev: 3dd86fbd8331
+bundle       : c_helper_sha256: 80db43303b1fac7dd5070fcff846bca81488a233b0532668b2d6ea26017a9ad0
+state: ready
+message: Printer is ready
+software_version: v2026.11.00-57-g61602f77
+=== info
+state: ready
+message: Printer is ready
+software_version: v2026.11.00-57-g61602f77
+=== temps
+extruder: {"can_extrude": false, "motion_queue": null, "nozzle_diameter": 0.4, "pid_profile": "default", "power": 0.0, "pressure_advance": 0.0, "smooth_time": 0.04, "target": 0.0, "temperature": 29.53}
+fan: {"power": 0.0, "rpm": null, "speed": 0.0, "value": 0.0}
+fan_generic aux_fan: {"power": 0.0, "rpm": null, "speed": 0.0, "value": 0.0}
+heater_bed: {"pid_profile": "default", "power": 0.0, "target": 0.0, "temperature": 26.18}
+heater_fan hotend_fan: {"power": 0.0, "rpm": null, "speed": 0.0, "value": 0.0}
+temperature_sensor mcu_temp: {"measured_max_temp": 36.0, "measured_min_temp": 34.77, "temperature": 35.55}
+=== Stats (last 20, resumido)
+Stats 5429.7: mcu: mcu_awake=0.001 mcu_task_avg=0.000006 mcu_task_stddev=0.000004 bytes_write=8231 bytes_read=122970 bytes_retransmit=63 bytes_invalid=0 send_seq=1230 receive_seq=1230 retransmit_seq=2 srtt=0.001 rttvar=0.000 rto=0.025 ready_bytes=0 upcoming_bytes=0 freq=119999039 nozzle_mcu: mcu_awake=0.000 mcu_task_avg=0.000004
+Stats 5430.7: mcu: mcu_awake=0.001 mcu_task_avg=0.000006 mcu_task_stddev=0.000004 bytes_write=8237 bytes_read=123076 bytes_retransmit=63 bytes_invalid=0 send_seq=1231 receive_seq=1231 retransmit_seq=2 srtt=0.001 rttvar=0.000 rto=0.025 ready_bytes=0 upcoming_bytes=0 freq=119999040 nozzle_mcu: mcu_awake=0.000 mcu_task_avg=0.000004
+Stats 5431.7: mcu: mcu_awake=0.001 mcu_task_avg=0.000006 mcu_task_stddev=0.000004 bytes_write=8243 bytes_read=123197 bytes_retransmit=63 bytes_invalid=0 send_seq=1232 receive_seq=1232 retransmit_seq=2 srtt=0.001 rttvar=0.000 rto=0.025 ready_bytes=0 upcoming_bytes=0 freq=119999040 nozzle_mcu: mcu_awake=0.000 mcu_task_avg=0.000004
+...
+Stats 5448.7: gcodein=0 mcu: mcu_awake=0.001 mcu_task_avg=0.000006 mcu_task_stddev=0.000004 bytes_write=8345 bytes_read=125197 bytes_retransmit=63 bytes_invalid=0 send_seq=1249 receive_seq=1249 retransmit_seq=2 srtt=0.001 rttvar=0.000 rto=0.025 ready_bytes=0 upcoming_bytes=0 freq=119999042 nozzle_mcu: mcu_awake=0.000 mcu_task_avg=0.000005 mcu_task_stddev=0.000003 bytes_write=7549 bytes_read=73831 bytes_retransmit=9 bytes_invalid=0 send_seq=1171 receive_seq=1171 retransmit_seq=17 srtt=0.001 rttvar=0.000 rto=0.025 ready_bytes=0 upcoming_bytes=0 freq=120000598 adj=120001558 bed_mcu: mcu_awake=0.000 mcu_task_avg=0.000004 mcu_task_stddev=0.000003 bytes_write=6821 bytes_read=22623 bytes_retransmit=0 bytes_invalid=0 send_seq=1118 receive_seq=1118 retransmit_seq=0 srtt=0.001 rttvar=0.000 rto=0.025 ready_bytes=0 upcoming_bytes=0 freq=71833967 adj=71834244 heater_bed: target=0 temp=26.1 pwm=0.000 
+retransmit (ultimos 20):
+     20 bytes_retransmit=0
+     20 bytes_retransmit=63
+     20 bytes_retransmit=9
+2
+ 10:22:02 up  5:30,  load average: 0.05, 0.04, 0.00

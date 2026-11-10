@@ -1,0 +1,67 @@
+## start --ui (11:10:59 local)
+[hi_kalico] stock print state: standby
+[hi_kalico] + /etc/init.d/app stop
+[hi_kalico] + /etc/init.d/klipper stop
+[hi_kalico] starting Kalico
+state: ready
+message: Printer is ready
+software_version: v2026.11.00-57-g61602f77
+[hi_kalico] + /etc/init.d/moonraker stop
+[hi_kalico] done. Back to stock: '/mnt/UDISK/kalico-hi/current/tools/hi_kalico.sh stop' or reboot.
+rc=0
+start --ui duro 30 s
+## comprobaciones (solo lectura)
+stock klippy : not running
+kalico       : running (pid 8159)
+moonraker    : pointed at Kalico (pid 8259)
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
+BrokenPipeError: [Errno 32] Broken pipe
+state: ready
+extruder: {"can_extrude": false, "motion_queue": null, "nozzle_diameter": 0.4, "pid_profile": "default", "power": 0.0, "pressure_advance": 0.0, "smooth_time": 0.04, "target": 0.0, "temperature": 36.07
+heater_bed: {"pid_profile": "default", "power": 0.0, "target": 0.0, "temperature": 28.07}
+--- ps moonraker
+ 8159 root      0:08 /usr/bin/python3 /mnt/UDISK/kalico-hi/current/kalico/klippy/klippy.py /mnt/UDISK/kalico-hi/config/printer.cfg -l /mnt/UDISK/kalico-hi/logs/klippy.log -a /tmp/kalico_uds -I /tmp/kalico_printer
+ 8259 root      0:06 /usr/share/moonraker-env/bin/python /usr/share/moonraker/moonraker.py -c /tmp/kalico-hi-moonraker.conf -l /mnt/UDISK/kalico-hi/logs/moonraker.log
+-rw-r--r--    1 root     root           758 Nov 10 11:11 /tmp/kalico-hi-moonraker.conf
+4:klippy_uds_address: /tmp/kalico_uds
+--- 7125
+[printer/info]
+{"result": {"app": "Kalico", "state": "ready", "state_message": "Printer is ready", "hostname": "Creality Hi-<masked>", "klipper_path": "/mnt/UDISK/kalico-hi/current/kalico", "python_path": "/usr/bin/python3", "process_id": 8159, "user_id": 0, "group_id": 0, "log_file": "/mnt/UDISK/kalico-hi/logs/klippy.log", "config_file": "/mnt/UDISK/kalico-hi/config/printer.cfg", "software_version": "v2026.11.00-57-g61602f77", "cpu_info": "2 core ARMv7 Processor rev 5 (v7l)"}}
+[server/info]
+{"result": {"klippy_connected": true, "klippy_state": "ready", "components": ["klippy_connection", "application", "websockets", "internal_transport", "dbus_manager", "database", "file_manager", "klippy_apis", "secrets", "template", "shell_command", "machine", "data_store", "proc_stats", "job_state", "job_queue", "http_client", "announcements", "webcam", "extensions", "authorization", "octoprint_compat", "history"], "failed_components": [], "registered_directories": ["config", "logs", "gcodes"], "warnings": ["Supplied path (/mnt/UDISK/kalico-hi/current/kalico/config) for (config_examples) is invalid. Make sure<br/>that the path exists and is not the file system root.", "Supplied path (/mnt/UD
+--- Fluidd 4408
+200 <!DOCTYPE html> <html lang="en">   <head>     <script>self["MonacoEnvironment"] = (function (paths) 
+--- logs
+2406
+Traceback (most recent call last):
+FileNotFoundError: [Errno 2] No such file or directory
+2026-11-10 11:11:35,154 [moonraker.py:add_warning()] - Supplied path (/mnt/UDISK/kalico-hi/current/kalico/config) for (config_examples) is invalid. Make sure
+2026-11-10 11:11:35,156 [moonraker.py:add_warning()] - Supplied path (/mnt/UDISK/kalico-hi/current/kalico/docs) for (docs) is invalid. Make sure
+2026-11-10 11:11:35,165 [moonraker.py:add_warning()] - file_manager: Klipper configuration file not located in 'config' folder.
+Warning, unable to detect the following printer objects:
+--- kalico log sesion
+2
+0
+6
+bytes_retransmit=63 bytes_retransmit=0 bytes_retransmit=9 sysload=1.40 285:Traceback (most recent call last):
+2026-11-10 11:11:34,543 [extensions.py:start_unix_server()] - Creating Unix Domain Socket at '/mnt/UDISK/printer_data/comms/moonraker.sock'
+2026-11-10 11:11:34,546 [extensions.py:start_unix_server()] - Failed to create Unix Domain Socket: /mnt/UDISK/printer_data/comms/moonraker.sock
+Traceback (most recent call last):
+  File "/usr/share/moonraker/components/extensions.py", line 119, in start_unix_server
+    self.uds_server = await asyncio.start_unix_server(
+  File "/usr/lib/python3.9/asyncio/streams.py", line 132, in start_unix_server
+  File "/usr/lib/python3.9/asyncio/unix_events.py", line 296, in create_unix_server
+FileNotFoundError: [Errno 2] No such file or directory
+2026-11-10 11:11:34,547 [moonraker.py:start_server()] - Starting Moonraker on (0.0.0.0, 7125), Hostname: Creality Hi-<masked>
+2026-11-10 11:11:34,559 [app.py:listen()] - SSL Certificate/Key not configured, aborting HTTPS Server startup
+2026-11-10 11:11:34,815 [klippy_connection.py:_do_connect()] - Klippy Connection Established
+2026-11-10 11:11:35,074 [klippy_connection.py:_init_klippy_connection()] - Webhooks Subscribed
+2026-11-10 11:11:35,082 [klippy_connection.py:_init_klippy_connection()] - GCode Output Subscribed
+2026-11-10 11:11:35,093 [moonraker.py:add_log_rollover_item()] - Klipper Version: v2026.11.00-57-g61602f77
+2026-11-10 11:11:35,101 [app.py:register_remote_handler()] - Registering HTTP endpoint: (GET POST) /printer/info
+2026-11-10 11:11:35,103 [websockets.py:register_api_handler()] - Registering Websocket JSON-RPC methods: printer.info
+2026-11-10 11:11:35,103 [app.py:register_remote_handler()] - Registering HTTP endpoint: (GET POST) /printer/emergency_stop
+---
+333:Warning, unable to detect the following printer objects:
+334-[pause_resume], [virtual_sdcard], [display_status]
+335-Please add the the above sections to printer.cfg for full Moonraker functionality.

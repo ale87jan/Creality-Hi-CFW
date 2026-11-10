@@ -1,0 +1,8 @@
+##### DUMP_TMC STEPPER=stepper_z
+exit=0
+##### DUMP_TMC STEPPER=stepper_z1
+exit=0
+##### DUMP_TMC STEPPER=extruder
+exit=0
+##### QUERY_ENDSTOPS
+exit=0

@@ -1,0 +1,55 @@
+## start 2 (11:07:04 local)
+[hi_kalico] stock print state: standby
+[hi_kalico] + /etc/init.d/app stop
+[hi_kalico] + /etc/init.d/klipper stop
+[hi_kalico] starting Kalico
+state: ready
+message: Printer is ready
+software_version: v2026.11.00-57-g61602f77
+[hi_kalico] done. Back to stock: '/mnt/UDISK/kalico-hi/current/tools/hi_kalico.sh stop' or reboot.
+rc=0
+start duro 31 s
+stock klippy : not running
+kalico       : running (pid 6088)
+moonraker    : stock
+Exception ignored in: <_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>
+BrokenPipeError: [Errno 32] Broken pipe
+extruder: {"can_extrude": false, "motion_queue": null, "nozzle_diameter": 0.4, "pid_profile": "default", "power": 0.0, "pressure_advance": 0.0, "smooth_time": 0.04, "target": 0.0, "temperature": 41.05}
+heater_bed: {"pid_profile": "default", "power": 0.0, "target": 0.0, "temperature": 28.86}
+4
+12
+11:Start printer at Tue Nov 10 06:05:28 2026 (1794287128.5 4412.8)
+306:Start printer at Tue Nov 10 06:05:39 2026 (1794287139.3 4423.6)
+3861:Start printer at Tue Nov 10 11:07:09 2026 (1794305229.1 22513.5)
+4156:Start printer at Tue Nov 10 11:07:14 2026 (1794305234.7 22519.1)
+sesion desde linea 4156
+Start printer: 1 | Loaded MCU: 3 | Traceback: 2 | CRC mismatch: 0 | automated restart: 0 | Timeout on connect: 2
+261:mcu 'mcu': Timeout on connect
+263:Traceback (most recent call last):
+281:mcu 'mcu': Timeout on connect
+283:Traceback (most recent call last):
+299:Loaded MCU 'mcu' 117 commands ( cf1eac2d-dirty-20250210_192534-ubuntu / gcc: (15:9-2019-q4-0ubuntu1) 9.2.1
+302:Loaded MCU 'nozzle_mcu' 113 commands ( 23f337b2 / gcc: (15:9-2019-q4-0ubuntu1) 9.2.1 20191025 (release) [A
+305:Loaded MCU 'bed_mcu' 94 commands ( 54872883-dirty-20240605_163644-longer-virtual-machine / gcc: (15:9-2019
+310:Configured MCU 'mcu' (3416 moves)
+313:Configured MCU 'nozzle_mcu' (1403 moves)
+316:Configured MCU 'bed_mcu' (1614 moves)
+324:Welcome to Kalico
+---
+Stats 22548.3 bytes_retransmit=63 bytes_invalid=0 bytes_retransmit=9 bytes_invalid=0 bytes_retransmit=0 bytes_invalid=0 sysload=0.80 memavail=406992 
+326
+state: ready
+message: Printer is ready
+software_version: v2026.11.00-57-g61602f77
+primer tramo (11:07:09): Loaded MCU 3 | Traceback 0 | CRC 1
+263:Loaded MCU 'mcu' 117 commands ( cf1eac2d-dirty-20250210_192534-ubuntu / gcc: (15:9-2019-q4-0ubun
+274:Loaded MCU 'nozzle_mcu' 113 commands ( 23f337b2 / gcc: (15:9-2019-q4-0ubuntu1) 9.2.1 20191025 (r
+288:Loaded MCU 'bed_mcu' 94 commands ( 54872883-dirty-20240605_163644-longer-virtual-machine / gcc: 
+291:Attempting automated MCU 'mcu' restart: CRC mismatch
+292:Attempting MCU 'mcu' reset command
+293:Attempting MCU 'nozzle_mcu' reset command
+294:Attempting MCU 'bed_mcu' reset command
+295:Restarting printer
+
+4
+4522:Stats 22559.3: gcodein=0 

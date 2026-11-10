@@ -2,7 +2,9 @@
 
 Punto de entrada para retomar el trabajo sin contexto previo. Se actualiza en cada commit.
 
-- **Fase actual:** 1 — Kalico arrancando en la Hi con config mínima ([roadmap.md](roadmap.md)).
+- **Fase actual:** 1 **validada en la Hi el 2026-11-10** (instalación, arranque, calentadores, Z, extrusor,
+  Fluidd y vuelta a stock; [phase1-plan.md §8.1](phase1-plan.md)). Siguiente: fase 2, lazo cerrado de X/Y
+  ([phase2-plan.md](phase2-plan.md)), que empieza en solo lectura ([roadmap.md](roadmap.md)).
 - **Plan y análisis:** [phase1-plan.md](phase1-plan.md). **Tareas pequeñas pendientes:** [backlog.md](backlog.md).
 - **Última actualización:** 2026-11-10.
 
