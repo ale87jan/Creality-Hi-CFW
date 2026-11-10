@@ -395,6 +395,8 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
 - **Hecho cuando:** `tools/cfg_commands.py` sobre `config/hi/` no encuentra comandos ausentes y hay test en
   batch de `START_PRINT` y `END_PRINT`.
 - **Riesgos:** depende de las fases 2 a 5.
+- **Estado (2026-11-10):** macros del usuario portadas (`heat.cfg`, `mesh.cfg`, `print.cfg`, `modes.cfg`) con
+  tests; quedan las decisiones 2 (pantalla) y 3 (arranque) de §6 y la prueba en la impresora.
 
 ### B39 — Fase 6: instalador, pantalla y documentación · U
 

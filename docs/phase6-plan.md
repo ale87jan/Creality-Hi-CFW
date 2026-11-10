@@ -112,9 +112,22 @@ Base decidida: la configuración del usuario (§6, decisión 1). Inventario repe
   `motor_control_hi` no porta esa comprobación. Decisión del usuario (2026-11-10): `PAUSE` corta con `CFS_CUT`
   si el CFS tiene un filamento cargado, y apaga la boquilla a los 15 minutos si sigue en pausa
   (`_HI_PAUSE_PARK`, `_HI_PAUSE_COOL`) [verificado: test `test_pause_cuts_only_when_a_cfs_filament_is_loaded`].
-  Qué hace falta para reanudar tras un corte (recargar el filamento) es [supuesto: probarlo en la Hi tras el
-  paso 5.4]; `RESUME` no recarga.
-- Faltan `FIRST_FLOOR_*`, `print_modes.cfg` y el resto de `multimaterial.cfg` (`M600`, carga y descarga).
+  Tras el corte no hay que recargar: el filamento sigue en el extrusor y la impresión continúa al extruir
+  [usuario, 2026-11-10]; `RESUME` no hace nada más.
+- **Hecho (2026-11-10):** `FIRST_FLOOR_PAUSE`, `FIRST_FLOOR_PAUSE_POSITION`, `FIRST_FLOOR_RESUME` y `M600` en
+  `print.cfg`, copiadas (solo `g28_ext_temp` pasa a `_HI_MESH.probe_temp`). `print_modes.cfg` en `modes.cfg`:
+  Kalico no tiene `ACCEL_TO_DECEL`, así que se guarda y restaura `minimum_cruise_ratio`, y los modos ponen
+  `MINIMUM_CRUISE_RATIO=0` (equivale a `ACCEL_TO_DECEL` igual a `ACCEL`) [verificado: fork:toolhead.py:259,
+  682]; `SET_QMODE_FLAG` y `SET_RMODE_FLAG` se quitan (§3). 5 tests más; los de los modos lanzan un trabajo de
+  `virtual_sdcard` para estar en estado de impresión.
+- **No portado de `multimaterial.cfg`:** `CALIBRATE_CUT_POS` (`motor_control_hi` no tiene `MOTOR_CHECK_CUT_POS`;
+  la posición de corte es `cut_pos_x` de `[creality_cfs]`); `LOAD_MATERIAL` y `QUIT_MATERIAL` (soporte externo,
+  fuera de la primera versión); `DELAY_DISABLE_EXTRUDER`, `COOLING_AFTER_LOAD_OR_QUIT_MATERIAL`,
+  `EXTRUDE_BEFORE_CLEAR` y `TPU_EXTRUDE_BEFORE_CLEAR`, que ninguna macro de la captura llama [verificado:
+  búsqueda en captura:*.cfg] y que llamaría el módulo cerrado del CFS [supuesto]. Nota:
+  `COOLING_AFTER_LOAD_OR_QUIT_MATERIAL` usa `printer_state` sin definirlo, así que siempre apaga la boquilla
+  [verificado: captura:multimaterial.cfg:88-98].
+- Con esto el inventario de macros del usuario queda portado o descartado con motivo.
 - B36 necesita el `klippy/` de stock, que no está en git: hay que traerlo del PC del usuario (carpeta
   `firmware`), que debe estar encendido.
 
