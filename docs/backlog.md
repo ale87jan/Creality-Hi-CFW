@@ -16,12 +16,7 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
 
 - **Objetivo:** que el trabajo de `claude/project-thread-fnrqje` esté en GitHub y en revisión hacia `dev` en los
   dos repos.
-- **Contexto:** la sesión del 2026-11-09 no pudo hacer `git push` (403: la app de Claude no tiene permiso de
-  escritura en los repos). Los commits están guardados como bundles de git en los ficheros del proyecto:
-  `fase1/cfw.bundle` y `fase1/kalico.bundle`.
-- **Pasos:** dar acceso de escritura a la app de GitHub de Claude, o bien en el PC:
-  `git fetch <ruta>/cfw.bundle claude/project-thread-fnrqje:claude/project-thread-fnrqje` en cada repo y
-  `git push -u origin claude/project-thread-fnrqje`; abrir PR hacia `dev`.
+- **Estado:** ramas subidas y PR abiertos el 2026-11-10. Queda la revisión del usuario y el CI.
 - **Hecho cuando:** hay un PR abierto por repo y el CI del fork (`ci-build_test`, `ci-lintformat`) termina.
 - **Riesgos:** `test_import_extra` puede fallar en el CI por `extras/cartographer.py` (ver B07); no lo
   introduce esta rama.

@@ -24,8 +24,8 @@ config mínima en modo batch ([phase1-plan.md §3.2](phase1-plan.md)).
 
 ## Siguiente acción
 
-1. **Usuario:** dar permiso de escritura en GitHub o subir las ramas a mano (B01).
-2. **Usuario:** responder a las dos decisiones pendientes (abajo).
+1. **Usuario:** revisar los pull request hacia `dev` (B01).
+2. **Usuario:** responder a la decisión pendiente (abajo).
 3. **Usuario:** compilar `c_helper.so` en su PC y ejecutar el paso 0 en la impresora (B03, B02).
 4. **Modelo:** analizar `step0.txt` y registrar decisiones (B02, B04).
 
@@ -33,9 +33,8 @@ Nada se ha ejecutado todavía en la impresora.
 
 ## Dónde está el trabajo
 
-- Rama `claude/project-thread-fnrqje` en los dos repos, creada desde `dev`. **Sin subir a GitHub** a fecha
-  2026-11-09 (push rechazado con 403). Copia en los ficheros del proyecto: `fase1/cfw.bundle` y
-  `fase1/kalico.bundle`.
+- Rama `claude/project-thread-fnrqje` en los dos repos, creada desde `dev` y subida a GitHub el 2026-11-10, con
+  pull request hacia `dev` en cada uno.
 - Fork: commit `feat(hi): add phase 1 bring-up config with batch tests` (`config/hi/printer.cfg`, `test/hi/`,
   `test/test_hi_config.py`).
 
@@ -45,5 +44,5 @@ Enviadas el 2026-11-09 (se trabaja con la opción recomendada mientras tanto). D
 [phase1-plan.md §10](phase1-plan.md):
 
 1. ~~Cómo se instala Kalico en fase 1~~: aprobada la escalonada sin flash el 2026-11-10 (D5).
-2. De dónde sale `c_helper.so` (recomendada: artefacto del paquete de instalación).
+2. ~~De dónde sale `c_helper.so`~~: aprobado como artefacto del paquete el 2026-11-10 (D6).
 3. Interfaz en fase 1 (recomendada: consola SSH y después Fluidd).

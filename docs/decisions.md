@@ -109,3 +109,23 @@ overlay.
   `hi_kalico.sh`, `hi_restore.sh`.
 - Kalico no arranca solo al encender; el servicio persistente (backlog B13) y el slot A/B (B14, objetivo final
   del proyecto) se diseñan cuando la fase 1 funcione.
+
+## D6 — `c_helper.so` como artefacto del paquete de instalación (2026-11-10)
+
+**Contexto.** El `c_helper.so` que trae el fork (compilado por Jacob10383 para la K2) pide `GLIBC_2.34` y no
+carga con la glibc 2.29 de la Hi ([phase1-plan.md](phase1-plan.md) §4). Opciones: compilarlo al crear el paquete
+de instalación, o sustituir el binario en la rama `dev` del fork.
+
+**Decisión.** Artefacto del paquete: `scripts/build_chelper.sh` lo compila y `scripts/make_bundle.sh` lo mete en
+el `.tar.gz` con su SHA-256. El fork conserva el binario de Jacob sin tocar.
+
+**Motivos.**
+
+- Sin conflicto binario al sincronizar con upstream.
+- Un binario en git queda desfasado sin avisar cuando cambian los fuentes C; el paquete lo recompila siempre y
+  registra el commit del que sale.
+
+**Consecuencias.**
+
+- Un clon del fork no funciona en la Hi por sí solo: hay que instalar el paquete.
+- `make_bundle.sh` rechaza un `.so` compilado de otro commit.
