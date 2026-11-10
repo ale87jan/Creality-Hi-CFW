@@ -74,7 +74,8 @@ Plan y análisis: [phase5-plan.md](phase5-plan.md).
 
 - [ ] Prueba de solo lectura con `box_protocol.py` (A2, 0x0A, 0x05, 0x08, 0x0E).
 - [ ] Corte: la cuchilla de la Hi está en +X (la K2 corta en -X).
-- [ ] Purga y limpieza: la Hi no tiene papelera trasera; el pin del sensor de corte de la K2
+- [ ] Purga y limpieza: la papelera de la Hi está a la izquierda (X=-18,5), no detrás; el teflón de limpieza
+      sí está detrás (`[nozzle_clear]`); el pin del sensor de corte de la K2
       (`nozzle_mcu:PB9`) es un ventilador en la Hi.
 - [ ] Rack externo (`filament_rack`).
 

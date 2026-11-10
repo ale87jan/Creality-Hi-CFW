@@ -127,7 +127,8 @@ serie) y que la macro de `G28` hay que mantenerla.
 - Comandos: `NOZ_CLEAR` y `FORECEZ` [verificado: stock:nozzle_clear.py:47-48].
 - Config de stock: `clear_temp: 170`, `enable_clear: true`, `start_pos: 98, 266`, `touch_cnt: 3`,
   `clear_start: 148, 266`, `probe_pos_diff: 0, 0`, `clear_lenght: 14, 2`, `upraise: 0.2`, `clear_cnt: 10`
-  [verificado: stock:printer.cfg:351-360]. La zona de limpieza está al fondo de la cama (Y=266 de 274).
+  [verificado: stock:printer.cfg:351-360]. La zona de limpieza es una pieza de teflón en la
+  parte trasera (Y=266 de 274) [usuario, 2026-11-10].
 - Dependencias que el fork no tiene:
   - `prtouch_v3.pres.tri_hold`, que modifica en caliente para subir el umbral de disparo
     [verificado: stock:nozzle_clear.py:75-77].

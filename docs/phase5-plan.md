@@ -69,7 +69,8 @@ Con esto aparece una cuarta forma de adaptar el CFS (§4, opción D).
 | Tope de búsqueda del corte | `check_cut_pos_x_max: 280`; `cut_pos_x: 283.5` comentado | box.cfg:16, 40 |
 | Límites de X | `position_min: -19`, `position_max: 285` | printer.cfg:79-80 |
 | Punto de purga | `extrude_pos_x: -18.50`, `extrude_pos_y: 130`, `has_extrude_pos: 1` | box.cfg |
-| Limpieza en teflón | `clean_left_pos_x: 0`, `clean_right_pos_x: -5`, Y=130, `clean_velocity: 12000` | box.cfg |
+| Pasada junto a la papelera | `clean_left_pos_x: 0`, `clean_right_pos_x: -5`, Y=130, `clean_velocity: 12000` | box.cfg |
+| Limpieza en el teflón trasero | `[nozzle_clear]`: `start_pos: 98, 266`, `clear_start: 148, 266` | printer.cfg:351-360 |
 | Rodeo del corte a la purga | `detour_pos_y: 261`, `detour_y: True` | box.cfg |
 | Retracción y carga | `Tn_retrude: -20`, `Tn_extrude: 140`, `Tn_extrude_temp: 220`, `buffer_empty_len: 30` | box.cfg |
 | Longitudes de limpieza | `box_need_clean_length: 60`, `box_first_clean_length: 70`, `..._max: 80` | box.cfg |
@@ -77,8 +78,10 @@ Con esto aparece una cuarta forma de adaptar el CFS (§4, opción D).
 | Sensor de filamento | `filament_sensor`, `!nozzle_mcu:PB15` | printer.cfg:381-383 |
 | Rack externo | `[filament_rack] need_clean_length: 63`, `first_clean_length: 66` | box.cfg:7-9 |
 
-La Hi corta en +X (derecha), purga fuera de la cama por la izquierda (X=-18,5) y limpia en una pieza de teflón
-entre X=-5 y X=0. No tiene papelera ni almohadilla traseras.
+La Hi corta en +X (derecha), purga fuera de la cama por la izquierda (X=-18,5), **donde está la papelera**, y
+limpia en una pieza de teflón **trasera**, en la posición de `[nozzle_clear]` [usuario, 2026-11-10]. Los
+valores `clean_left_pos_x`/`clean_right_pos_x` de `[box]` (X entre -5 y 0, Y=130) son otra pasada, junto a la
+papelera; el comentario de stock también la llama teflón [supuesto: ver en la impresora qué hay en X=-5..0].
 
 `switch_pin` es el sensor de la cuchilla [verificado: ref:configs/printer.cfg.example:99-102, que lo llama
 `cut_switch_pin`]. El paso 5.1 lo comprueba en la impresora.
@@ -89,8 +92,8 @@ entre X=-5 y X=0. No tiene papelera ni almohadilla traseras.
 | - | - | - |
 | Sensor de corte | `nozzle_mcu:PB9`, fijo en el código (`box.py:576-580`) | `PB9` es `fan2_pin`, el ventilador de modelo (stock:printer_params.cfg:20). El sensor sería `nozzle_mcu:PB1` |
 | Sentido del corte | Hacia -X: amplía `position_min` hasta `cut_pos_x - 5` (`box.py:2395, 2472-2477`); por defecto `pre_cut_pos_x: 10`, `check_cut_pos_x_max: -5.5` (`box.py:521, 532-533`) | Hacia +X: habría que ampliar `position_max` |
-| Papelera | `wastebin_pos_x/y` y aproximación, con validación que exige la papelera detrás y a la izquierda (`box.py:482-494`) | No hay papelera; purga en X=-18,5 |
-| Almohadilla | `clean_pad_left_x: 154`, `clean_pad_front_y: 367` (`box.py:496-498`); `NOZZLE_CLEAN` la usa (`box.py:634`) | Teflón en X -5..0, Y=130 |
+| Papelera | `wastebin_pos_x/y` y aproximación, con validación que exige la papelera detrás y a la izquierda (`box.py:482-494`) | Papelera a la izquierda, fuera de la cama: purga en X=-18,5, Y=130 |
+| Almohadilla | `clean_pad_left_x: 154`, `clean_pad_front_y: 367` (`box.py:496-498`); `NOZZLE_CLEAN` la usa (`box.py:634`) | Teflón trasero en la posición de `[nozzle_clear]` (Y=266) |
 | Zona de servicio | Movimientos por `extended_zone_transform` (`box.py:2227-2230`) y `motion_limits` (`box.py:23`) | La Hi no tiene zona trasera extendida |
 | Macro | `HOME_IF_NEEDED AXIS=XY` (`box.py:2394`), definida en `config/k2/macros.cfg:21` | Hay que definirla |
 | Calibración del corte | `CALIBRATE_CUT_POS` estaba en `motor_control.py` | Quitada en `motor_control_hi.py` (D8); `cut_pos_x` se fija a mano |
@@ -104,11 +107,11 @@ Lo que sí coincide: el nombre del sensor de filamento (`filament_switch_sensor 
 ## 4. Cómo adaptarlo
 
 - **A. Opciones nuevas en `box.py`**: `cut_sensor_pin`, sentido del corte deducido de `cut_pos_x` frente a
-  `pre_cut_pos_x`, y un modo de purga sin papelera. Es lo que pide la regla del repositorio (opciones antes que
+  `pre_cut_pos_x`, y la papelera a la izquierda en vez de detrás. Es lo que pide la regla del repositorio (opciones antes que
   editar valores fijos) y permite proponer los cambios a upstream. Toca un módulo compartido de 3382 líneas.
 - **B. Copia aparte `box_hi.py`**, como D8. Aísla la Hi, pero duplica 5000 líneas que upstream cambia a menudo.
 - **C. Solo capas bajas**: usar `serial_485`, `box_addr` y `box_protocol` y escribir un `box_hi.py` pequeño con
-  la secuencia de la Hi (corte en +X, purga en X=-18,5, limpieza en teflón), guiado por las macros de stock
+  la secuencia de la Hi (corte en +X, purga en la papelera de X=-18,5, limpieza en el teflón trasero), guiado por las macros de stock
   (`BOX_LOAD_MATERIAL_WITH_MATERIAL` y siguientes, `stock:box.cfg`). Menos funciones al principio (sin mapa de
   colores del laminador ni recuperación), pero cada movimiento es de la Hi.
 
@@ -136,7 +139,7 @@ pin y el sentido del corte. La decisión depende de cuánto cuesta cambiar el tr
 ## 6. Decisiones que necesito
 
 1. **Cómo adaptar el CFS** (§4): A, B, C o D. Se decide después de B32 y B31b.
-2. **Purga en la Hi**: repetir la de stock (purga en X=-18,5 y limpieza en teflón) o usar solo torre de purga.
+2. **Purga en la Hi**: repetir la de stock (purga en la papelera de X=-18,5 y limpieza en el teflón trasero) o usar solo torre de purga.
    Recomendada: la de stock, con sus valores.
 3. **Rack externo (`filament_rack`)**: dejarlo fuera de la primera versión (recomendada) o incluirlo.
 
