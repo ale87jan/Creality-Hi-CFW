@@ -339,19 +339,17 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
 - **Hecho cuando:** el plan tiene las secuencias con referencias a línea y la recomendación.
 - **Riesgos:** ninguno; solo lectura. Es larga (unas 5000 líneas).
 
-### B33 — Fase 5: decisiones de diseño · U · EN CURSO
+### B33 — Fase 5: decisiones de diseño · U · HECHO
 
-- **Hecho:** decisión 1 cerrada (D16: `creality_cfs.py` sobre `serial_485`).
-- **Hecho:** decisión 2 cerrada (purga en la papelera, sin teflón en el cambio de filamento).
-- **Falta:** decisión 3 (rack externo) de [phase5-plan.md §6](phase5-plan.md).
+- **Hecho (2026-11-10):** D16 (`creality_cfs.py` sobre `serial_485`); purga en la papelera sin teflón en el
+  cambio; rack externo fuera de la primera versión.
 
 ### B34 — Fase 5: CFS para la Hi con tests · M · EN CURSO
 
 - **Hecho (2026-11-10):** `klippy/extras/creality_cfs.py` con transporte opcional por `serial_485`,
   `config/hi/cfs.cfg`, `phase5.cfg`, `test/test_hi_cfs.py` (11 tests); `CFS_PURGE` y `_HI_CFS_SHAKE` (purga en la papelera). Detalle en
   [phase5-plan.md §5](phase5-plan.md), "Hecho el 2026-11-10".
-- **Falta:** leer la coreografía completa (`load_process`, `unload_process`, `CFS_CUT`, `CFS_FLUSH`); rodeo por
-  Y=261 al purgar con pieza en la cama; cambio de herramienta `T0`..`T3`; gancho para tramas no pedidas en `serial_485`.
+- **Falta:** leer la coreografía completa (`load_process`, `unload_process`, `CFS_CUT`, `CFS_FLUSH`); cambio de herramienta `T0`..`T3`; gancho para tramas no pedidas en `serial_485`.
 - **Riesgos:** el módulo de la referencia no se ha ejercitado en hardware (su `NOTICES.md`).
 
 ### B34b — Proponer el transporte compartido a gitstonelabs · U

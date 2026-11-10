@@ -202,8 +202,13 @@ Límites y pendientes:
    [verificado: fork:creality_cfs.py, `cmd_CFS_FLUSH`: solo `M83`, `G1 E` y `G91`/`G90`]. Hecho en `cfs.cfg`: `CFS_PURGE`
    va antes a la papelera y `_HI_CFS_SHAKE` hace la pasada corta tras cada ciclo, enganchada por
    `nozzle_clean_macro` [verificado: test `test_purge_runs_the_flush_over_the_waste_bin`]. El orden de la pasada
-   corta (X 0, -5, 0, -18,5) es [supuesto: verlo en la Hi, paso 5.5]. No reproduce el rodeo por Y=261 de stock
-   (`detour_pos_y`): no usar `CFS_PURGE` con una pieza en la cama todavía.
+   corta (X 0, -5, 0, -18,5) es [supuesto: verlo en la Hi, paso 5.5]. Antes de cruzar en X sube Z
+   (`z_lift: 3`, valor nuestro) y da el rodeo por Y=261 [usuario, 2026-11-10: el rodeo es correcto y hace falta
+   subir Z antes]. En stock el rodeo en Y lo hace el módulo (`detour_y: True`, `detour_pos_y: 261`) y no hay
+   subida de Z en la config: `detour_z` está comentado y las macros `BOX_*` no mueven Z [verificado:
+   captura:box.cfg:57-59, 103-150]. Si el laminador sube Z en su G-code de cambio de filamento es [supuesto:
+   mirar el "G-code de cambio de filamento" del perfil de la Hi]. `CFS_PURGE` deja la boquilla sobre la
+   papelera; la vuelta a la pieza es del cambio de herramienta (fase 6).
 4. `cut_velocity: 3000` es el valor del ejemplo de la referencia; el stock usa 15000
    [verificado: captura:box.cfg, `cut_velocity`]. Se mantiene el lento hasta el paso 5.4.
 5. Comandos `T0`..`T3` y los `BOX_*` de stock que llaman las macros y el laminador: sin hacer (fase 6).
@@ -216,7 +221,7 @@ Límites y pendientes:
    (`CFS_PURGE`), pero **sin ir al teflón trasero en un cambio de filamento**: el teflón está a la altura de la
    cama y habría que bajar el pórtico, que durante una impresión está por encima de la pieza [usuario,
    2026-11-10]. El teflón queda solo para la limpieza previa a la impresión (`NOZZLE_CLEAN`).
-3. **Rack externo (`filament_rack`)**: dejarlo fuera de la primera versión (recomendada) o incluirlo.
+3. **Rack externo (`filament_rack`)**: cerrada el 2026-11-10: fuera de la primera versión [usuario].
 
 ## 7. Riesgos
 
