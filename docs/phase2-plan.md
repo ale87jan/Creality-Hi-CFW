@@ -1,0 +1,181 @@
+# Fase 2 — Motores X/Y de lazo cerrado
+
+Análisis del 2026-11-10, hecho sin impresora. Alcance: que Kalico hable con los drivers X/Y por RS-485, mueva
+X/Y y haga homing de X e Y. Fuera: homing de Z y sonda (fase 3), `z_align` (fase 4), CFS y cuchilla (fase 5).
+
+Cada afirmación lleva `[verificado: fichero:línea]` o `[supuesto: cómo comprobarlo]`. Rutas: `fork:` es
+Creality-Hi-Kalico (rama `dev`, commit `a0b3a40` en la rama de trabajo); `stock:` es el rootfs de la OTA
+V1.1.0.60 (`/usr/share/klipper/`), que se lee y no se ejecuta; `captura:` es
+`data/captures/2026-11-09_hi-v1.1.0.60/printer-config/`.
+
+**Depende de la fase 1.** Nada de esto se ha probado en la Hi. Todo el plan asume que la fase 1 termina bien
+(paso 0, carga de `c_helper.so`, arranque de las tres MCU) [supuesto: [phase1-plan.md](phase1-plan.md) §8].
+
+## 1. Conclusiones
+
+1. `motor_control.py` del fork **no arranca en la Hi tal cual**, por tres motivos independientes (§3): exige el
+   motor E por el túnel `transparent` de la boquilla, que la MCU de la Hi no tiene; lleva fijos los pines de
+   stall de la K2; y asigna las direcciones al revés que el stock de la Hi.
+2. La lista de ejes ya es configurable (`motor_axes: x, y`), así que quitar Z y Z1 no necesita código.
+3. **La Hi no hace homing de X/Y con los pines de stall.** El stock usa `endstop_pin: !PC7` para X y `^PB13`
+   para Y, que no son los pines de stall (`PA8`, `PA6`). `PC7` es la misma línea que usa la sonda
+   (`step_swap_pin`) y llega desde la MCU de la boquilla a través de `[io_remap]`. Esto cambia el plan del
+   roadmap ("homing por stall") y adelanta `io_remap.py` de la fase 4 a la fase 2 (§4).
+4. El `homing.py` del fork sirve para `G28 X Y`. `G28 Z` depende del escáner de la K2 y queda bloqueado hasta
+   la fase 3 (§5).
+5. El arranque de la K2 escribe en los drivers (modo de stall, borrado de fallos y, si la config trae
+   parámetros, `SYS_PARAM`). Para la Hi se propone un arranque por niveles, empezando en solo lectura (§6).
+
+## 2. Qué hace `motor_control.py` en el arranque
+
+Secuencia al recibir `serial_485:ready` [verificado: fork:klippy/extras/motor_control.py:3290-3309]:
+
+| Paso | Qué envía al bus | ¿Escribe en el driver? |
+| - | - | - |
+| `serial_target_discovery` | Pone DIR/STEP según `PIN_DIR_SEQUENCE`, broadcast `READ_ADDR 01` a 0xFF y `READ_ADDR 02` a cada dirección | Sí: cada driver toma su dirección. El stock hace lo mismo en cada arranque [supuesto: `set_motor_pin_dir` y `MOTOR_SET_ADDR` en los símbolos de stock:klippy/extras/motor_control_wrapper.cpython-39.so; confirmar con la traza del paso 2.1] |
+| `extruder_target_discovery` | `READ_ADDR` por el túnel de la boquilla | No aplica a la Hi |
+| `stall_mode` | `STALL_MODE 02` a todos los ejes | Sí (RAM). La Hi ya tiene `param_stall_mode` = 2 [verificado: docs/protocols/rs485.md, tabla de parámetros] |
+| `protect_check` | `PROTECTION 0B` | No |
+| `protect_clear` | `PROTECTION 05` solo si hay fallos | Sí: borra errores y avisos |
+| `protect_recheck` | `PROTECTION 0B` | No |
+| `apply_overrides` | Por cada clave `x_...`/`y_...` de `[motor_control]`: lee, y si difiere escribe `SYS_PARAM 01` y aplica `03` | **Sí**, solo si la config trae parámetros [verificado: fork:klippy/extras/motor_control.py:1611-1680] |
+
+Después: sondeo de protección cada 60 s y lectura de temperatura de los drivers (`GET`, solo lectura)
+[verificado: fork:klippy/extras/motor_control.py:2625, 2437-2439]. Si un paso falla reintenta 3 veces y deja
+`is_ready = False`, sin apagar Klipper [verificado: fork:klippy/extras/motor_control.py:3527-3592].
+
+Sin claves de parámetros en la config no hay escrituras de `SYS_PARAM`. La config de stock de la Hi trae 51
+claves por eje (captura:motor_control.cfg), así que **no se puede reutilizar tal cual**: provocaría la
+comparación y, si algo difiere, la escritura.
+
+## 3. Por qué no arranca en la Hi
+
+| Problema | Dónde | Efecto en la Hi |
+| - | - | - |
+| Motor E obligatorio | `managed_axes = kinematic_axes + EXTRUDER_AXES` [verificado: fork:klippy/extras/motor_control.py:2678]; el adaptador registra `config_transparent` en `nozzle_mcu` [verificado: :1778] | La boquilla de la Hi no tiene `config_transparent` [verificado: fork:test/hi/nozzle_mcu.dict; docs/protocols/mcu.md]: error al conectar |
+| Pines de stall fijos | `STALL_PIN_LAYOUT`: `PB12`, `PB11`, `nozzle_mcu:PB12` [verificado: :2275-2281] | La Hi usa `PA8` y `PA6` [verificado: captura:motor_control.cfg:25-26]. `PB12` es un sensor de filamento en la Hi [verificado: captura:printer.cfg:294] |
+| Direcciones | `motor_map.json`: x = 0x82, y = 0x81; `PIN_DIR_SEQUENCE` pone DIR de X a 1 y de Y a 0 [verificado: fork:klippy/extras/motor_map.json `_addr`; motor_control.py:2519-2528] | El stock deja X = 0x81, Y = 0x82 [P]. Funcionaría con las de la K2, pero el roadmap pide mantener las de stock |
+| Mapa de parámetros | `motor_map.json` es de `mot2_002_081`, con valores de referencia de la K2 | Los ids valen para `071` (51/51 por eje [P]); los **valores** de referencia no son los de la Hi (el X es otro motor) |
+| Calibración del corte | `MotorCutCalibrationHelper` asume la cuchilla en -X [verificado: :38-47] | La Hi corta en +X: no usar `CALIBRATE_CUT_POS` (fase 5) |
+
+Lo que sí sirve sin cambios: `serial_485.py` (trama idéntica, `/dev/ttyS5` a 230400 por defecto
+[verificado: fork:klippy/extras/serial_485.py:184-185]), el cliente de firmware, la vigilancia de stall con
+`buttons` (las dos MCU tienen `config_buttons` [verificado: fork:test/hi/mcu.dict]) y `motor_axes`
+[verificado: fork:klippy/extras/motor_control.py:2352-2360].
+
+## 4. Homing de X/Y en la Hi: el hallazgo de los finales de carrera
+
+| | K2 (config del fork) | Hi (stock) |
+| - | - | - |
+| `stepper_x` `endstop_pin` | `PB12` = pin de stall de X | `!PC7` |
+| `stepper_y` `endstop_pin` | `PB11` = pin de stall de Y | `^PB13` |
+| Pines de stall | `PB12`, `PB11` | `PA8`, `PA6` |
+
+[verificado: fork:config/k2/printer.cfg:90,105; captura:printer.cfg:122,135; captura:motor_control.cfg:25-26]
+
+- El Python de stock no sustituye los endstops durante el homing: `homing.py` es el de Klipper con mensajes de
+  Creality y usa los endstops del raíl [verificado: stock:klippy/extras/homing.py:79-103]. Por tanto `PC7` y
+  `PB13` son entradas reales de la MCU principal.
+- `PC7` es también `step_swap_pin` de la sonda [verificado: captura y stock:config/F018_CR4NU200360C20/
+  printer.cfg:153], y la config de stock deja comentado `# endstop_pin:!nozzle_mcu:PB0` junto al de X
+  [verificado: stock:config/F018_CR4NU200360C20/printer.cfg:75-76].
+- `[io_remap]` configura en la **MCU de la boquilla** que `PB0` (entrada) se copie en `PA15` (salida)
+  [verificado: stock:klippy/extras/io_remap.py:20-38; captura:printer.cfg:108-114]. `nozzle_mcu:PA15` es
+  `pres_swap_pin` de la sonda [verificado: docs/hardware.md:59].
+- Lectura más probable: el final de carrera de X es un sensor en el cabezal (`nozzle_mcu:PB0`) que la boquilla
+  reenvía por la línea `PA15` → `PC7`, compartida con la sonda. El de Y es un sensor en `PB13` de la placa
+  [supuesto: comprobar en la impresora con `QUERY_ENDSTOPS` en stock moviendo el cabezal a mano con los motores
+  desactivados; y confirmar con el usuario si la Hi tiene sensores físicos en X e Y].
+- `MOTOR_STALL_MODE DATA=1` antes del homing y `DATA=2` después siguen en el `homing_override` de stock
+  [verificado: stock:config/F018_CR4NU200360C20/sensorless.cfg:154,203]. Qué cambia en el driver con el modo 1 no
+  está documentado [supuesto: leer `param_stall_mode` y el pin de stall antes y después, solo lectura].
+
+Consecuencias:
+
+1. La config de la Hi mantiene `endstop_pin: !PC7` y `^PB13`; no se usa el pin de stall como endstop.
+2. Hay que portar `io_remap.py` en esta fase. Es Python legible, 50 líneas, y las dos MCU tienen
+   `config_ioRemap` y `operation_ioRemap` [verificado: fork:test/hi/nozzle_mcu.dict].
+3. Si `SET_IOREMAP` hace falta para activar el reenvío no está claro: ninguna macro de stock lo llama
+   [verificado: búsqueda en stock:config/F018_CR4NU200360C20/*.cfg] [supuesto: ver si lo llama algún `.so`;
+   comprobar con `QUERY_ENDSTOPS`].
+
+## 5. `homing.py` del fork con la Hi
+
+- `G28 X Y` ordena Y y después X, entra en modo de stall 1, hace el homing con los endstops del raíl y vuelve
+  al modo 2 [verificado: fork:klippy/extras/homing.py:975-989, 901-935, 1166-1206]. El stock hace X y después Y
+  [verificado: stock:config/F018_CR4NU200360C20/sensorless.cfg:77,97]. El orden importa si el cabezal puede
+  chocar [supuesto: preguntar al usuario; el orden se puede forzar con `G28 X` y `G28 Y` por separado].
+- Antes del primer homing tras reiniciar hace un movimiento de "cebado" del eje
+  [verificado: fork:klippy/extras/homing.py:995-1024] [supuesto: revisar distancias con la geometría de la Hi
+  antes de mover].
+- `G28 Z` exige el modelo del escáner (`_is_probe_model_ready`) y `NOZZLE_CLEAN`
+  [verificado: fork:klippy/extras/homing.py:1128-1152]: no sirve para la Hi hasta la fase 3.
+- En la fase 2 la config bloquea `G28 Z` con un `[homing_override]` que solo deja pasar X e Y. Sin Z en homing,
+  Kalico rechaza los movimientos de Z, igual que en la fase 1.
+
+## 6. Diseño propuesto (pendiente de decisiones, §9)
+
+Cambios en el fork, todos como opciones nuevas con los valores de la K2 por defecto:
+
+| Opción nueva en `[motor_control]` | Valor en la Hi | Sustituye a |
+| - | - | - |
+| `extruder_motor: False` | sin motor E en el bus | `EXTRUDER_AXES` fijo |
+| `motor_x_stall`, `motor_y_stall` | `PA8`, `PA6` | `STALL_PIN_LAYOUT` |
+| `motor_x_addr`, `motor_y_addr` | `0x81`, `0x82` | `_addr` de `motor_map.json` y `PIN_DIR_SEQUENCE` |
+| `startup_writes` | `none` al principio | secuencia fija de arranque |
+
+Niveles de `startup_writes`:
+
+| Nivel | Qué hace | Riesgo |
+| - | - | - |
+| `none` | Asigna direcciones y solo lee: `READ_ADDR`, `PROTECTION 0B`, `GET` | El mismo broadcast que hace el stock |
+| `stall` | Añade `STALL_MODE 02` y borrado de fallos si los hay | Escribe estado volátil que el stock también escribe |
+| `params` | Añade `apply_overrides` | Escribe `SYS_PARAM` en RAM: **necesita aprobación expresa** |
+
+Además: `klippy/extras/io_remap.py` (port del de stock) y `config/hi/motor_control.cfg` sin claves de
+parámetros. `MOTOR_FLASH_PARAM` y `MOTOR_CALIBRATE` quedan sin registrar en la Hi mientras no se aprueben.
+
+## 7. Qué se puede hacer sin impresora
+
+| Trabajo | Depende de resultados de la Hi |
+| - | - |
+| Opciones nuevas de `motor_control.py` con tests | No |
+| Port de `io_remap.py` y test en batch con los diccionarios reales | No |
+| Simulador del bus RS-485 para tests (responde `READ_ADDR`, `PROTECTION`, `GET`, `SYS_PARAM 02`) | No |
+| `config/hi/` de la fase 2 validada en batch | No (los valores salen de la captura) |
+| Script de solo lectura para el paso 2.1 (ampliar `tools/hi_probe.py`) | No |
+| Orden de homing, distancias de cebado, uso de `SET_IOREMAP` | **Sí** [supuesto] |
+
+## 8. Plan en la impresora (después de la fase 1)
+
+Todo empieza en solo lectura. Ninguna escritura de parámetros sin aprobación expresa.
+
+| Paso | Acción | Escribe | Criterio |
+| - | - | - | - |
+| 2.1 | En stock: `QUERY_ENDSTOPS` con el cabezal lejos y pegado a cada final de carrera (motores desactivados, a mano); `MOTOR_READ_ALL_PIN_IO` | No | X e Y cambian de estado; se sabe qué pin es cada uno |
+| 2.2 | En stock: leer `param_stall_mode` y `PROTECTION` antes y después de un `G28 X Y` | No (el homing es el de stock) | Se documenta el efecto del modo 1 |
+| 2.3 | Kalico con `startup_writes: none`: `MOTOR_STATUS` | Solo direcciones | 0x81 y 0x82 responden, sin fallos |
+| 2.4 | `QUERY_ENDSTOPS` en Kalico con `io_remap` | No | Igual que 2.1 |
+| 2.5 | `startup_writes: stall`; mover X/Y unos mm con `FORCE_MOVE` a baja velocidad | Modo de stall | Movimiento suave, sin fallos |
+| 2.6 | `G28 Y`, `G28 X` con la mano en el interruptor | Modo de stall | Homing correcto y repetible |
+| 2.7 | Comparar parámetros leídos con la captura (solo informe) | No | 51/51 por eje |
+
+## 9. Decisiones que necesito
+
+1. **Cómo adaptar `motor_control.py`**: opciones nuevas en el módulo compartido (recomendada, §6), un módulo
+   solo de la Hi que herede del de la K2, o una copia aparte.
+2. **Escrituras en el arranque**: niveles `none` → `stall` → `params` (recomendada, §6) o el arranque de la K2
+   sin claves de parámetros.
+3. **Homing en la fase 2**: solo X/Y con Z bloqueado (recomendada, §5) o adelantar el homing de Z.
+4. **Dato tuyo**: si la Hi tiene sensores físicos de final de carrera en X (en el cabezal) y en Y, y en qué
+   orden hace el homing de stock sin riesgo de choque.
+
+## 10. Riesgos
+
+| Id | Riesgo | Mitigación |
+| - | - | - |
+| R1 | La lectura de §4 sobre `PC7`/`PB13` es errónea | Paso 2.1 antes de escribir config definitiva |
+| R2 | El broadcast de direcciones deja un driver sin dirección | El stock lo hace en cada arranque; reiniciar en stock lo restaura [supuesto] |
+| R3 | Una clave de parámetro en la config provoca una escritura | `startup_writes: none` ignora las claves; test que lo comprueba |
+| R4 | Kalico y el Klipper de stock a la vez en `/dev/ttyS5` | `hi_kalico.sh` ya para el stock antes de arrancar [verificado: scripts/hi_kalico.sh:104] |
+| R5 | Movimiento de cebado contra un tope | Revisar distancias; primera prueba con `G28` de un solo eje y velocidad baja |

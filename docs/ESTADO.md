@@ -33,6 +33,12 @@ Nada se ha ejecutado todavía en la impresora.
 El CI del fork está en rojo en el pull request Creality-Hi-Kalico #2 por fallos que ya tiene `dev` (B07); los
 tests de la Hi pasan. El usuario decidió el 2026-11-10 no tocarlo por ahora.
 
+## Fase 2 (motores X/Y)
+
+Análisis hecho sin impresora el 2026-11-10: [phase2-plan.md](phase2-plan.md). Tareas B15 a B20. Sin código
+todavía: espera las decisiones del §9 del plan. Hallazgo principal: la Hi no usa los pines de stall como final
+de carrera de X/Y y hay que portar `io_remap.py` en esta fase.
+
 ## Dónde está el trabajo
 
 - Rama `claude/project-thread-fnrqje` en los dos repos, creada desde `dev` y subida a GitHub el 2026-11-10, con

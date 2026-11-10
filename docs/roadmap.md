@@ -39,12 +39,14 @@ Plan, análisis y pruebas pendientes: [phase1-plan.md](phase1-plan.md). Estado: 
 
 ## Fase 2 — Motores X/Y de lazo cerrado
 
-Portar `motor_control.py` de la K2:
+Plan y análisis: [phase2-plan.md](phase2-plan.md). Portar `motor_control.py` de la K2:
 
 - [ ] Pines de stall: `STALL_PIN_LAYOUT` fijo (`PB12/PB11`) → `PA8/PA6`, o leerlos de la config.
 - [ ] Direcciones: mantener las de stock (X=0x81, Y=0x82) en `PIN_DIR_SEQUENCE`.
 - [ ] Quitar los ejes E, Z y Z1 del descubrimiento y del arranque.
 - [ ] Homing por stall: el `homing.py` de Kalico de Jacob llama a `set_homing_stall_mode`.
+      Revisado: la Hi usa `endstop_pin` `!PC7` y `^PB13`, no los pines de stall, y necesita `io_remap.py`
+      ([phase2-plan.md](phase2-plan.md) §4).
 - [ ] Primeras pruebas sin overrides de parámetros. Nunca `MOTOR_FLASH_PARAM ... COMMIT=1` ni `MOTOR_CALIBRATE`.
 
 ## Fase 3 — Sonda

@@ -158,11 +158,56 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
   el usuario. `fw_setenv` solo documentado.
 - **Riesgos:** un slot que no arranca sin vuelta automática deja la impresora sin acceso por red.
 
-### B15 — Fase 2: preparar el port de `motor_control` · M
+### B15 — Fase 2: decisiones de diseño · U
 
-- **Objetivo:** dividir en tareas de este tamaño los puntos de la fase 2 de [roadmap.md](roadmap.md)
-  (`STALL_PIN_LAYOUT`, `PIN_DIR_SEQUENCE`, quitar E/Z/Z1 del descubrimiento, homing por stall).
-- **Ficheros:** Creality-Hi-Kalico `klippy/extras/motor_control.py`, `klippy/extras/homing.py`;
-  `docs/protocols/rs485.md`.
-- **Hecho cuando:** hay tareas B con objetivo, ficheros, criterio y riesgos, y tests en modo batch previstos.
-- **Riesgos:** las reglas de seguridad de motores de `CLAUDE.md` (nunca escribir parámetros sin aprobación).
+- **Objetivo:** cerrar las cuatro decisiones de [phase2-plan.md §9](phase2-plan.md) y anotarlas en
+  [decisions.md](decisions.md).
+- **Hecho cuando:** las decisiones están en `decisions.md` y el plan deja de decir "pendiente".
+- **Riesgos:** B16 a B20 dependen de la decisión 1 y 2.
+
+### B16 — Fase 2: opciones de `motor_control.py` para la Hi · M
+
+- **Objetivo:** `extruder_motor`, `motor_x_stall`/`motor_y_stall`, `motor_x_addr`/`motor_y_addr` y
+  `startup_writes` ([phase2-plan.md §6](phase2-plan.md)), con los valores de la K2 por defecto.
+- **Ficheros:** Creality-Hi-Kalico `klippy/extras/motor_control.py`, `test/test_hi_motor_control.py`.
+- **Hecho cuando:** con la config de la K2 el comportamiento no cambia (test); con la de la Hi no se registra
+  `config_transparent`, los pines de stall son `PA8`/`PA6`, las direcciones son 0x81/0x82 y con
+  `startup_writes: none` no sale ninguna trama de escritura aunque la config traiga claves de parámetros (test
+  con el bus simulado de B17).
+- **Riesgos:** conflictos con upstream; mantener cada opción en un commit.
+
+### B17 — Fase 2: bus RS-485 simulado para tests · M
+
+- **Objetivo:** un `serial_485` de prueba que responda `READ_ADDR`, `PROTECTION 0B`, `GET` y `SYS_PARAM 02` con
+  los valores de `data/captures/2026-11-09_hi-v1.1.0.60/motors.json` y registre todas las tramas enviadas.
+- **Ficheros:** Creality-Hi-Kalico `test/hi/fake_rs485.py`.
+- **Hecho cuando:** un test arranca `motor_control` en batch contra el bus simulado y comprueba la lista exacta
+  de tramas.
+- **Riesgos:** el modo batch de klippy no ejecuta temporizadores igual que en real; puede hacer falta probar las
+  clases sin el reactor.
+
+### B18 — Fase 2: portar `io_remap.py` · M
+
+- **Objetivo:** módulo `[io_remap]` de la Hi en Kalico ([phase2-plan.md §4](phase2-plan.md)).
+- **Ficheros:** Creality-Hi-Kalico `klippy/extras/io_remap.py`; origen `klippy/extras/io_remap.py` de la OTA
+  V1.1.0.60 (GPL).
+- **Hecho cuando:** carga en batch con `test/hi/nozzle_mcu.dict` y emite `config_ioRemap` con los valores de la
+  captura.
+- **Riesgos:** no se sabe si hace falta `SET_IOREMAP` para activar el reenvío (paso 2.1).
+
+### B19 — Fase 2: config de la Hi con X/Y · M
+
+- **Objetivo:** `config/hi/` con `[serial_485]`, `[motor_control]` sin claves de parámetros, `[io_remap]`,
+  endstops de stock y `[homing_override]` que solo deja pasar X e Y.
+- **Ficheros:** Creality-Hi-Kalico `config/hi/printer.cfg`, `config/hi/motor_control.cfg`,
+  `test/test_hi_config.py`.
+- **Hecho cuando:** valida en batch; `G28 Z` se rechaza; `G28 X Y` genera pasos solo en X e Y.
+- **Riesgos:** depende de B16 y B18.
+
+### B20 — Fase 2: lecturas previas en la impresora · U, después M
+
+- **Objetivo:** pasos 2.1 y 2.2 de [phase2-plan.md §8](phase2-plan.md): qué pin es cada final de carrera y qué
+  hace el modo de stall 1.
+- **Ficheros:** `tools/hi_probe.py` (ampliar, solo lectura); salida en `data/captures/`.
+- **Hecho cuando:** las dos preguntas están respondidas con [P] en `docs/hardware.md`.
+- **Riesgos:** ninguna escritura; el homing del paso 2.2 es el de stock.
