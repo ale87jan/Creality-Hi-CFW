@@ -344,3 +344,31 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
 - **Hecho cuando:** cambio de color completo sin intervención; resultados [P] en `docs/hardware.md`.
 - **Riesgos:** golpe en el corte; purga fuera de sitio.
 
+### B36 — Fase 6: equivalencias de los comandos de Creality · M
+
+- **Objetivo:** leer en el stock qué hace cada comando de [phase6-plan.md §3](phase6-plan.md) y `[custom_macro]`,
+  y fijar su equivalente en Kalico.
+- **Ficheros:** stock `klippy/` (solo lectura); `docs/phase6-plan.md` §3.
+- **Hecho cuando:** ninguna fila de la tabla queda como supuesto.
+- **Riesgos:** algunos comandos pueden estar en `.so` cerrados.
+
+### B37 — Fase 6: `config/hi/` por subsistemas · M
+
+- **Objetivo:** un fichero por subsistema (`printer.cfg`, `motor_control.cfg`, `prtouch.cfg`, `macros.cfg`...),
+  como `config/k2/`. Lo necesita ya B22.
+- **Hecho cuando:** los tests en batch de las fases 1 y 2 pasan con la nueva estructura.
+- **Riesgos:** cambia rutas que usan `hi_kalico.sh` y el plan de la fase 1; actualizar los dos.
+
+### B38 — Fase 6: decisiones y macros de impresión · U, después M
+
+- **Objetivo:** cerrar las decisiones de [phase6-plan.md §6](phase6-plan.md) y escribir las macros de impresión.
+- **Hecho cuando:** `tools/cfg_commands.py` sobre `config/hi/` no encuentra comandos ausentes y hay test en
+  batch de `START_PRINT` y `END_PRINT`.
+- **Riesgos:** depende de las fases 2 a 5.
+
+### B39 — Fase 6: instalador, pantalla y documentación · U
+
+- **Objetivo:** paquete `.tar.gz` con SHA-256, arranque automático (decisión 3), sustituto de la pantalla y web
+  de documentación. Sin analizar.
+- **Riesgos:** el arranque automático escribe en el sistema; necesita vuelta a stock probada.
+

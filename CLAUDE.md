@@ -43,10 +43,11 @@ Decision D4 in [docs/decisions.md](docs/decisions.md).
 | `docs/protocols/` | `rs485.md` (motor/CFS bus), `mcu.md` (Klipper MCU commands) |
 | `docs/analysis/` | Hi firmware version diffs; K2 port feasibility with on-printer results |
 | `docs/roadmap.md` | Phases and next steps |
-| `docs/phase2-plan.md` ... `docs/phase5-plan.md` | Phase 2 (closed-loop X/Y), 3 (probe), 4 (Hi modules, dual-Z align) and 5 (CFS) analysis and on-printer plans |
+| `docs/phase2-plan.md` ... `docs/phase6-plan.md` | Phase 2 (closed-loop X/Y), 3 (probe), 4 (Hi modules, dual-Z align), 5 (CFS) and 6 (macros, UX) analysis and on-printer plans |
 | `docs/decisions.md` | Design decisions (D1 Jacob10383's Kalico as base, D2 own fork, D3 two repos, D4 git flow, D5 staged phase 1, D6 c_helper.so artifact, D7 phase 1 UI, D8 separate Hi motor_control, D9 staged motor writes, D10 phase 2 homes X/Y only) |
 | `RESEARCH.md` | Method, sources, confidence levels, licensing notes |
 | `tools/fwextract.py` | Unpack OTA images, MCU dictionaries, kernel/DTB/config |
+| `tools/cfg_commands.py` | Offline inventory of config commands and sections a klippy tree lacks |
 | `tools/hi_probe.py` | Read-only probe run **on the printer** (MCU identify, motor params) |
 | `tools/tests/` | Offline tests: `python -m unittest discover -s tools/tests` |
 | `data/captures/` | Data read on the printer |

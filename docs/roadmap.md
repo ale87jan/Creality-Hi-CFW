@@ -78,10 +78,13 @@ Plan y análisis: [phase5-plan.md](phase5-plan.md).
 
 ## Fase 6 — Macros y experiencia de uso
 
+Plan e inventario: [phase6-plan.md](phase6-plan.md).
+
 - [ ] Sustituir comandos del Klipper parcheado de Creality: `SET_LIMITS`, `FORCE_MOVE_E`, `CXSAVE_CONFIG`,
       `Tnn`, `BOX_*`.
 - [ ] Integrar la config del usuario (`ale87jan/Creality-Hi-Custom-Klipper`).
 - [ ] Pantalla: Fluidd al principio; valorar HelixScreen (LVGL) para el panel 240x320.
 - [ ] Instalador y actualizaciones en este repo, al estilo de `install.py`/`bootstrap`/`swap` de la K2: el
-      instalador clona el fork en la impresora y verifica cada pieza con SHA-256.
+      instalador verifica cada pieza con SHA-256. La Hi no tiene git: se instala desde un paquete, no
+      clonando.
 - [ ] Web de documentación (MkDocs + GitHub Pages), como la de la K2.

@@ -58,6 +58,12 @@ Análisis ligero hecho el 2026-11-10: [phase5-plan.md](phase5-plan.md). Tareas B
 protocolo del fork valen; `box.py` no vale tal cual (pin del sensor de corte, corte hacia -X y zona trasera de
 la K2 fijos en el código). Falta leer la lógica de carga y purga (B32) antes de decidir cómo adaptarlo.
 
+## Fase 6 (macros y uso)
+
+Inventario hecho el 2026-11-10: [phase6-plan.md](phase6-plan.md). Tareas B36 a B39. La configuración del
+usuario usa unos 50 comandos que el fork no ofrece (`tools/cfg_commands.py`); 33 son del CFS. El instalador no
+puede clonar el fork en la Hi (no hay git): será un paquete.
+
 ## Dónde está el trabajo
 
 - Rama `claude/project-thread-fnrqje` en los dos repos, creada desde `dev` y subida a GitHub el 2026-11-10, con
