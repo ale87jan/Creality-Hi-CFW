@@ -1,11 +1,24 @@
 # Pantalla de la Hi con Kalico: opciones
 
-Estado: análisis sin impresora (2026-11-10). **No hay decisión**: las opciones esperan tu elección. Mientras
+Estado: análisis sin impresora (2026-11-10). Decisiones ya tomadas en el §0; la base de la pantalla táctil
+(opción H frente a E) sigue abierta. Mientras
 tanto sigue vigente la decisión D7 (consola SSH y luego Fluidd) y la recomendación de
 [phase6-plan.md](phase6-plan.md) §8.2: solo Fluidd hasta imprimir bien.
 
 Marcas: **[verificado: fichero:línea]** leído en el repo; **[supuesto: cómo comprobarlo]**. Las citas de
 proyectos externos vienen de sus páginas, leídas por un subagente y no contrastadas con el código fuente.
+
+## 0. Decisiones de Alejandro (2026-11-10)
+
+Pendientes de copiar a `docs/decisions.md` cuando se unan las ramas (ese fichero tiene D5-D17 en la rama de
+fases y aquí daría conflicto).
+
+| Opción | Decisión |
+| - | - |
+| 0 Solo Fluidd | **Adoptada como base**: la pantalla queda parada durante Kalico hasta tener sustituto |
+| G Panel del CFS en Fluidd | **Planificado** (B45), tras fijar la interfaz del CFS en la fase 5 |
+| A UI de stock (A1 y A2) | **Descartada**; B41 deja de hacer falta |
+| Pantalla táctil | Preferencia: adaptar ADL-Screen o K1C-CFS-Power-Screen (opción H) o UI propia (E). Sin cerrar |
 
 ## 1. Qué tiene la Hi
 
@@ -98,6 +111,43 @@ Hay dos variantes.
 Si B funciona salvo el tamaño, se puede contribuir un layout vertical 240x320 (o el modo «tiny»). Depende de
 que el equipo aguas arriba lo acepte; se decide tras ver B en el panel.
 
+### Opción H — Adaptar PowerScreen (K1C-CFS-Power-Screen) o su fork ADL-Screen
+
+Propuesta por Alejandro. Código leído en clones de solo lectura: `ADL-Screen@e3ecc09` (2026-11-08) y
+`K1C-CFS-Power-Screen@bbc6a17` (2026-10-14). Las referencias `fichero:línea` son de ADL-Screen.
+
+- Qué son: forks de Guppyscreen (GPL-3.0) en C++ con LVGL 8, unas 20 000 líneas en `src/`. ADL-Screen es
+  PowerScreen mantenido aparte desde el 2026-11-06, con i18n (italiano por defecto) [verificado: NOTICE.md:3-5;
+  src/main.cpp:47-49].
+- Lo que encaja con la Hi:
+  - Dibuja en fbdev y lee el táctil por evdev, con el tamaño leído del framebuffer, rotación por software
+    (`display_rotate`) y calibración táctil opcional [verificado: src/main.cpp:58-112].
+  - Habla con Moonraker por websocket (libhv) [verificado: src/websocket_client.cpp]; no usa `/tmp/klippy_uds`.
+  - Enlace estático y compilación cruzada con `CROSS_COMPILE` [verificado: Makefile:4-12,26]: no depende de
+    la glibc 2.29 de la Hi. Hoy solo se publica para MIPS [verificado: Makefile:77]; ARMv7 habría que montarlo.
+  - Ya trae panel del CFS (`cfs_panel.cpp`, `cfs_model.cpp`), M600 y flujo de impresión.
+- Lo que no encaja:
+  - **Diseño fijo de 800x480 apaisado**: todo se escala con `ancho/800` y la pantalla de inicio usa posiciones
+    absolutas sobre esa rejilla [verificado: src/powerui.h:11; src/powerui.cpp:12; src/main_panel.cpp:767]. En
+    240x320 el factor sería 0,3: ilegible. Hay que **rehacer las vistas**, no ajustar un parámetro.
+  - El CFS usa el objeto `box` y `BOX_INFO_REFRESH`, `BOX_MODIFY_TN_DATA`, `BOX_ENABLE_CFS_PRINT`,
+    `BOX_NOZZLE_CLEAN` del Klipper de Creality [verificado: src/cfs_model.h:10; src/cfs_panel.cpp:535,880;
+    src/print_panel.cpp:1427]; hay que portarlo a `creality_cfs` (D16).
+  - Rutas y servicios de la K1 (`/usr/data/...`) [verificado: src/main.cpp:45]; su `installer.sh` no vale para la Hi.
+  - Licencia: el código es GPL-3.0, pero el diseño PowerUI (tema, iconos, maquetas) es **CC BY-NC 4.0**
+    [verificado: LICENSE-POWERUI.md:3-5], que no es compatible con redistribuir bajo GPL-3.0. Como las vistas
+    se rehacen igualmente, se usaría el código sin los recursos PowerUI [supuesto: revisar qué ficheros de
+    `assets/` y `src/powerui.*` cubre esa licencia].
+- Cuál de los dos: PowerScreen es el original y la fuente de los cambios; ADL-Screen añade i18n y es más
+  reciente, pero lleva cuatro días como fork. [supuesto: comparar `git log` de ambos antes de elegir]
+- Ejemplo: reutilizar `websocket_client`, `state`, `cfs_model` y el arranque fbdev/evdev, y escribir tres
+  vistas nuevas de 240x320 vertical (inicio, impresión, CFS). Se prueba en el PC con el simulador SDL del
+  propio Makefile (compilación sin `CROSS_COMPILE`) antes de tocar la Hi.
+
+Frente a la opción E (UI propia): H ahorra el cliente de Moonraker, el modelo de estado y el del CFS, a cambio
+de heredar 20 000 líneas pensadas para otra pantalla. En la práctica H es «UI propia sobre el motor de
+PowerScreen».
+
 ### Complemento G — Panel del CFS dentro de Fluidd (para la opción 0)
 
 Aportado por Alejandro: repos de la K1C que añaden un panel del CFS a Fluidd. Leídos en sus páginas de GitHub
@@ -137,6 +187,7 @@ por un subagente (sin ver el código ni las fechas de los commits, que no se pud
 | C Guppyscreen | alto | alto | no declarado | no |
 | D KlipperScreen | inviable | — | no (mín. 480x320) | no |
 | E UI propia | alto | medio | sí | no |
+| H PowerScreen / ADL-Screen | alto (vistas nuevas, port ARMv7 y CFS) | medio | no (diseño 800x480) | no |
 | G Panel CFS en Fluidd | medio (adaptar JS) | bajo (solo ficheros web) | — (es web) | sí; complementa a 0 |
 
 ## 4. Comprobaciones de solo lectura (desde tu PC, por SSH)
@@ -172,7 +223,7 @@ copiarlas al unir ramas. Siguientes ids tras B39: B40-B44. Todas U (sin analizar
   los ficheros y sockets que abre `display-server`, RAM libre y si hay PIL.
 - **Riesgos:** ninguno; no pasar de lectura.
 
-### B41 — Pantalla: protocolo UDS de la UI de stock · M
+### B41 — Pantalla: protocolo UDS de la UI de stock · M (anulada: opción A descartada)
 
 - **Objetivo:** documentar las peticiones que `display-server`/`master-server` envían a `/tmp/klippy_uds`
   (nombres de métodos y campos) para valorar A2.
@@ -208,3 +259,10 @@ copiarlas al unir ramas. Siguientes ids tras B39: B40-B44. Todas U (sin analizar
   (en modo batch o impresora) con tu aprobación.
 - **Riesgos:** depende de que la fase 5 fije la interfaz del CFS; instalar toca ficheros de Fluidd en el overlay.
   Sin dependencia de la pantalla física.
+
+### B46 — Pantalla: compilar PowerScreen/ADL-Screen para ARMv7 y simulador · M
+
+- **Objetivo:** compilar el fork elegido en el simulador SDL (PC) y de forma cruzada, estático, para ARMv7
+  hard-float; medir tamaño y qué vistas caben en 240x320.
+- **Hecho cuando:** binario ARMv7 estático generado y capturas del simulador a 240x320 guardadas.
+- **Riesgos:** ninguno en la impresora (no se ejecuta en la Hi en esta tarea).
