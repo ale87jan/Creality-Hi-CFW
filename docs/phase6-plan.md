@@ -100,7 +100,18 @@ Base decidida: la configuración del usuario (§6, decisión 1). Inventario repe
   `BOX_START_PRINT`, `BOX_END_PRINT`, `ENABLE_PRESSURE_ADVANCE`, `NEXT_HOMEZ_NACCU`. Añadido: `START_PRINT`
   vuelve a preparar si algún eje no está referenciado, porque `PRINT_PREPARE_CLEAR` aún no está portado.
   `tools/cfg_commands.py` sobre `config/hi/` da cero comandos ausentes.
-- Faltan `PAUSE`, `RESUME`, `CANCEL_PRINT`, `FIRST_FLOOR_*`, `print_modes.cfg` y `multimaterial.cfg`.
+- **Hecho (2026-11-10):** `PAUSE`, `RESUME`, `CANCEL_PRINT`, `MOTOR_CANCEL_PRINT` y `FINISH_INIT` en `print.cfg`,
+  con 3 tests más. La bandera `PRINT_PREPARED` se quitó [usuario]: `START_PRINT` prepara salvo que los tres ejes
+  estén referenciados y la boquilla limpia. Cambios: `xyz_ready` es `toolhead.homed_axes`;
+  `pause_resume.resume_err` (parche de Creality, lo activa código cerrado) no se consulta [verificado:
+  stock:extras/pause_resume.py:46, 185-187]; `RESUME_FLUSH` es una extrusión simple sobre la papelera a `F360`
+  y `BOX_NOZZLE_CLEAN` es `_HI_CFS_SHAKE` [supuesto]; `ACCEL_TO_DECEL` pasa a `MINIMUM_CRUISE_RATIO`.
+- **Corte en la pausa, sin portar.** `IF_CUT_AND_COOLING` corta (`PAUSE_CUT`, en `box_wrapper`) solo si
+  `printer.motor_control.cut.state` es verdadero, que es el enclavamiento de la comprobación de posición de
+  corte del módulo de motores [verificado: captura:multimaterial.cfg; fork:motor_control.py:3700-3717, 4416].
+  `motor_control_hi` no porta esa comprobación, así que el estado sería siempre falso: el port usa solo la
+  rama sin corte (`_HI_PAUSE_PARK`: boquilla a 140 °C y cama al frente). Pendiente de decisión.
+- Faltan `FIRST_FLOOR_*`, `print_modes.cfg` y el resto de `multimaterial.cfg` (`M600`, carga y descarga).
 - B36 necesita el `klippy/` de stock, que no está en git: hay que traerlo del PC del usuario (carpeta
   `firmware`), que debe estar encendido.
 
