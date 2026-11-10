@@ -320,27 +320,17 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
 - **Objetivo:** portarlo solo si hace falta (recuperación tras corte de luz). `timer_read` no se porta (D15).
 - **Riesgos:** los comandos `EEPROM_WRITE_*` escriben en una memoria que también usa el stock.
 
-### B31 — Fase 5: clasificar las tramas del CFS · M
+### B31 — Fase 5: clasificar las tramas del CFS · M · HECHO 2026-11-10 (tabla)
 
-- **Objetivo:** tabla de las tramas de `box_protocol.py` y `box_addr.py` (lectura, escritura volátil, escritura
-  persistente, movimiento) en `docs/protocols/rs485.md`, y herramienta de solo lectura para el paso 5.2.
-- **Ficheros:** Creality-Hi-Kalico `klippy/extras/box_protocol.py`, `box_addr.py`; Creality-Hi-CFW
-  `docs/protocols/rs485.md`, `tools/`.
-- **Hecho cuando:** cada trama tiene clase y referencia a línea; la herramienta solo envía las de lectura y
-  tiene test sin impresora.
-- **Riesgos:** ninguno; solo lectura.
+- **Hecho:** clase de cada trama (lectura, estado, movimiento) en la tabla de [phase5-plan.md §1](phase5-plan.md).
+- **Pendiente (B31c):** herramienta de solo lectura para el paso 5.2, con `0x0A` decodificado como 4 bytes.
 
-### B31b — Fase 5: contrastar con `gitstonelabs/creality-cfs-klipper` · M · EN CURSO
+### B31b — Fase 5: contrastar con `gitstonelabs/creality-cfs-klipper` · M · HECHO 2026-11-10
 
-- **Hecho (2026-11-10):** primera lectura en [phase5-plan.md §1](phase5-plan.md): licencia GPLv3, Hi como
-  hardware de referencia, mismos códigos de función que el fork, geometría de corte igual a la de stock, y el
-  problema de que abre el puerto serie por su cuenta.
-- **Falta:** tabla trama a trama (carga útil y respuesta) entre `ref:src/creality_cfs.py`, `ref:docs/protocol.md`
-  y `fork:box_protocol.py`; leer la coreografía (`ref:src/creality_cfs.py:1100-3839`) y estimar el cambio de
-  transporte a `serial_485` (opción D).
-- **Hecho cuando:** el plan tiene la tabla y una recomendación para la decisión 1.
-- **Acceso:** repositorio público; en la nube se clona solo para leer en una carpeta aparte. En el PC, en
-  `external/`.
+- **Hecho:** tabla trama a trama en [phase5-plan.md §1](phase5-plan.md). La capa de órdenes del fork no es la
+  de la Hi (`0x0A` de 4 bytes frente a 6, `0x0F` ausente, `0x0D` y `0x11` distintos). El cambio de transporte
+  de la referencia se concentra en `_send_command`. Recomendación: opción D.
+- **Pendiente:** leer la coreografía completa de la referencia antes de adaptarla (parte de B34).
 
 ### B32 — Fase 5: leer la lógica de `box.py` y `box_change.py` · M
 

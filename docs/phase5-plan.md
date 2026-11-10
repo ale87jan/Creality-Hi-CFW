@@ -56,6 +56,40 @@ ref:src/creality_cfs.py:1-700, 969-1023, ref:configs/printer.cfg.example].
   driver de X, de solo lectura [verificado: docs/protocols/rs485.md:48]. Su captura `f7 81 04 00 0c 0b`
   coincide con nuestra descripción de la trama. No es peligrosa, pero no es del CFS.
 
+### Comparación trama a trama con la referencia (B31b y B31, 2026-11-10)
+
+Fuentes: `ref:docs/protocol.md:234-620` (capturas del bus de una Hi con CRC verificado, según el autor) y
+`fork:klippy/extras/box_protocol.py:24-38, 392-764`. La columna "Hi" es lo que la referencia dice haber visto
+en el bus; no lo he comprobado en la impresora [supuesto: paso 5.2].
+
+| Func. | Fork (K2) | Hi según la referencia | ¿Coincide? | Clase |
+| - | - | - | - | - |
+| `0xA1`, `0xA2`, `0xA0`, `0x0B` | Descubrir, consultar, asignar dirección, pasar a app (`:741-764`) | Mismas cargas (`ref:protocol.md:238-244`); la Hi añade `0xA3` | Sí | `A1`/`A2` lectura; `A0` y `0B` cambian estado |
+| `0x02` | `[máscara]`; respuesta ASCII `A:...;B:...;` (`:521-554`) | Igual; con `0x0F` puede tardar ~11 s | Sí | Lectura |
+| `0x03` | `[máscara]`; 4 bytes (`:556-568`) | Igual; `0xFF` = ranura no pedida | Sí | Lectura |
+| `0x04` | `(0, 1)` sin ranura, `(ranura, 0)` con ranura (`:637-644`) | `[00][01]` modo alimentación, `[ranura][00]` modo impresión | Sí | Escribe estado |
+| `0x05` | Sin carga; 1 byte (`:672`) | Igual: 0 medio, 1 lleno, 2 vacío | Sí | Lectura |
+| `0x08` | `(0)` máscara de ranuras, `(1)` máscara del hub; rechaza bits altos (`:660-670`) | `[canal]` 0 material, 1 conexiones; visto `0x00`, `0x01`, `0x07` | Sí en forma; nombres distintos | Lectura |
+| `0x0A` | Sin carga; **exige 6 bytes** (o 4 con estado `0x30`) y un estado entre 0 y 5 (`:475-510`) | Sin carga; **4 bytes** `[b0][b1][b2][b3]` con estado `0x00`; `b3 = 0x02` cargado | **No**: el decodificador del fork rechazaría la respuesta normal de la Hi ("payload has the wrong shape") | Lectura |
+| `0x0D` | `(0, 0/1)` lectura de RFID al insertar; `(máscara, 2)` lectura forzada, 190 s por ranura (`:705-728`) | `[0F][00]` armar precarga, `[0F][01]` desarmar, `[ranura][02]` rearmar (bloquea ~38 s) | **Parcial**: mismo código, otra máscara y otro significado | Escribe estado; la fase 2 mueve |
+| `0x0E` | `(1)`; float big-endian (`:679-693`) | Igual | Sí | Lectura |
+| `0x0F` | **No existe** en el fork | Motor de conexión: `[01]` acoplar, `[00]` soltar; envuelve cada carga | **No** | Mueve |
+| `0x10` | `(ranura, etapa, arg)`, etapas 0, 4, 5, 6 y 7 con `arg = 3` en la 7 (`:612-621`) | `[ranura][etapa][arg]`: `00 00`, `04 00`, `05 00`, `06 00`, `07 03` | Sí en la petición; longitudes de respuesta sin comparar | Mueve |
+| `0x11` | Fase 0 `(0, 0)`, fase 1 `(ranura, 1)` (`:627-635`) | `[ranura][00]` inicio, `[ranura][01]` fin (retenido ~9,6 s) | **No** en el primer byte de la fase 0 | Mueve |
+| `0x14`, `0xF0` | No existen | Versión y número de serie | — | Lectura |
+
+Consecuencias:
+
+- La conclusión 2 de arriba se queda corta: valen el transporte (`serial_485.py`) y el sobre de la trama, pero
+  **la capa de órdenes del fork no es la de la Hi**. Lo más grave es `0x0A`, que `box.py` consulta de continuo:
+  con el firmware `cfs0_000_113` cada consulta acabaría en `ProtocolError`. Encaja con la conclusión 5 (app
+  más antigua que la de la K2).
+- Para el paso 5.2 (solo lectura) sirven `A2`, `0x05`, `0x08`, `0x0E`, `0x03`, `0x14` y `0xF0`; `0x0A` hay que
+  decodificarlo como 4 bytes, no con el decodificador del fork.
+- La referencia concentra todo el tráfico en una función, `_send_command`, con 19 llamadas
+  [verificado: ref:src/creality_cfs.py:1427; recuento con grep]. Cambiar su transporte a `serial_485` es
+  sustituir esa función y la apertura del puerto (`:1357`, `register_fd`), no reescribir la coreografía.
+
 Con esto aparece una cuarta forma de adaptar el CFS (§4, opción D).
 
 ## 2. Config de stock de la Hi
@@ -121,8 +155,9 @@ Lo que sí coincide: el nombre del sensor de filamento (`filament_switch_sensor 
   `CFS_STATUS`, `CFS_EXTRUDE`, `CFS_RETRUDE`, `CFS_CUT`, `CFS_FLUSH`), distinto del de la K2 (`BOX_LOAD`...) y
   del de stock (`BOX_*`).
 
-No tengo recomendación firme hasta leer la lógica (B32 y B31b): depende de cuánto de `box.py` es geometría de la K2.
-Con lo visto, **D** es la candidata: es la única coreografía probada en una Hi. La alternativa es A para el
+Recomendación tras B31b (2026-11-10): **D**. Es la única coreografía probada en una Hi, y las opciones A a C
+heredan una capa de órdenes que no coincide con la Hi en `0x0A`, `0x0D`, `0x0F` y `0x11` (§1), así que además
+de la geometría habría que rehacer el protocolo. La alternativa es A para el
 pin y el sentido del corte. La decisión depende de cuánto cuesta cambiar el transporte de D.
 
 ## 5. Plan en la impresora
