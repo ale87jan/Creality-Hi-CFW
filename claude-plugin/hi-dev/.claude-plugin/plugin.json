@@ -1,6 +1,6 @@
 {
   "name": "hi-dev",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Token-saving tooling for the Creality Hi CFW project: read-only scripts, cheap subagents, guard hooks and workflow skills.",
   "author": { "name": "ale87jan" },
   "license": "GPL-3.0-or-later"
