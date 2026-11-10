@@ -95,9 +95,10 @@ Consecuencias:
 1. La config de la Hi mantiene `endstop_pin: !PC7` y `^PB13`; no se usa el pin de stall como endstop.
 2. Hay que portar `io_remap.py` en esta fase. Es Python legible, 50 líneas, y las dos MCU tienen
    `config_ioRemap` y `operation_ioRemap` [verificado: fork:test/hi/nozzle_mcu.dict].
-3. Si `SET_IOREMAP` hace falta para activar el reenvío no está claro: ninguna macro de stock lo llama
-   [verificado: búsqueda en stock:config/F018_CR4NU200360C20/*.cfg] [supuesto: ver si lo llama algún `.so`;
-   comprobar con `QUERY_ENDSTOPS`].
+3. El reenvío solo se activa mientras X hace homing: el `homing.py` de stock envía `SET_IOREMAP S=1` antes de
+   X y `S=0` después, también si falla [verificado: stock:klippy/extras/homing.py:399-413]. La línea se
+   comparte con la sonda. En Kalico lo hace el propio módulo con `homing_stepper: stepper_x`, desde los eventos
+   de homing y sin tocar `homing.py` [verificado: fork:klippy/extras/io_remap.py; fork:config/hi/phase2.cfg].
 
 ## 5. `homing.py` del fork con la Hi
 
@@ -162,7 +163,7 @@ o de calibración no sale nunca, sea cual sea el nivel [verificado: fork:klippy/
 | Simulador del bus RS-485 para tests (responde `READ_ADDR`, `PROTECTION`, `GET`, `SYS_PARAM 02`) | No |
 | `config/hi/` de la fase 2 validada en batch | No (los valores salen de la captura) |
 | Script de solo lectura para el paso 2.1 (ampliar `tools/hi_probe.py`) | No |
-| Distancias de cebado, uso de `SET_IOREMAP`, homing real con el bus | **Sí** [supuesto] |
+| Distancias de cebado y homing real con el bus | **Sí** [supuesto] |
 
 ## 8. Plan en la impresora (después de la fase 1)
 
@@ -173,17 +174,17 @@ Todo empieza en solo lectura. Ninguna escritura de parámetros sin aprobación e
 | 2.1 | En stock: `QUERY_ENDSTOPS` con el cabezal lejos y pegado a cada final de carrera (motores desactivados, a mano); `MOTOR_READ_ALL_PIN_IO` | No | X e Y cambian de estado; se sabe qué pin es cada uno |
 | 2.2 | En stock: leer `param_stall_mode` y `PROTECTION` antes y después de un `G28 X Y` | No (el homing es el de stock) | Se documenta el efecto del modo 1 |
 | 2.3 | Kalico con `startup_writes: none`: `MOTOR_STATUS` | Solo direcciones | 0x81 y 0x82 responden, sin fallos |
-| 2.4 | `QUERY_ENDSTOPS` en Kalico con `io_remap` | No | Igual que 2.1 |
+| 2.4 | `SET_IOREMAP S=1`, `QUERY_ENDSTOPS` y `SET_IOREMAP S=0` en Kalico | Solo el reenvío de pines | Igual que 2.1 |
 | 2.5 | `startup_writes: stall`; mover X/Y unos mm con `FORCE_MOVE` a baja velocidad | Modo de stall | Movimiento suave, sin fallos |
 | 2.6 | Levantar Z 5 mm; `G28 Y`, `G28 X` con la mano en el interruptor | Modo de stall | Homing correcto y repetible |
 | 2.7 | Comparar parámetros leídos con la captura (solo informe) | No | 51/51 por eje |
 
-## 9. Decisiones que necesito
+## 9. Decisiones (todas cerradas)
 
 1. **Cómo adaptar `motor_control.py`**: decidida el 2026-11-10, copia aparte (D8 en
    [decisions.md](decisions.md)).
 2. **Escrituras en el arranque**: decidida el 2026-11-10, niveles `none` → `stall` → `params` (D9).
-3. **Homing en la fase 2**: solo X/Y con Z bloqueado (recomendada, §5) o adelantar el homing de Z.
+3. **Homing en la fase 2**: decidida el 2026-11-10, solo X/Y con Z bloqueado (D10).
 4. **Dato tuyo**: respondido el 2026-11-10. Hay sensores físicos en X e Y; el orden no es obligatorio; hay que
    levantar Z antes (§4 y §5).
 

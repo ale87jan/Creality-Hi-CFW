@@ -163,8 +163,8 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
 - **Objetivo:** cerrar las cuatro decisiones de [phase2-plan.md §9](phase2-plan.md) y anotarlas en
   [decisions.md](decisions.md).
 - **Hecho cuando:** las decisiones están en `decisions.md` y el plan deja de decir "pendiente".
-- **Estado:** decisión 1 cerrada (D8, copia aparte) y dato de los finales de carrera recibido. Decisión 2
-  cerrada (D9, niveles). Falta la 3.
+- **Estado:** decisión 1 cerrada (D8, copia aparte) y dato de los finales de carrera recibido. Decisiones 2
+  y 3 cerradas (D9 niveles, D10 solo X/Y). Tarea terminada.
 - **Riesgos:** B16 a B20 dependen de la decisión 2.
 
 ### B16 — Fase 2: `motor_control_hi.py` · M
@@ -203,7 +203,8 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
   V1.1.0.60 (GPL).
 - **Hecho cuando:** carga en batch con `test/hi/nozzle_mcu.dict` y emite `config_ioRemap` con los valores de la
   captura.
-- **Riesgos:** no se sabe si hace falta `SET_IOREMAP` para activar el reenvío (paso 2.1).
+- **Riesgos:** el reenvío se activa solo durante el homing de X (`homing_stepper`), como en stock; falta verlo
+  en la impresora (paso 2.4).
 
 ### B19 — Fase 2: config de la Hi con X/Y · M
 

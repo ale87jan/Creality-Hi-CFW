@@ -186,3 +186,15 @@ calibración no se envían en ningún nivel.
 - Asignar direcciones (broadcast `READ_ADDR 01`) ocurre en todos los niveles; se asume que el stock hace lo
   mismo en cada arranque (por confirmar en el paso 2.1).
 - Subir a `params` es una decisión aparte, con los ids ya verificados para `mot2_002_071`.
+
+## D10 — Homing de la fase 2: solo X e Y (2026-11-10)
+
+**Contexto.** El `homing.py` del fork exige el escáner de la K2 para `G28 Z` ([phase2-plan.md](phase2-plan.md)
+§5). Opciones: solo X/Y con Z bloqueado, o adelantar el homing de Z (sonda y `z_align`) a la fase 2.
+
+**Decisión.** Solo X e Y. `G28` y `G28 Z` dan error en `config/hi/phase2.cfg`; Z se levanta con
+`SET_KINEMATIC_POSITION`, como en la fase 1. El homing de Z llega con la sonda en la fase 3.
+
+**Motivos.** No juntar en las mismas pruebas el riesgo de los motores con el de choque contra la cama.
+
+**Consecuencias.** En la fase 2 no hay posición de Z real: antes de mover X/Y hay que levantar Z a mano.
