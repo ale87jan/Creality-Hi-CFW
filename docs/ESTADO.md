@@ -8,6 +8,7 @@ Punto de entrada para retomar el trabajo sin contexto previo. Se actualiza en ca
 - **Plan y análisis:** [phase1-plan.md](phase1-plan.md). **Tareas pequeñas pendientes:** [backlog.md](backlog.md).
 - **Última actualización:** 2026-11-10.
 - **Ramas protegidas** con rulesets de GitHub en los dos repos ([decisions.md](decisions.md), D19).
+- **Ahorro de tokens:** plugin `hi-dev` e índice `docs/INDEX.md` ([decisions.md](decisions.md), D20).
 
 ## Hecho
 
@@ -42,7 +43,7 @@ tests de la Hi pasan. El usuario decidió el 2026-11-10 no tocarlo por ahora.
 
 Análisis hecho sin impresora el 2026-11-10: [phase2-plan.md](phase2-plan.md). Tareas B15 a B20. Código hecho en el fork (B16 a B19): `motor_control_hi.py` (copia aparte, D8), `motor_map_hi.json`,
 `io_remap.py`, `config/hi/phase2.cfg` y 41 tests. Decisiones cerradas (D8, D9, D10). Falta todo lo de la impresora
-(B20 y §8 del plan). **Paso 2.1 hecho el 2026-11-10** en stock, solo lectura: Y se lee directo; X solo con `SET_IOREMAP S=1` y comparte línea con Z ([hardware.md](hardware.md)); 2.2 cerrado sin observar el efecto del modo de stall 1 (B20 hecho). 2.3 hecho: Kalico con `startup_writes: none`, 0x81 y 0x82 responden sin fallos (ver [phase2-plan.md](phase2-plan.md) §8). 2.4 hecho: en Kalico X solo se lee con `SET_IOREMAP S=1`. 2.5 hecho: X e Y se mueven bien y en el sentido de stock (Y− acerca la cama al final de carrera de Y). 2.6 y 2.7 hechos: `G28 Y` y `G28 X` en Kalico con `startup_writes: stall`, sin fallos. `G28 X Y` con X ya en el tope solo movió Y (probado desde una posición alejada: bien; D20, PR Creality-Hi-Kalico#3: `_HI_HOME_XY` aparta X del tope y la aparca en X0, probado en la Hi). **Fase 2 casi probada en la Hi**, falta esa prueba y la decisión de qué nivel `startup_writes` lleva el repo por defecto (`none` o `stall`) y los 5 puntos pendientes de la fase 1. Hallazgo principal: la Hi no usa los pines de stall como final
+(B20 y §8 del plan). **Paso 2.1 hecho el 2026-11-10** en stock, solo lectura: Y se lee directo; X solo con `SET_IOREMAP S=1` y comparte línea con Z ([hardware.md](hardware.md)); 2.2 cerrado sin observar el efecto del modo de stall 1 (B20 hecho). 2.3 hecho: Kalico con `startup_writes: none`, 0x81 y 0x82 responden sin fallos (ver [phase2-plan.md](phase2-plan.md) §8). 2.4 hecho: en Kalico X solo se lee con `SET_IOREMAP S=1`. 2.5 hecho: X e Y se mueven bien y en el sentido de stock (Y− acerca la cama al final de carrera de Y). 2.6 y 2.7 hechos: `G28 Y` y `G28 X` en Kalico con `startup_writes: stall`, sin fallos. `G28 X Y` con X ya en el tope solo movió Y (probado desde una posición alejada: bien; D21, PR Creality-Hi-Kalico#3: `_HI_HOME_XY` aparta X del tope y la aparca en X0, probado en la Hi). **Fase 2 casi probada en la Hi**, falta esa prueba y la decisión de qué nivel `startup_writes` lleva el repo por defecto (`none` o `stall`) y los 5 puntos pendientes de la fase 1. Hallazgo principal: la Hi no usa los pines de stall como final
 de carrera de X/Y y hay que portar `io_remap.py` en esta fase.
 
 ## Fase 3 (sonda)

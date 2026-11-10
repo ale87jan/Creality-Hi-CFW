@@ -339,7 +339,21 @@ bypass del rol de administrador **solo en modo `pull_request`** [usuario]: se fu
 no hay push directo. Los rulesets no pueden limitar la rama origen: "`main-hi` solo desde `dev`" sigue siendo una
 convención. Todo cambio, también de docs, va por rama y PR.
 
-## D20 — Apartar X del tope antes del homing y aparcarla en X0 después (2026-11-10)
+## D20 — Plugin `hi-dev` para ahorrar tokens (2026-11-10)
+
+**Contexto.** Cada sesión releía unas 2900 líneas de docs y repetía las mismas secuencias de git, `gh` y SSH. Con
+varios hilos en el mismo clon, además, un `git add -A` puede arrastrar cambios ajenos.
+
+**Decisión.** [usuario] Plugin versionado en este repo (`claude-plugin/hi-dev`, marketplace `creality-hi`) con
+scripts de solo lectura, subagentes Haiku por defecto (Sonnet para verificar), skills de flujo y hooks. `docs/INDEX.md`
+lo genera un script y se regenera solo al editar docs.
+
+**Consecuencias.** Los hooks hacen cumplir D4 y D19 (sin commits en ramas protegidas, sin `git add -A`, sin
+atribuciones, preguntar antes de escribir en los motores) y las reglas de datos privados. Un hilo que comparta clon
+con otro trabaja en un `git worktree` propio. Los hooks no se han probado dentro de Claude Code (no hay CLI en esta
+máquina): solo con los tests offline [I].
+
+## D21 — Apartar X del tope antes del homing y aparcarla en X0 después (2026-11-10)
 
 **Contexto.** En la prueba de la fase 2, `G28 X Y` con X ya en el tope solo movió Y [P]: el stock se aparta 10 mm
 antes (`_HOME_X`) y la config de la fase 2 no. Además, el homing deja X en `-19`, pulsando el interruptor de la

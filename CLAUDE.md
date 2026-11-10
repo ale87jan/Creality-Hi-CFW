@@ -45,7 +45,9 @@ Decision D4 in [docs/decisions.md](docs/decisions.md).
 | `docs/roadmap.md` | Phases and next steps |
 | `docs/phase2-plan.md` ... `docs/phase6-plan.md` | Phase 2 (closed-loop X/Y), 3 (probe), 4 (Hi modules, dual-Z align), 5 (CFS) and 6 (macros, UX) analysis and on-printer plans |
 | `docs/autostart-plan.md` | Design of the Kalico auto-start service and the way back to stock (paper only) |
-| `docs/decisions.md` | Design decisions (D1 Jacob10383's Kalico as base, D2 own fork, D3 two repos, D4 git flow, D5 staged phase 1, D6 c_helper.so artifact, D7 phase 1 UI, D8 separate Hi motor_control, D9 staged motor writes, D10 phase 2 homes X/Y only, D11 K2 prtouch as is, D12 Z alignment before probe, D13 z_align ported from the Hi module, D14 nozzle cleaning macros with guard reset, D15 tmc_line_check ported, D16 CFS on gitstonelabs creality_cfs over serial_485, D17 no repeated gantry alignment, D18 auto-start by an own switch-over service, D19 branch protection with rulesets, D20 step off the X endstop and park X at 0) |
+| `docs/decisions.md` | Design decisions (D1 Jacob10383's Kalico as base, D2 own fork, D3 two repos, D4 git flow, D5 staged phase 1, D6 c_helper.so artifact, D7 phase 1 UI, D8 separate Hi motor_control, D9 staged motor writes, D10 phase 2 homes X/Y only, D11 K2 prtouch as is, D12 Z alignment before probe, D13 z_align ported from the Hi module, D14 nozzle cleaning macros with guard reset, D15 tmc_line_check ported, D16 CFS on gitstonelabs creality_cfs over serial_485, D17 no repeated gantry alignment, D18 auto-start by an own switch-over service, D19 branch protection with rulesets, D20 hi-dev token-saving plugin, D21 step off the X endstop and park X at 0) |
+| `docs/INDEX.md` | Generated map of docs and decisions: read it before opening whole docs |
+| `claude-plugin/hi-dev/` | Claude Code plugin (scripts, hooks, agents, skills) to save tokens; tests in its `tests/` |
 | `RESEARCH.md` | Method, sources, confidence levels, licensing notes |
 | `tools/fwextract.py` | Unpack OTA images, MCU dictionaries, kernel/DTB/config |
 | `tools/cfg_commands.py` | Offline inventory of config commands and sections a klippy tree lacks |
