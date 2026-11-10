@@ -18,7 +18,7 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
   dos repos.
 - **Estado:** ramas subidas y PR abiertos el 2026-11-10. Queda la revisión del usuario y el CI.
 - **Hecho cuando:** hay un PR abierto por repo y el CI del fork (`ci-build_test`, `ci-lintformat`) termina.
-- **Riesgos:** `test_import_extra` puede fallar en el CI por `extras/cartographer.py` (ver B07); no lo
+- **Riesgos:** el CI del fork está en rojo por fallos heredados de `dev` (ver B07); no los
   introduce esta rama.
 
 ### B02 — Ejecutar el paso 0 y analizar la salida · U, después M
@@ -69,15 +69,28 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
 - **Hecho cuando:** el workflow pasa en un PR. `selftest.sh` necesita `gcc`, `python3` y `busybox`.
 - **Riesgos:** ninguno.
 
-### B07 — `test_import_extra` falla por `cartographer.py` · M
+### B07 — El CI del fork está en rojo en `dev` · M
 
-- **Objetivo:** que `pytest test/test_imports.py` pase en el fork.
-- **Contexto:** `klippy/extras/cartographer.py` (de la K2) hace `from cartographer.extra import *`, un paquete
-  externo. Comprobar primero si el CI del fork de Jacob falla igual.
-- **Ficheros:** Creality-Hi-Kalico `klippy/extras/cartographer.py` o `test/test_imports.py`.
-- **Hecho cuando:** el test pasa o se salta con motivo, sin romper el uso de la K2 (preferir cambio mínimo para
-  no complicar los merges con upstream).
-- **Riesgos:** conflictos al sincronizar con upstream.
+- **Objetivo:** que los checks de pull request (`ruff`, `Test Klippy`) pasen en el fork.
+- **Contexto:** comprobado el 2026-11-10 en el pull request Creality-Hi-Kalico #2 y reproducido en `origin/dev`
+  sin los cambios de la Hi. Tres causas, todas heredadas del fork de la K2:
+  1. `ruff` 0.15.22: 13 errores de `ruff check` y 24 ficheros sin formatear, todos en `klippy/extras/` (módulos
+     de la K2: `box*.py`, `motor_control.py`, `homing.py`, `z_align.py`...). `dev` da exactamente lo mismo.
+  2. 72 tests `test/klippy/*.test` fallan con `Internal error on command:"G28"`: `klippy/extras/homing.py:590`
+     hace `lookup_object("motor_control")` sin condición y cualquier config sin `[motor_control]` cae al hacer
+     homing [verificado: batch con una config cartesiana mínima sobre `origin/dev`].
+  3. `test/test_imports.py::test_import_extra`: `klippy/extras/cartographer.py` hace
+     `from cartographer.extra import *`, un paquete externo.
+  Los tests de la Hi (`test/test_hi_config.py`) pasan en el CI.
+- **Ficheros:** Creality-Hi-Kalico `klippy/extras/homing.py`, `klippy/extras/cartographer.py`, y el formateo de
+  `klippy/extras/`.
+- **Propuesta:** (2) hacer opcional `motor_control` en `homing.py` (`lookup_object("motor_control", None)` y
+  saltar los pasos de la K2 si no existe); hace falta igualmente para el homing de Z en la Hi antes de portar
+  `motor_control` (ver B15). (3) import protegido en `cartographer.py`. (1) `ruff format` + `ruff check --fix` en
+  un commit aparte. Comprobar antes si el CI del fork de Jacob falla igual y si acepta los cambios upstream.
+- **Hecho cuando:** `ruff` y `Test Klippy` pasan en un pull request hacia `dev`, sin saltar tests.
+- **Riesgos:** (1) toca 24 ficheros compartidos y complica los merges con upstream: decisión del usuario.
+  (2) cambia el camino de homing de la K2: probar con `[motor_control]` presente.
 
 ### B08 — Ejecutar `test/klippy/*.test` con las versiones de la Hi · M
 
