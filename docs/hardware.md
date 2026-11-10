@@ -10,7 +10,7 @@ Nivel de confianza: **[P]** verificado en la impresora, **[F]** leído en el fir
 | SoC | Allwinner T113-i (`sun8iw20`, Cortex-A7, ARMv7 hard-float) | [F] DTB |
 | Sistema | Tina 5.0 / OpenWrt 21.02, kernel 5.4.61 (Linaro GCC 5.3), U-Boot 2018.07 | [F] |
 | Userland | glibc 2.29, Python 3.9.12 (con pyserial 3.4, numpy 1.20.1, cffi 1.14.6, greenlet 1.0.0, Jinja2 3.0.3) | [F] |
-| Almacenamiento | eMMC `mmcblk0`; particiones A/B por `/dev/by-name/` (el `bootcmd` aún nombra `setargs_nand`) | [P] paso 0, 2026-11-10 |
+| Almacenamiento | eMMC `mmcblk0` con GPT; particiones A/B por `/dev/by-name/`: `rootfsA` p6, `rootfsB` p7, `rootfs_data` p10, `UDISK` p11 (el `bootcmd` aún nombra `setargs_nand`) | [P] paso 0 y lectura B40, 2026-11-10 |
 | Placa (variante) | `get_sn_mac.sh board` devuelve `CR4NU200360C21` en la unidad del usuario | [P] paso 0, 2026-11-10 |
 | Pantalla | GC9307, SPI 9 bit, 240x320 (kernel sin driver ST7701 de la K2) | [F] DTB, kernel config |
 | WiFi | AIC8800 (sin Ethernet en el kernel) | [F] |
