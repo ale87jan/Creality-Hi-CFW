@@ -98,6 +98,34 @@ Hay dos variantes.
 Si B funciona salvo el tamaño, se puede contribuir un layout vertical 240x320 (o el modo «tiny»). Depende de
 que el equipo aguas arriba lo acepte; se decide tras ver B en el panel.
 
+### Complemento G — Panel del CFS dentro de Fluidd (para la opción 0)
+
+Aportado por Alejandro: repos de la K1C que añaden un panel del CFS a Fluidd. Leídos en sus páginas de GitHub
+por un subagente (sin ver el código ni las fechas de los commits, que no se pudieron leer):
+
+| Repo | Qué es | Panel en Fluidd |
+| - | - | - |
+| [borferkic/K1C-CFS-Power-Script](https://github.com/borferkic/K1C-CFS-Power-Script) | Menú SSH, fork del Creality Helper Script, GPL-3.0 | **Sí**: «copying `power-cfs-panel.js` to the Fluidd folder and adding one `<script>` tag to Fluidd's index.html», más cambio de la revisión en `sw.js` por la caché PWA |
+| [AlbertoTrento/ADL-Script](https://github.com/AlbertoTrento/ADL-Script) | Fork del anterior, GPL-3.0 | Hereda el panel (cuatro slots); mecanismo no descrito en su página |
+| [borferkic/K1C-CFS-Power-Screen](https://github.com/borferkic/K1C-CFS-Power-Screen) | Sustituye la pantalla de la K1C (variante de Guppyscreen, MIPS) | No: solo registra su actualizador en Moonraker |
+
+- Mecanismo: JavaScript inyectado en Fluidd, que lee el objeto `box` de Klipper y envía G-code por Moonraker
+  (`BOX_MODIFY_TN_DATA` para tipo y color de material, `BOX_INFO_REFRESH` para refrescar). No toca Klipper ni la
+  pantalla, así que **no compite con nada**: es un complemento de la opción 0, no una pantalla.
+- Encaje con la Hi [verificado: firmware-versions.md:32 para Fluidd 1.30.0; el resto es supuesto]:
+  - El panel depende de los nombres del Klipper parcheado de Creality (`box`, `BOX_*`). Kalico con
+    `creality_cfs` (D16, phase6-plan) expone otros objetos y comandos [supuesto: comparar con
+    `printer.objects.list` en Kalico y con las macros `T0`..`T3` ya hechas]. Habría que adaptar el JS, no usarlo tal cual.
+  - Los tres son solo K1C (MIPS, firmware CFS 2.3.5.34); la Hi no aparece. El resto del Power-Script
+    (sustituir `printer.cfg`, `box.cfg`, desactivar servicios de Creality) **no se debe ejecutar** en la Hi.
+  - El cambio es de ficheros de Fluidd, reversible restaurando `index.html` y `sw.js`. El overlay es común a
+    los slots A y B (phase1-plan §5.2), así que no se aísla por partición: instalar en la ruta de Fluidd de la
+    sesión y no en la de stock si es posible [supuesto: leer la ruta real de Fluidd en la Hi].
+  - Licencia GPL-3.0: se puede tomar como base citando el origen. PowerUI (tema de la pantalla) lleva licencia
+    propia no comercial: no usarlo.
+- Ejemplo: copiar solo `power-cfs-panel.js` a una copia de Fluidd y comprobar en el navegador si
+  muestra «CFS disconnected» contra Kalico; después reescribir las llamadas a `box` por los objetos de `creality_cfs`.
+
 ## 3. Resumen comparativo
 
 | Opción | Esfuerzo | Riesgo en la Hi | Encaja 240x320 | Convive con la UI de stock |
@@ -109,6 +137,7 @@ que el equipo aguas arriba lo acepte; se decide tras ver B en el panel.
 | C Guppyscreen | alto | alto | no declarado | no |
 | D KlipperScreen | inviable | — | no (mín. 480x320) | no |
 | E UI propia | alto | medio | sí | no |
+| G Panel CFS en Fluidd | medio (adaptar JS) | bajo (solo ficheros web) | — (es web) | sí; complementa a 0 |
 
 ## 4. Comprobaciones de solo lectura (desde tu PC, por SSH)
 
@@ -171,3 +200,11 @@ copiarlas al unir ramas. Siguientes ids tras B39: B40-B44. Todas U (sin analizar
 - **Objetivo:** elegir entre 0, A2, B/F o E con los datos de B40-B42 y anotar la decisión (D18, número por
   confirmar) en `docs/decisions.md`.
 - **Hecho cuando:** decisión aprobada por ti.
+
+### B45 — Pantalla: panel del CFS en Fluidd a partir del de la K1C · M
+
+- **Objetivo:** valorar y adaptar `power-cfs-panel.js` (GPL-3.0) a los objetos y comandos de `creality_cfs`.
+- **Hecho cuando:** mapa de las llamadas `box`/`BOX_*` del panel a Kalico, y prueba del panel contra Kalico
+  (en modo batch o impresora) con tu aprobación.
+- **Riesgos:** depende de que la fase 5 fije la interfaz del CFS; instalar toca ficheros de Fluidd en el overlay.
+  Sin dependencia de la pantalla física.
