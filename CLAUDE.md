@@ -69,7 +69,8 @@ Decision D4 in [docs/decisions.md](docs/decisions.md).
 
 - `scp -O` is required (no sftp-server). Copy **one remote file per `scp` call**.
 - Stop Klipper before using the serial ports: `/etc/init.d/klipper stop`, then `start` afterwards.
-- Installed firmware: V1.1.0.60 (`fw_printenv version`).
+- Installed firmware: V1.1.0.60 (`fw_printenv version`), stock, but running **the user's own configuration**: the
+  files in `data/captures/2026-11-09_hi-v1.1.0.60/printer-config/` (not Creality's original config).
 
 ## Related repositories
 
