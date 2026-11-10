@@ -165,15 +165,50 @@ pin y el sentido del corte. La decisión depende de cuánto cuesta cambiar el tr
 | Paso | Qué | Escribe o mueve |
 | - | - | - |
 | 5.1 | Con stock: leer `nozzle_mcu:PB1` con la cuchilla suelta y empujada a mano; anotar la posición X real del corte | No |
-| 5.2 | Con Kalico y `[box]` sin cargar: lecturas del CFS con `box_protocol` (estado, RFID, longitud restante, versión) desde una herramienta de solo lectura | No [supuesto: confirmar en B31 qué tramas son de solo lectura] |
-| 5.3 | Auto-dirección del CFS (A0/A1/A2/0B) y convivencia con los drivers en el mismo bus | Asigna direcciones volátiles [supuesto: comprobar en B31 que no se guarda nada en el CFS] |
+| 5.2 | Con Kalico y `phase5.cfg`: arrancar y comprobar en el log que no sale ninguna trama del CFS (`auto_init` apagado) y que X/Y siguen respondiendo (`MOTOR_STATUS`) | No |
+| 5.3 | `CFS_INIT` (descubre y asigna dirección, como hace el stock en cada arranque) y después `CFS_STATUS`, `CFS_VERSION`, `CFS_FW_VERSION`, `CFS_ADDR_TABLE`. Comprobar que `0x0A` devuelve 4 bytes y que los drivers de X/Y siguen respondiendo | Asigna dirección al CFS [supuesto: volátil; el stock la reasigna al arrancar] |
 | 5.4 | Corte sin filamento, a baja aceleración, con `cut_pos_x` 2 mm antes del valor medido | Mueve X |
 | 5.5 | Carga y descarga de una ranura, sin imprimir | Mueve, calienta, extruye |
 | 5.6 | Cambio de color con purga | Todo |
 
+### Hecho el 2026-11-10 (D16, B34 primera parte)
+
+`klippy/extras/creality_cfs.py` en el fork: el módulo de la referencia (commit `16309d8`, GPLv3, con su
+cabecera y autoría) más una opción nueva `serial`. Si nombra una sección `[serial_485]`, el módulo no abre el
+puerto y cada intercambio pasa por ese transporte; sin la opción se comporta como el original. El cambio es
+aditivo (48 líneas añadidas, 1 cambiada) para poder proponerlo al autor. `config/hi/cfs.cfg` y `phase5.cfg`;
+9 tests (`test/test_hi_cfs.py`). Nada probado en la impresora.
+
+- La trama que llega al bus es byte a byte la que construye el módulo: `serial_485` recibe la trama sin
+  cabecera ni CRC y los añade con el mismo algoritmo [verificado: test
+  `test_shared_bus_puts_the_same_frame_on_the_wire`; fork:serial_485.py:516-530].
+- `serial_485` empareja la respuesta por dirección y función, y por función sola en difusión, igual que el
+  original [verificado: fork:serial_485.py:545-556; fork:creality_cfs.py `_dispatch_rx`].
+- `auto_init: False` en `cfs.cfg`: al arrancar no se envía nada al CFS [verificado: test
+  `test_phase5_config_loads_and_sends_nothing_at_startup`]. `CFS_INIT` solo hace el autodireccionamiento; la
+  precarga del arranque automático no se ejecuta [verificado: fork:creality_cfs.py, `cmd_CFS_INIT`].
+- La lectura de diagnóstico `0x0C` a `0x81`/`0x82` no se envía en el bus compartido (son los drivers de X/Y);
+  ningún comando la llamaba [verificado: búsqueda de `read_buffer_block_0x0c(` en el fichero].
+
+Límites y pendientes:
+
+1. `NOTICES.md` de la referencia dice que la coreografía se validó en una Hi con la implementación de la que
+   porta, pero que **este módulo no se ha ejercitado aún en hardware** [verificado: ref:NOTICES.md]. Corrige
+   lo dicho en §1 y §4: es la mejor base, no una coreografía probada tal cual.
+2. Las tramas que la caja envía sin petición (avisos de inserción y fallos por `0x0A`) se pierden:
+   `serial_485` descarta lo que no responde a una petición pendiente [verificado: fork:serial_485.py:565-570].
+   El estado se sigue viendo al consultar. Pendiente: gancho en `serial_485` para tramas no pedidas.
+3. `CFS_FLUSH` extruye donde esté la boquilla; no va a la papelera (X=-18,5)
+   [verificado: fork:creality_cfs.py, `cmd_CFS_FLUSH`: solo `M83`, `G1 E` y `G91`/`G90`]. Hace falta una macro de
+   la Hi que coloque la boquilla antes y haga la pasada de expulsión (decisión 2).
+4. `cut_velocity: 3000` es el valor del ejemplo de la referencia; el stock usa 15000
+   [verificado: captura:box.cfg, `cut_velocity`]. Se mantiene el lento hasta el paso 5.4.
+5. Comandos `T0`..`T3` y los `BOX_*` de stock que llaman las macros y el laminador: sin hacer (fase 6).
+6. Proponer el cambio al autor desde un fork de su repositorio (tarea del usuario, B34b).
+
 ## 6. Decisiones que necesito
 
-1. **Cómo adaptar el CFS** (§4): A, B, C o D. Se decide después de B32 y B31b.
+1. **Cómo adaptar el CFS** (§4): cerrada el 2026-11-10, opción D (D16).
 2. **Purga en la Hi**: repetir la de stock (purga en la papelera de X=-18,5 y limpieza en el teflón trasero) o usar solo torre de purga.
    Recomendada: la de stock, con sus valores.
 3. **Rack externo (`filament_rack`)**: dejarlo fuera de la primera versión (recomendada) o incluirlo.

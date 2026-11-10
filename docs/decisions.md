@@ -276,3 +276,20 @@ fecha y `timer_read` no se porta.
 
 - `CHECK_ZMOTOR_LINE` permite comprobar los cables de Z y Z1 antes del primer `ZDOWN` (paso 4.2b).
 - Sin `bl24c16f` no hay recuperación de impresión tras un corte de luz.
+
+## D16 — CFS: `creality_cfs.py` de gitstonelabs sobre `serial_485` (2026-11-10)
+
+**Contexto.** El `box.py` de la K2 tiene fijos el pin del sensor de corte, el sentido del corte y la geometría
+trasera, y su capa de órdenes no coincide con lo capturado en una Hi (`0x0A`, `0x0D`, `0x0F`, `0x11`;
+[phase5-plan.md](phase5-plan.md) §1). `gitstonelabs/creality-cfs-klipper` (GPLv3) tiene la Hi como hardware de
+referencia, pero abre el puerto serie por su cuenta, y en la Hi ese puerto es el bus de los drivers de X/Y.
+
+**Decisión.** Usar `creality_cfs.py` con una opción `serial` añadida que lo hace hablar por `serial_485`.
+Comandos `CFS_*`; los alias `BOX_*` de stock se dejan para la fase 6.
+
+**Consecuencias.**
+
+- El cambio sobre el fichero original es aditivo, para proponerlo a su autor desde un fork (B34b).
+- El módulo no se ha ejercitado en hardware según su propio `NOTICES.md`: las pruebas en la Hi empiezan por
+  lectura (pasos 5.2 y 5.3) y `auto_init` queda apagado.
+- No se usa `box.py` ni `box_protocol.py` de la K2 en la Hi.

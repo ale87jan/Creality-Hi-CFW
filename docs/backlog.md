@@ -339,19 +339,25 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
 - **Hecho cuando:** el plan tiene las secuencias con referencias a línea y la recomendación.
 - **Riesgos:** ninguno; solo lectura. Es larga (unas 5000 líneas).
 
-### B33 — Fase 5: decisiones de diseño · U
+### B33 — Fase 5: decisiones de diseño · U · EN CURSO
 
-- **Objetivo:** cerrar las tres decisiones de [phase5-plan.md §6](phase5-plan.md).
-- **Hecho cuando:** están en `decisions.md`.
-- **Riesgos:** la 1 depende de B32.
+- **Hecho:** decisión 1 cerrada (D16: `creality_cfs.py` sobre `serial_485`).
+- **Falta:** decisiones 2 (purga) y 3 (rack externo) de [phase5-plan.md §6](phase5-plan.md).
 
-### B34 — Fase 5: CFS para la Hi con tests · M
+### B34 — Fase 5: CFS para la Hi con tests · M · EN CURSO
 
-- **Objetivo:** adaptación según la decisión 1: pin del sensor de corte configurable, corte en +X y purga de la
-  Hi; `config/hi/phase5.cfg` con los valores de stock.
-- **Hecho cuando:** carga en batch; un test rechaza `PB9` como sensor y otro comprueba que el corte no sale de
-  los límites de X de la Hi.
-- **Riesgos:** depende de las fases 2 a 4 probadas.
+- **Hecho (2026-11-10):** `klippy/extras/creality_cfs.py` con transporte opcional por `serial_485`,
+  `config/hi/cfs.cfg`, `phase5.cfg`, `test/test_hi_cfs.py` (9 tests). Detalle en
+  [phase5-plan.md §5](phase5-plan.md), "Hecho el 2026-11-10".
+- **Falta:** leer la coreografía completa (`load_process`, `unload_process`, `CFS_CUT`, `CFS_FLUSH`); macro de
+  purga en la papelera; cambio de herramienta `T0`..`T3`; gancho para tramas no pedidas en `serial_485`.
+- **Riesgos:** el módulo de la referencia no se ha ejercitado en hardware (su `NOTICES.md`).
+
+### B34b — Proponer el transporte compartido a gitstonelabs · U
+
+- **Objetivo:** fork de `gitstonelabs/creality-cfs-klipper` y pull request con la opción `serial`, después de
+  probarla en la Hi. El cambio ya es aditivo y no altera el comportamiento sin la opción.
+- **Quién:** el usuario crea el fork; el parche sale del diff entre el commit `16309d8` y el fichero del fork.
 
 ### B35 — Fase 5: pruebas en la impresora · U, después M
 
