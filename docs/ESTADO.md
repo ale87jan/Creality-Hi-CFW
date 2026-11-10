@@ -54,7 +54,7 @@ forma parte del `G28 Z` de stock. Ni el módulo de la K2 (pide `safeDist` y `z_a
 (depende de cuatro parches de Creality) valen tal cual. Hecho `z_align_hi.py`, portado del de la Hi (D13), con
 `align.cfg` para probarlo antes que la sonda (D12) y `phase4.cfg` con la macro de `G28`; 12 tests. Limpieza de
 boquilla hecha (B27, B28): `clean.cfg` con las macros del usuario portadas (D14), 5 tests, sin probar en la Hi.
-`tmc_line_check` portado (D15, B30), 9 tests. `[z_tilt]` de Kalico añadido a `phase4.cfg`. Falta conservar la
+`tmc_line_check` portado (D15, B30), 8 tests. `[z_tilt]` de Kalico añadido a `phase4.cfg`. Falta conservar la
 corrección de inclinación (B26b, solo ahorro de tiempo).
 
 ## Fase 5 (CFS)

@@ -283,7 +283,7 @@ Diagnóstico de fábrica: en stock ninguna macro lo llama, solo `test_tmc.py`
 [verificado: búsqueda de `CHECK_ZMOTOR_LINE` en stock:klippy y en captura:printer-config].
 
 **Hecho el 2026-11-10 (D15).** `klippy/extras/tmc_line_check.py` del fork, con `[tmc_line_check]` en
-`config/hi/zalign.cfg` y 9 tests. Sin probar en la impresora.
+`config/hi/zalign.cfg` y 8 tests. Sin probar en la impresora.
 
 - El supuesto queda resuelto: se lee `DRV_STATUS` con `mcu_tmc.get_register("DRV_STATUS")`
   [verificado: fork:klippy/extras/tmc_uart.py:305-306; fork:klippy/extras/tmc2208.py:27]. El criterio es el de

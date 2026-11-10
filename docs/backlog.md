@@ -305,7 +305,7 @@ Tipo: **U** la ejecuta el usuario en su PC o impresora; **M** la puede hacer un 
 ### B30 — `tmc_line_check` · M · HECHO 2026-11-10 (sin impresora)
 
 - **Hecho:** `klippy/extras/tmc_line_check.py`, `[tmc_line_check]` en `config/hi/zalign.cfg`,
-  `test/test_hi_tmc_line_check.py` (9 tests). Decisión D15. Detalle en [phase4-plan.md §6](phase4-plan.md).
+  `test/test_hi_tmc_line_check.py` (8 tests). Decisión D15. Detalle en [phase4-plan.md §6](phase4-plan.md).
 - **Pendiente:** paso 4.2b en la impresora.
 
 ### B30b — `bl24c16f` · M, sin fecha
